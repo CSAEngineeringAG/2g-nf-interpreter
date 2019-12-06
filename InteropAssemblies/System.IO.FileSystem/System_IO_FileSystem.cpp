@@ -40,8 +40,16 @@ static const CLR_RT_MethodHandler method_lookup[] =
     NULL,
     NULL,
     NULL,
-    Library_System_IO_FileSystem_System_IO_Math::NativeSuperComplicatedCalculation___STATIC__R8__R8,
-    Library_System_IO_FileSystem_System_IO_NativeFileStream::CreateFileNative___VOID__STRING__STRING,
+    NULL,
+    Library_System_IO_FileSystem_System_IO_NativeFile::ExistsNative___STATIC__BOOLEAN__STRING__STRING,
+    Library_System_IO_FileSystem_System_IO_NativeFile::MoveNative___STATIC__VOID__STRING__STRING,
+    Library_System_IO_FileSystem_System_IO_NativeFile::DeleteNative___STATIC__VOID__STRING,
+    Library_System_IO_FileSystem_System_IO_NativeFile::GetAttributesNative___STATIC__U1__STRING,
+    Library_System_IO_FileSystem_System_IO_NativeFile::SetAttributesNative___STATIC__VOID__STRING__U1,
+    Library_System_IO_FileSystem_System_IO_NativeFileStream::OpenFileNative___VOID__STRING__STRING__I4,
+    Library_System_IO_FileSystem_System_IO_NativeFileStream::ReadNative___STRING__STRING__STRING__I8__I4,
+    Library_System_IO_FileSystem_System_IO_NativeFileStream::WriteNative___VOID__STRING__STRING__I8__STRING__I4,
+    Library_System_IO_FileSystem_System_IO_NativeFileStream::GetLengthNative___I8__STRING__STRING,
     NULL,
     NULL,
     NULL,
@@ -66,7 +74,7 @@ static const CLR_RT_MethodHandler method_lookup[] =
 const CLR_RT_NativeAssemblyData g_CLR_AssemblyNative_System_IO_FileSystem =
 {
     "System.IO.FileSystem", 
-    0xA7AB8989,
+    0x0698A310,
     method_lookup,
     ////////////////////////////////////////////////////////////////////////////////////
     // check if the version bellow matches the one in AssemblyNativeVersion attribute //

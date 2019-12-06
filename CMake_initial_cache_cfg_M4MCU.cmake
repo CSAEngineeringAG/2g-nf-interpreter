@@ -42,3 +42,8 @@ set(SUPPORT_ANY_BASE_CONVERSION ON CACHE BOOL "option to enable support for conv
 set(SWO_OUTPUT ON CACHE BOOL "option to enable SWO Output")
 set(TARGET_SERIES STM32F4xx CACHE STRING "Series of the target MCU")
 set(TOOLCHAIN_PREFIX C:/2G_Drives/nanoFramework_Tools/GNU_ARM_Toolchain/8_2019-q3-update CACHE PATH "Path to the Compiler Toolchain")
+# set(NF_INTEROP_ASSEMBLIES NF.AwesomeLib CACHE STRING "option for InterOP NF.AwesomeLib")
+set(NF_INTEROP_ASSEMBLIES System.IO.FileSystem CACHE STRING "option for System.IO.FileSystem API")
+
+
+
