@@ -13,6 +13,7 @@ cmake-variants.json
 InteropAssemblies/*
 !InteropAssemblies/CLR_RT_InteropAssembliesTable.cpp.in
 !InteropAssemblies/README.md
+!InteropAssemblies/System.IO.FileSystem
 !InteropAssemblies/USB.Host
 !InteropAssemblies/Oberon.NaCl
 
@@ -29,6 +30,7 @@ InteropAssemblies/*
 
 # ignore CMake modules for Interop assemblies
 CMake/Modules/FindINTEROP*.cmake
+!CMake/Modules/FindINTEROP-System.IO.FileSystem.cmake
 !CMake/Modules/FindINTEROP-USB.Host.cmake
 !CMake/Modules/FindINTEROP-Oberon.NaCl.cmake
 
