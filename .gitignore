@@ -13,6 +13,7 @@ cmake-variants.json
 InteropAssemblies/*
 !InteropAssemblies/CLR_RT_InteropAssembliesTable.cpp.in
 !InteropAssemblies/README.md
+!InteropAssemblies/USB.Host
 
 # Visual Studio Code
 # ignore C/C++ launch file (will change frequently per user/board setup, use should derive content from launch.TEMPLATE.json)
@@ -27,6 +28,7 @@ InteropAssemblies/*
 
 # ignore CMake modules for Interop assemblies
 CMake/Modules/FindINTEROP*.cmake
+!CMake/Modules/FindINTEROP-USB.Host.cmake
 
 # Visual Studio
 ## Ignore Visual Studio temporary files, build results, and
