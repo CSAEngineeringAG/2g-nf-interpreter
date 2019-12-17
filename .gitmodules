@@ -1,3 +1,6 @@
 [submodule "targets-community"]
 	path = targets-community
 	url = https://github.com/nanoframework/nf-Community-Targets
+[submodule "nF_Tools"]
+	path = nF_Tools
+	url = https://github.com/CSAEngineeringAG/2g-nf-toolchain.git
