@@ -14,11 +14,11 @@ pipeline {
 			}
 		}
 
-		// Get the newest version of the nanoFramework development branch from GitHub
+		// Save the commit hash of the corresponding repository into a text file
 		stage('Create buildInfo'){
 			steps{
 				bat 'cd %WORKSPACE% & dir'
-				bat 'cd %WORKSPACE% & for /F %%i in (\'git rev-parse --verify HEAD\') do echo The corresponding commit hash of the nanoFramwork repository is: %%i >> buildInfo.txt'
+				bat 'cd %WORKSPACE% & for /F %%i in (\'git rev-parse --verify HEAD\') do echo The corresponding commit hash of our Git repository is: %%i >> buildInfo.txt'
 			}
 		}
 
