@@ -34,8 +34,8 @@ namespace System
             // Helper Functions to access fields of managed object
             // Declaration of stubs. These functions are implemented by Interop code developers
             static void OpenFileNative( CLR_RT_HeapBlock* pMngObj, const char* param0, const char* param1, signed int param2, HRESULT &hr );
-            static const char* ReadNative( CLR_RT_HeapBlock* pMngObj, const char* param0, const char* param1, signed __int64 param2, signed int param3, HRESULT &hr );
-            static void WriteNative( CLR_RT_HeapBlock* pMngObj, const char* param0, const char* param1, signed __int64 param2, const char* param3, signed int param4, HRESULT &hr );
+            static signed int ReadNative( CLR_RT_HeapBlock* pMngObj, const char* param0, const char* param1, signed __int64 param2, CLR_RT_TypedArray_UINT8 param3, signed int param4, HRESULT &hr );
+            static void WriteNative( CLR_RT_HeapBlock* pMngObj, const char* param0, const char* param1, signed __int64 param2, CLR_RT_TypedArray_UINT8 param3, signed int param4, HRESULT &hr );
             static signed __int64 GetLengthNative( CLR_RT_HeapBlock* pMngObj, const char* param0, const char* param1, HRESULT &hr );
         };
     }

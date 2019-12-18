@@ -45,8 +45,8 @@ struct Library_System_IO_FileSystem_System_IO_NativeFile
 struct Library_System_IO_FileSystem_System_IO_NativeFileStream
 {
     NANOCLR_NATIVE_DECLARE(OpenFileNative___VOID__STRING__STRING__I4);
-    NANOCLR_NATIVE_DECLARE(ReadNative___STRING__STRING__STRING__I8__I4);
-    NANOCLR_NATIVE_DECLARE(WriteNative___VOID__STRING__STRING__I8__STRING__I4);
+    NANOCLR_NATIVE_DECLARE(ReadNative___I4__STRING__STRING__I8__SZARRAY_U1__I4);
+    NANOCLR_NATIVE_DECLARE(WriteNative___VOID__STRING__STRING__I8__SZARRAY_U1__I4);
     NANOCLR_NATIVE_DECLARE(GetLengthNative___I8__STRING__STRING);
 
     //--//

@@ -47,8 +47,8 @@ static const CLR_RT_MethodHandler method_lookup[] =
     Library_System_IO_FileSystem_System_IO_NativeFile::GetAttributesNative___STATIC__U1__STRING,
     Library_System_IO_FileSystem_System_IO_NativeFile::SetAttributesNative___STATIC__VOID__STRING__U1,
     Library_System_IO_FileSystem_System_IO_NativeFileStream::OpenFileNative___VOID__STRING__STRING__I4,
-    Library_System_IO_FileSystem_System_IO_NativeFileStream::ReadNative___STRING__STRING__STRING__I8__I4,
-    Library_System_IO_FileSystem_System_IO_NativeFileStream::WriteNative___VOID__STRING__STRING__I8__STRING__I4,
+    Library_System_IO_FileSystem_System_IO_NativeFileStream::ReadNative___I4__STRING__STRING__I8__SZARRAY_U1__I4,
+    Library_System_IO_FileSystem_System_IO_NativeFileStream::WriteNative___VOID__STRING__STRING__I8__SZARRAY_U1__I4,
     Library_System_IO_FileSystem_System_IO_NativeFileStream::GetLengthNative___I8__STRING__STRING,
     NULL,
     NULL,
@@ -74,7 +74,7 @@ static const CLR_RT_MethodHandler method_lookup[] =
 const CLR_RT_NativeAssemblyData g_CLR_AssemblyNative_System_IO_FileSystem =
 {
     "System.IO.FileSystem", 
-    0x0698A310,
+    0xB2147849,
     method_lookup,
     ////////////////////////////////////////////////////////////////////////////////////
     // check if the version bellow matches the one in AssemblyNativeVersion attribute //

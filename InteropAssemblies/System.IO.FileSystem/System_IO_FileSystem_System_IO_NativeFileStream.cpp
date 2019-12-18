@@ -148,7 +148,7 @@ void NativeFileStream::OpenFileNative( CLR_RT_HeapBlock* pMngObj, const char* pa
     }
 }
 
-const char* NativeFileStream::ReadNative( CLR_RT_HeapBlock* pMngObj, const char* param0, const char* param1, signed __int64 param2, signed int param3, HRESULT &hr )
+signed int NativeFileStream::ReadNative( CLR_RT_HeapBlock* pMngObj, const char* param0, const char* param1, signed __int64 param2, CLR_RT_TypedArray_UINT8 param3, signed int param4, HRESULT &hr )
 {
     (void)hr;
     (void)pMngObj;
@@ -160,8 +160,9 @@ const char* NativeFileStream::ReadNative( CLR_RT_HeapBlock* pMngObj, const char*
     const char* workingPath = param0;
     const char* fileName = param1;
     signed __int64 position = param2;
-    int length = param3;
-    char* buffer = NULL; 
+    unsigned char* buffer = param3.GetBuffer();
+    int length = param4;
+    unsigned int readCount = 0; 
 
     FIL             file; 
     FRESULT         operationResult;
@@ -219,12 +220,8 @@ const char* NativeFileStream::ReadNative( CLR_RT_HeapBlock* pMngObj, const char*
                 length = f_size(&file) - position;
             }
 
-            buffer = new char[ length + 1];
-            buffer[length] = '\0';
-
             // file opened succesfully
-            UINT read = 0;
-            operationResult = f_read(&file, buffer, length, &read);
+            operationResult = f_read(&file, buffer, length, &readCount);
             if(operationResult != FR_OK)
             {
                 // Failed to write to file
@@ -249,10 +246,11 @@ const char* NativeFileStream::ReadNative( CLR_RT_HeapBlock* pMngObj, const char*
         platform_free(filePath);
     }
 
-    return buffer;
+    return readCount;
 }
 
-void NativeFileStream::WriteNative( CLR_RT_HeapBlock* pMngObj, const char* param0, const char* param1, signed __int64 param2, const char* param3, signed int param4, HRESULT &hr )
+//void NativeFileStream::WriteNative( CLR_RT_HeapBlock* pMngObj, const char* param0, const char* param1, signed __int64 param2, const char* param3, signed int param4, HRESULT &hr )
+void NativeFileStream::WriteNative( CLR_RT_HeapBlock* pMngObj, const char* param0, const char* param1, signed __int64 param2, CLR_RT_TypedArray_UINT8 param3, signed int param4, HRESULT &hr )
 {
     (void)hr;
     (void)pMngObj;
@@ -260,7 +258,7 @@ void NativeFileStream::WriteNative( CLR_RT_HeapBlock* pMngObj, const char* param
     const char* workingPath = param0;
     const char* fileName = param1;
     signed __int64 position = param2;
-    const char* buffer = param3;
+    const unsigned char* buffer = param3.GetBuffer();
     const int length = param4;
 
     FIL             file; 

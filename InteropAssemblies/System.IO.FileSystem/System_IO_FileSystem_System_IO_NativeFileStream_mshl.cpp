@@ -36,7 +36,7 @@ HRESULT Library_System_IO_FileSystem_System_IO_NativeFileStream::OpenFileNative_
     NANOCLR_NOCLEANUP();
 }
 
-HRESULT Library_System_IO_FileSystem_System_IO_NativeFileStream::ReadNative___STRING__STRING__STRING__I8__I4( CLR_RT_StackFrame& stack )
+HRESULT Library_System_IO_FileSystem_System_IO_NativeFileStream::ReadNative___I4__STRING__STRING__I8__SZARRAY_U1__I4( CLR_RT_StackFrame& stack )
 {
     NANOCLR_HEADER(); hr = S_OK;
     {
@@ -53,18 +53,21 @@ HRESULT Library_System_IO_FileSystem_System_IO_NativeFileStream::ReadNative___ST
         signed __int64 param2;
         NANOCLR_CHECK_HRESULT( Interop_Marshal_INT64( stack, 3, param2 ) );
 
-        signed int param3;
-        NANOCLR_CHECK_HRESULT( Interop_Marshal_INT32( stack, 4, param3 ) );
+        CLR_RT_TypedArray_UINT8 param3;
+        NANOCLR_CHECK_HRESULT( Interop_Marshal_UINT8_ARRAY( stack, 4, param3 ) );
 
-        const char* retVal = NativeFileStream::ReadNative( pMngObj,  param0, param1, param2, param3, hr );
+        signed int param4;
+        NANOCLR_CHECK_HRESULT( Interop_Marshal_INT32( stack, 5, param4 ) );
+
+        signed int retVal = NativeFileStream::ReadNative( pMngObj,  param0, param1, param2, param3, param4, hr );
         NANOCLR_CHECK_HRESULT( hr );
-        SetResult_LPCSTR( stack, retVal );
+        SetResult_INT32( stack, retVal );
 
     }
     NANOCLR_NOCLEANUP();
 }
 
-HRESULT Library_System_IO_FileSystem_System_IO_NativeFileStream::WriteNative___VOID__STRING__STRING__I8__STRING__I4( CLR_RT_StackFrame& stack )
+HRESULT Library_System_IO_FileSystem_System_IO_NativeFileStream::WriteNative___VOID__STRING__STRING__I8__SZARRAY_U1__I4( CLR_RT_StackFrame& stack )
 {
     NANOCLR_HEADER(); hr = S_OK;
     {
@@ -81,8 +84,8 @@ HRESULT Library_System_IO_FileSystem_System_IO_NativeFileStream::WriteNative___V
         signed __int64 param2;
         NANOCLR_CHECK_HRESULT( Interop_Marshal_INT64( stack, 3, param2 ) );
 
-        const char* param3;
-        NANOCLR_CHECK_HRESULT( Interop_Marshal_LPCSTR( stack, 4, param3 ) );
+        CLR_RT_TypedArray_UINT8 param3;
+        NANOCLR_CHECK_HRESULT( Interop_Marshal_UINT8_ARRAY( stack, 4, param3 ) );
 
         signed int param4;
         NANOCLR_CHECK_HRESULT( Interop_Marshal_INT32( stack, 5, param4 ) );
