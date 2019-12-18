@@ -1,0 +1,56 @@
+pipeline {
+    agent any
+	environment {
+        NINJA_PATH = 'C:\\Program Files (x86)\\Ninja'
+		TOOLCHAIN_PATH = 'nF_Tools\\GNU_ARM_Toolchain\\8_2019-q3-update'
+    }
+    stages {
+
+		// Delete old build files and nF
+		stage('Clear build folder'){
+			steps{
+				bat 'if exist "%WORKSPACE%\\build" RD /S /Q %WORKSPACE%\\build'
+				bat 'cd %WORKSPACE% & mkdir build'
+			}
+		}
+
+		// Get the newest version of the nanoFramework development branch from GitHub
+		stage('Create buildInfo'){
+			steps{
+				bat 'cd %WORKSPACE% & dir'
+				bat 'cd %WORKSPACE% & for /F %%i in (\'git rev-parse --verify HEAD\') do echo The corresponding commit hash of the nanoFramwork repository is: %%i >> buildInfo.txt'
+			}
+		}
+
+		stage('Delete SetNFroot.bat'){
+			steps{
+				// delete Batchfile to omit path substitution on the Jenkins server
+				bat 'cd %WORKSPACE% & del /f SetNFroot.bat'
+			}
+		}
+
+		// Build nanoFramework
+        stage('Build') {
+            steps {
+				bat 'cd %WORKSPACE%\\build & cmake -S ../ -C ../jenkins-pipelines/CMake_initial_cache_cfg_M4MCU.cmake -DUSE_M4MCU_V3:BOOLEAN=TRUE -DCMAKE_TOOLCHAIN_FILE=%WORKSPACE%\\CMake\\toolchain.arm-none-eabi.cmake -DTOOLCHAIN_PREFIX=%WORKSPACE%\\%TOOLCHAIN_PATH% -G Ninja'
+				bat 'cd %WORKSPACE%\\build & ninja'
+				bat 'cd %WORKSPACE%\\build & dir'
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Job finished.'
+
+        }
+        success {
+            echo 'Build successful! :)'
+			archiveArtifacts artifacts: 'build\\*.hex'
+			archiveArtifacts artifacts: 'build\\*.elf'
+			archiveArtifacts artifacts: 'buildInfo.txt'
+        }
+        failure {
+            echo 'Build failed! :('
+        }
+    }
+}
