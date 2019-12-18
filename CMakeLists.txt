@@ -135,6 +135,14 @@ message(STATUS "Build  directory is '${PROJECT_BINARY_DIR}'.")
 message(STATUS "")
 #######################
 
+if(USE_M4MCU_V3)
+	message(STATUS "Selected target board: M4MCUv3.")
+	message(STATUS "")
+else()
+	message(STATUS "Selected target board: M4MCUv1.")
+	message(STATUS "")
+endif()
+
 
 #################################################################
 # ouput RTM build option

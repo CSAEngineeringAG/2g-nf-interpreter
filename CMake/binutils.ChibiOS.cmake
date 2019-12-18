@@ -37,6 +37,10 @@ endfunction()
 
 function(NF_SET_COMPILER_DEFINITIONS TARGET)
 
+	if(USE_M4MCU_V3)
+		target_compile_definitions(${TARGET} PUBLIC -DUSE_M4MCU_V3)
+	endif()
+
     # definition for platform 
     # (always ARM here)
     # ChibiOS HAL community always include (nanoFramework overlay and official community contributions optionally)

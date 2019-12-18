@@ -25,7 +25,12 @@
  */
 
 #define STM32F4xx_MCUCONF
+#ifdef USE_M4MCU_V3
 #define STM32F427_MCUCONF
+#else
+#define STM32F407_MCUCONF
+#endif
+
 
 /*
  * HAL driver system settings.

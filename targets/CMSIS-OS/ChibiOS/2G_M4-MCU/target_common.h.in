@@ -17,10 +17,17 @@
 // The following addresses and sizes should be filled in according to the SoC data-sheet
 // they also must be coherent with what's in the linker file for nanoBooter and nanoCLR
 
+#ifdef USE_M4MCU_V3
 // RAM base address 
 #define RAM1_MEMORY_StartAddress        ((uint32_t)0xC0000000)
 // RAM size 
 #define RAM1_MEMORY_Size                ((uint32_t)0x00800000)
+#else
+// RAM base address 
+#define RAM1_MEMORY_StartAddress        ((uint32_t)0x64000000)
+// RAM size 
+#define RAM1_MEMORY_Size                ((uint32_t)0x00400000) //0x00800000
+#endif
 
 // FLASH base address
 #define FLASH1_MEMORY_StartAddress      ((uint32_t)0x08000000)
