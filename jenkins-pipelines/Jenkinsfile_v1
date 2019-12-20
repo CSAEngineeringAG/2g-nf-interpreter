@@ -10,6 +10,7 @@ pipeline {
 		stage('Clear build folder'){
 			steps{
 				bat 'if exist "%WORKSPACE%\\build" RD /S /Q %WORKSPACE%\\build'
+				bat 'if exist "%WORKSPACE%\\buildInfo.txt" del /f %WORKSPACE%\\buildInfo.txt'
 				bat 'cd %WORKSPACE% & mkdir build'
 			}
 		}
