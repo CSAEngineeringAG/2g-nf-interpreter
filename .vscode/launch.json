@@ -5,7 +5,7 @@
             "name": "nanoBooter 2G M4MCU",
             "type": "cppdbg",
             "request": "launch",
-            "miDebuggerPath": "C:/2G_Drives/nanoFramework_Tools/GNU_ARM_Toolchain/8_2019-q3-update/bin/arm-none-eabi-gdb.exe",
+            "miDebuggerPath": "C:/2G_Drives/nanoFramework/nf-interpreter/nF_Tools/GNU_ARM_Toolchain/8_2019-q3-update/bin/arm-none-eabi-gdb.exe",
             "targetArchitecture": "ARM",
             "program": "C:/2G_Drives/nanoFramework/nf-interpreter/build/nanoBooter.elf",
 
@@ -24,8 +24,8 @@
             ],
 
             "launchCompleteCommand": "exec-continue",
-            "debugServerPath": "C:/2G_Drives/nanoFramework_Tools/OpenOCD/openocd-0.10.0/bin/openocd.exe",
-            "debugServerArgs": "-s \"C:/nanoFramework_Tools/OpenOCD/openocd-0.10.0/scripts/\" -f interface/stlink-v2.cfg -f board/stm32f429discovery.cfg",
+            "debugServerPath": "C:/2G_Drives/nanoFramework/nf-interpreter/nF_Tools/openocd-0.10.0/bin/openocd.exe",
+            "debugServerArgs": "-s \"C:/2G_Drives/nanoFramework/nf-interpreter/nF_Tools/openocd-0.10.0/scripts/\" -f interface/stlink-v2.cfg -f board/stm32f429discovery.cfg",
             "serverStarted": "Info\\ :\\ [\\w\\d\\.]*:\\ hardware",
             "filterStderr": true,
             "externalConsole": true,
@@ -41,7 +41,7 @@
             "name": "nanoCLR 2G M4MCU",
             "type": "cppdbg",
             "request": "launch",
-            "miDebuggerPath": "C:/2G_Drives/nanoFramework_Tools/GNU_ARM_Toolchain/8_2019-q3-update/bin/arm-none-eabi-gdb.exe",
+            "miDebuggerPath": "C:/2G_Drives/nanoFramework/nf-interpreter/nF_Tools/GNU_ARM_Toolchain/8_2019-q3-update/bin/arm-none-eabi-gdb.exe",
             "targetArchitecture": "ARM",
             "program": "C:/2G_Drives/nanoFramework/nf-interpreter/build/nanoCLR.elf",
 
@@ -60,8 +60,8 @@
             ],
 
             "launchCompleteCommand": "exec-continue",
-            "debugServerPath": "C:/2G_Drives/nanoFramework_Tools/OpenOCD/openocd-0.10.0/bin/openocd.exe",
-            "debugServerArgs": "-s \"C:/nanoFramework_Tools/OpenOCD/openocd-0.10.0/scripts/\" -f interface/stlink-v2.cfg -f board/stm32f429discovery.cfg",
+            "debugServerPath": "C:/2G_Drives/nanoFramework/nf-interpreter/nF_Tools/openocd-0.10.0/bin/openocd.exe",
+            "debugServerArgs": "-s \"C:/2G_Drives/nanoFramework/nf-interpreter/nF_Tools/openocd-0.10.0/scripts/\" -f interface/stlink-v2.cfg -f board/stm32f429discovery.cfg",
             "serverStarted": "Info\\ :\\ [\\w\\d\\.]*:\\ hardware",
             "filterStderr": true,
             "externalConsole": true,
