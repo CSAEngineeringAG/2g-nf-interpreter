@@ -128,7 +128,7 @@
           "API_Hardware.Esp32" : "OFF",
           "API_Hardware.Stm32" : "ON",
           "API_Windows.Storage" : "ON",
-          "NF_INTEROP_ASSEMBLIES" : [ "System.IO.FileSystem", "USB.Host", "Oberon.NaCl" ]
+          "NF_INTEROP_ASSEMBLIES" : [ "System.IO.FileSystem", "USB.Host", "Oberon.NaCl", "MFUpdate" ]
         }
       },
       "2G_M4-MCU_v3": {
@@ -184,7 +184,7 @@
           "API_Hardware.Esp32" : "OFF",
           "API_Hardware.Stm32" : "ON",
           "API_Windows.Storage" : "ON",
-          "NF_INTEROP_ASSEMBLIES" : [ "System.IO.FileSystem", "USB.Host", "Oberon.NaCl" ]
+          "NF_INTEROP_ASSEMBLIES" : [ "System.IO.FileSystem", "USB.Host", "Oberon.NaCl", "MFUpdate"  ]
         }
       }
     }
