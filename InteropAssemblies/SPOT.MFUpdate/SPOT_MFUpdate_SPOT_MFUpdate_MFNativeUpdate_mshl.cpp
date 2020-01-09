@@ -7,13 +7,13 @@
 //-----------------------------------------------------------------------------
 
 
-#include "MFUpdate.h"
-#include "MFUpdate_MFUpdate_MFNativeUpdate.h"
+#include "SPOT_MFUpdate.h"
+#include "SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate.h"
 
-using namespace MFUpdate;
+using namespace SPOT::MFUpdate;
 
 
-HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::_cctor___STATIC__VOID( CLR_RT_StackFrame& stack )
+HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::_cctor___STATIC__VOID( CLR_RT_StackFrame& stack )
 {
     (void)stack;
 
@@ -25,7 +25,7 @@ HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::_cctor___STATIC__VOID( CLR_RT_
     NANOCLR_NOCLEANUP();
 }
 
-HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::Initialize___STATIC__I4__MFUpdateMFUpdateBase( CLR_RT_StackFrame& stack )
+HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Initialize___STATIC__I4__SPOTMFUpdateMFUpdateBase( CLR_RT_StackFrame& stack )
 {
     NANOCLR_HEADER(); hr = S_OK;
     {
@@ -40,7 +40,7 @@ HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::Initialize___STATIC__I4__MFUpd
     NANOCLR_NOCLEANUP();
 }
 
-HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::Authenticate___STATIC__BOOLEAN__I4__SZARRAY_U1( CLR_RT_StackFrame& stack )
+HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Authenticate___STATIC__BOOLEAN__I4__SZARRAY_U1( CLR_RT_StackFrame& stack )
 {
     NANOCLR_HEADER(); hr = S_OK;
     {
@@ -58,7 +58,7 @@ HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::Authenticate___STATIC__BOOLEAN
     NANOCLR_NOCLEANUP();
 }
 
-HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::Open___STATIC__BOOLEAN__I4( CLR_RT_StackFrame& stack )
+HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Open___STATIC__BOOLEAN__I4( CLR_RT_StackFrame& stack )
 {
     NANOCLR_HEADER(); hr = S_OK;
     {
@@ -73,7 +73,7 @@ HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::Open___STATIC__BOOLEAN__I4( CL
     NANOCLR_NOCLEANUP();
 }
 
-HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::Create___STATIC__BOOLEAN__I4( CLR_RT_StackFrame& stack )
+HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Create___STATIC__BOOLEAN__I4( CLR_RT_StackFrame& stack )
 {
     NANOCLR_HEADER(); hr = S_OK;
     {
@@ -88,7 +88,7 @@ HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::Create___STATIC__BOOLEAN__I4( 
     NANOCLR_NOCLEANUP();
 }
 
-HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::GetMissingPackets___STATIC__VOID__I4__SZARRAY_U4( CLR_RT_StackFrame& stack )
+HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::GetMissingPackets___STATIC__VOID__I4__SZARRAY_U4( CLR_RT_StackFrame& stack )
 {
     NANOCLR_HEADER(); hr = S_OK;
     {
@@ -104,7 +104,7 @@ HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::GetMissingPackets___STATIC__VO
     NANOCLR_NOCLEANUP();
 }
 
-HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::AddPacket___STATIC__BOOLEAN__I4__I4__SZARRAY_U1__SZARRAY_U1( CLR_RT_StackFrame& stack )
+HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::AddPacket___STATIC__BOOLEAN__I4__I4__SZARRAY_U1__SZARRAY_U1( CLR_RT_StackFrame& stack )
 {
     NANOCLR_HEADER(); hr = S_OK;
     {
@@ -128,7 +128,7 @@ HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::AddPacket___STATIC__BOOLEAN__I
     NANOCLR_NOCLEANUP();
 }
 
-HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::Validate___STATIC__BOOLEAN__I4__SZARRAY_U1( CLR_RT_StackFrame& stack )
+HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Validate___STATIC__BOOLEAN__I4__SZARRAY_U1( CLR_RT_StackFrame& stack )
 {
     NANOCLR_HEADER(); hr = S_OK;
     {
@@ -146,7 +146,7 @@ HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::Validate___STATIC__BOOLEAN__I4
     NANOCLR_NOCLEANUP();
 }
 
-HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::Install___STATIC__BOOLEAN__I4__SZARRAY_U1( CLR_RT_StackFrame& stack )
+HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Install___STATIC__BOOLEAN__I4__SZARRAY_U1( CLR_RT_StackFrame& stack )
 {
     NANOCLR_HEADER(); hr = S_OK;
     {
@@ -159,21 +159,6 @@ HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::Install___STATIC__BOOLEAN__I4_
         bool retVal = MFNativeUpdate::Install( param0, param1, hr );
         NANOCLR_CHECK_HRESULT( hr );
         SetResult_bool( stack, retVal );
-
-    }
-    NANOCLR_NOCLEANUP();
-}
-
-HRESULT Library_MFUpdate_MFUpdate_MFNativeUpdate::SerializeParameter___STATIC__SZARRAY_U1__OBJECT( CLR_RT_StackFrame& stack )
-{
-    NANOCLR_HEADER(); hr = S_OK;
-    {
-        UNSUPPORTED_TYPE param0;
-        NANOCLR_CHECK_HRESULT( Interop_Marshal_UNSUPPORTED_TYPE( stack, 0, param0 ) );
-
-        unsigned char retVal = MFNativeUpdate::SerializeParameter( param0, hr );
-        NANOCLR_CHECK_HRESULT( hr );
-        SetResult_UINT8( stack, retVal );
 
     }
     NANOCLR_NOCLEANUP();

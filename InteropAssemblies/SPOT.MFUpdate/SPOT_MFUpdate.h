@@ -7,15 +7,15 @@
 //-----------------------------------------------------------------------------
 
 
-#ifndef _MFUPDATE_H_
-#define _MFUPDATE_H_
+#ifndef _SPOT_MFUPDATE_H_
+#define _SPOT_MFUPDATE_H_
 
 #include <nanoCLR_Interop.h>
 #include <nanoCLR_Runtime.h>
-struct Library_MFUpdate_MFUpdate_MFNativeUpdate
+struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate
 {
     NANOCLR_NATIVE_DECLARE(_cctor___STATIC__VOID);
-    NANOCLR_NATIVE_DECLARE(Initialize___STATIC__I4__MFUpdateMFUpdateBase);
+    NANOCLR_NATIVE_DECLARE(Initialize___STATIC__I4__SPOTMFUpdateMFUpdateBase);
     NANOCLR_NATIVE_DECLARE(Authenticate___STATIC__BOOLEAN__I4__SZARRAY_U1);
     NANOCLR_NATIVE_DECLARE(Open___STATIC__BOOLEAN__I4);
     NANOCLR_NATIVE_DECLARE(Create___STATIC__BOOLEAN__I4);
@@ -23,13 +23,12 @@ struct Library_MFUpdate_MFUpdate_MFNativeUpdate
     NANOCLR_NATIVE_DECLARE(AddPacket___STATIC__BOOLEAN__I4__I4__SZARRAY_U1__SZARRAY_U1);
     NANOCLR_NATIVE_DECLARE(Validate___STATIC__BOOLEAN__I4__SZARRAY_U1);
     NANOCLR_NATIVE_DECLARE(Install___STATIC__BOOLEAN__I4__SZARRAY_U1);
-    NANOCLR_NATIVE_DECLARE(SerializeParameter___STATIC__SZARRAY_U1__OBJECT);
 
     //--//
 
 };
 
-struct Library_MFUpdate_MFUpdate_MFUpdateBase
+struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFUpdateBase
 {
     static const int FIELD__m_provider = 65535;
     static const int FIELD__m_updateID = 65535;
@@ -45,7 +44,7 @@ struct Library_MFUpdate_MFUpdate_MFUpdateBase
 
 };
 
-struct Library_MFUpdate_MFUpdate_MFUpdate
+struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFUpdate
 {
     static const int FIELD__m_pktBitChk = 65535;
     static const int FIELD__m_maxPkt = 65535;
@@ -56,7 +55,7 @@ struct Library_MFUpdate_MFUpdate_MFUpdate
 
 };
 
-struct Library_MFUpdate_MFUpdate_MFUpdatePkt
+struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFUpdatePkt
 {
     static const int FIELD__PacketIndex = 65535;
     static const int FIELD__ValidationData = 65535;
@@ -67,7 +66,7 @@ struct Library_MFUpdate_MFUpdate_MFUpdatePkt
 
 };
 
-struct Library_MFUpdate_MFUpdate_MFUpdateProperty
+struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFUpdateProperty
 {
     static const int FIELD__Name = 65535;
     static const int FIELD__Value = 65535;
@@ -77,7 +76,7 @@ struct Library_MFUpdate_MFUpdate_MFUpdateProperty
 
 };
 
-struct Library_MFUpdate_MFUpdate_MissingPacketEnumerator
+struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MissingPacketEnumerator
 {
     static const int FIELD__m_pktBitChk = 65535;
     static const int FIELD__m_currentIdx = 65535;
@@ -90,6 +89,6 @@ struct Library_MFUpdate_MFUpdate_MissingPacketEnumerator
 
 
 
-extern const CLR_RT_NativeAssemblyData g_CLR_AssemblyNative_MFUpdate;
+extern const CLR_RT_NativeAssemblyData g_CLR_AssemblyNative_SPOT_MFUpdate;
 
-#endif  //_MFUPDATE_H_
+#endif  //_SPOT_MFUPDATE_H_
