@@ -11,7 +11,7 @@
 //-----------------------------------------------------------------------------
 #include "SPOT_MFUpdate.h"
 #include "SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate.h"
-//#include <MFUpdate_decl.h>
+#include <MFUpdate_decl.h>
 
 using namespace SPOT::MFUpdate;
 
@@ -23,21 +23,46 @@ void MFNativeUpdate::_cctor( HRESULT &hr )
 */
 }
 
-signed int MFNativeUpdate::Initialize( UNSUPPORTED_TYPE param0, HRESULT &hr )
+signed int MFNativeUpdate::Initialize( unsigned int param0, unsigned int param1, unsigned int param2, unsigned short param3, unsigned short param4, signed int param5, signed int param6, signed int param7, signed int param8, HRESULT &hr )
 {
     (void)hr;
     (void)param0;
+    (void)param1;
+    (void)param2;
+    (void)param3;
+    (void)param4;
+    (void)param5;
+    (void)param6;
+    (void)param7;
+    (void)param8;
     CLR_INT32 retVal = 0; 
 /*
-    CLR_RT_HeapBlock* pUpdateBase = stack.Arg0().Dereference();
     MFUpdateHeader header;
     LPCSTR szProvider;
 
-    FAULT_ON_NULL(pUpdateBase);
+    FAULT_ON_NULL(param0);
+    FAULT_ON_NULL(param1);
+    FAULT_ON_NULL(param2);
+    FAULT_ON_NULL(param3);
+    FAULT_ON_NULL(param4);
+    //FAULT_ON_NULL(param5);
+    //FAULT_ON_NULL(param6);
+    //FAULT_ON_NULL(param7);
+    //FAULT_ON_NULL(param8);
+
+    // Set UpdateHeader Properties
+    header.PacketSize = param0;
+    header.UpdateID = (int) param1;
+    header.UpdateSize  = param2;
+    header.UpdateType = param3;
+    header.UpdateSubType = param4;
+
+    header.Version.usMajor = (unsigned short) param5;
+    header.Version.usMinor = (unsigned short) param6;
+    header.Verison.usBuild = (unsigned short) param7;
+    header.Verison.usRevision = (unsigned short) param8;
 
     szProvider = pUpdateBase[Library_spot_update_native_Microsoft_SPOT_MFUpdate_MFUpdateBase::FIELD__m_provider].Dereference()->StringText();
-
-    MarshalStorageHeader(pUpdateBase, header);
 
     retVal = MFUpdate_InitUpdate(szProvider, header);
 */

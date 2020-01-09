@@ -25,14 +25,38 @@ HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::_cctor___STATIC__VOI
     NANOCLR_NOCLEANUP();
 }
 
-HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Initialize___STATIC__I4__SPOTMFUpdateMFUpdateBase( CLR_RT_StackFrame& stack )
+HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Initialize___STATIC__I4__U4__U4__U4__U2__U2__I4__I4__I4__I4( CLR_RT_StackFrame& stack )
 {
     NANOCLR_HEADER(); hr = S_OK;
     {
-        UNSUPPORTED_TYPE param0;
-        NANOCLR_CHECK_HRESULT( Interop_Marshal_UNSUPPORTED_TYPE( stack, 0, param0 ) );
+        unsigned int param0;
+        NANOCLR_CHECK_HRESULT( Interop_Marshal_UINT32( stack, 0, param0 ) );
 
-        signed int retVal = MFNativeUpdate::Initialize( param0, hr );
+        unsigned int param1;
+        NANOCLR_CHECK_HRESULT( Interop_Marshal_UINT32( stack, 1, param1 ) );
+
+        unsigned int param2;
+        NANOCLR_CHECK_HRESULT( Interop_Marshal_UINT32( stack, 2, param2 ) );
+
+        unsigned short param3;
+        NANOCLR_CHECK_HRESULT( Interop_Marshal_UINT16( stack, 3, param3 ) );
+
+        unsigned short param4;
+        NANOCLR_CHECK_HRESULT( Interop_Marshal_UINT16( stack, 4, param4 ) );
+
+        signed int param5;
+        NANOCLR_CHECK_HRESULT( Interop_Marshal_INT32( stack, 5, param5 ) );
+
+        signed int param6;
+        NANOCLR_CHECK_HRESULT( Interop_Marshal_INT32( stack, 6, param6 ) );
+
+        signed int param7;
+        NANOCLR_CHECK_HRESULT( Interop_Marshal_INT32( stack, 7, param7 ) );
+
+        signed int param8;
+        NANOCLR_CHECK_HRESULT( Interop_Marshal_INT32( stack, 8, param8 ) );
+
+        signed int retVal = MFNativeUpdate::Initialize( param0, param1, param2, param3, param4, param5, param6, param7, param8, hr );
         NANOCLR_CHECK_HRESULT( hr );
         SetResult_INT32( stack, retVal );
 
