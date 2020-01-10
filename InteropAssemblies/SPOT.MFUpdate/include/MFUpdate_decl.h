@@ -26,6 +26,13 @@
 #define MFUPDATE_UPDATESUBTYPE_ASSEMBLY_ADD             0x0001
 #define MFUPDATE_UPDATESUBTYPE_ASSEMBLY_REPLACE_DEPLOY  0x0002
 
+typedef unsigned char   UINT8;
+typedef unsigned short  UINT16;
+typedef unsigned int    UINT32;
+typedef signed char     INT8;
+typedef signed short    INT16;
+typedef signed int      INT32;
+typedef bool            BOOL;
 
 #define MFUPDATE_UPDATEID_ANY        0xFFFFFFFF
 

@@ -21,7 +21,7 @@ namespace SPOT
             // Helper Functions to access fields of managed object
             // Declaration of stubs. These functions are implemented by Interop code developers
             static void _cctor( HRESULT &hr );
-            static signed int Initialize( unsigned int param0, unsigned int param1, unsigned int param2, unsigned short param3, unsigned short param4, signed int param5, signed int param6, signed int param7, signed int param8, HRESULT &hr );
+            static signed int Initialize( unsigned int param0, unsigned int param1, unsigned int param2, unsigned short param3, unsigned short param4, signed int param5, signed int param6, signed int param7, signed int param8, const char* param9, HRESULT &hr );
             static bool Authenticate( signed int param0, CLR_RT_TypedArray_UINT8 param1, HRESULT &hr );
             static bool Open( signed int param0, HRESULT &hr );
             static bool Create( signed int param0, HRESULT &hr );

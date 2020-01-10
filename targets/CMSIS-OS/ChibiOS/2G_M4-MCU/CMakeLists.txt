@@ -143,6 +143,10 @@ add_executable(
 
     # sources for nanoFramework APIs
     ${TARGET_NANO_APIS_SOURCES}
+	
+    # add stub and implementation for MFUpdate
+	"${PROJECT_SOURCE_DIR}/src/PAL/MFUpdate/stubs/MFUpdate_stub.cpp"
+	"${PROJECT_SOURCE_DIR}/src/PAL/MFUpdate/MFUpdate.cpp"
 )
 
 # add dependency from ChibiOS (this is required to make sure the ChibiOS repo is downloaded before the build starts)

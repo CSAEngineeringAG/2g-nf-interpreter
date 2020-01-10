@@ -15,8 +15,8 @@ using namespace SPOT::MFUpdate;
 
 HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::_cctor___STATIC__VOID( CLR_RT_StackFrame& stack )
 {
-    (void)stack;
-
+    (void) stack;
+    
     NANOCLR_HEADER(); hr = S_OK;
     {
         MFNativeUpdate::_cctor( hr );
@@ -25,7 +25,7 @@ HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::_cctor___STATIC__VOI
     NANOCLR_NOCLEANUP();
 }
 
-HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Initialize___STATIC__I4__U4__U4__U4__U2__U2__I4__I4__I4__I4( CLR_RT_StackFrame& stack )
+HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Initialize___STATIC__I4__U4__U4__U4__U2__U2__I4__I4__I4__I4__STRING( CLR_RT_StackFrame& stack )
 {
     NANOCLR_HEADER(); hr = S_OK;
     {
@@ -56,7 +56,10 @@ HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Initialize___STATIC_
         signed int param8;
         NANOCLR_CHECK_HRESULT( Interop_Marshal_INT32( stack, 8, param8 ) );
 
-        signed int retVal = MFNativeUpdate::Initialize( param0, param1, param2, param3, param4, param5, param6, param7, param8, hr );
+        const char* param9;
+        NANOCLR_CHECK_HRESULT( Interop_Marshal_LPCSTR( stack, 9, param9 ) );
+
+        signed int retVal = MFNativeUpdate::Initialize( param0, param1, param2, param3, param4, param5, param6, param7, param8, param9, hr );
         NANOCLR_CHECK_HRESULT( hr );
         SetResult_INT32( stack, retVal );
 
@@ -71,8 +74,9 @@ HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Authenticate___STATI
         signed int param0;
         NANOCLR_CHECK_HRESULT( Interop_Marshal_INT32( stack, 0, param0 ) );
 
+        // Can be NULL, so we dont rise exception here if its NULL
         CLR_RT_TypedArray_UINT8 param1;
-        NANOCLR_CHECK_HRESULT( Interop_Marshal_UINT8_ARRAY( stack, 1, param1 ) );
+        Interop_Marshal_UINT8_ARRAY( stack, 1, param1 );
 
         bool retVal = MFNativeUpdate::Authenticate( param0, param1, hr );
         NANOCLR_CHECK_HRESULT( hr );
@@ -141,8 +145,9 @@ HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::AddPacket___STATIC__
         CLR_RT_TypedArray_UINT8 param2;
         NANOCLR_CHECK_HRESULT( Interop_Marshal_UINT8_ARRAY( stack, 2, param2 ) );
 
+        // Can be NULL, so we dont rise exception here if its NULL
         CLR_RT_TypedArray_UINT8 param3;
-        NANOCLR_CHECK_HRESULT( Interop_Marshal_UINT8_ARRAY( stack, 3, param3 ) );
+        Interop_Marshal_UINT8_ARRAY( stack, 3, param3 );
 
         bool retVal = MFNativeUpdate::AddPacket( param0, param1, param2, param3, hr );
         NANOCLR_CHECK_HRESULT( hr );
@@ -159,8 +164,9 @@ HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Validate___STATIC__B
         signed int param0;
         NANOCLR_CHECK_HRESULT( Interop_Marshal_INT32( stack, 0, param0 ) );
 
+        // Can be NULL, so we dont rise exception here if its NULL
         CLR_RT_TypedArray_UINT8 param1;
-        NANOCLR_CHECK_HRESULT( Interop_Marshal_UINT8_ARRAY( stack, 1, param1 ) );
+        Interop_Marshal_UINT8_ARRAY( stack, 1, param1 );
 
         bool retVal = MFNativeUpdate::Validate( param0, param1, hr );
         NANOCLR_CHECK_HRESULT( hr );
@@ -177,8 +183,9 @@ HRESULT Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Install___STATIC__BO
         signed int param0;
         NANOCLR_CHECK_HRESULT( Interop_Marshal_INT32( stack, 0, param0 ) );
 
+        // Can be NULL, so we dont rise exception here if its NULL
         CLR_RT_TypedArray_UINT8 param1;
-        NANOCLR_CHECK_HRESULT( Interop_Marshal_UINT8_ARRAY( stack, 1, param1 ) );
+        Interop_Marshal_UINT8_ARRAY( stack, 1, param1 );
 
         bool retVal = MFNativeUpdate::Install( param0, param1, hr );
         NANOCLR_CHECK_HRESULT( hr );

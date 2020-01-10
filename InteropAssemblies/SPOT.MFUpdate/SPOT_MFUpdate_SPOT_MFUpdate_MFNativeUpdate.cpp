@@ -18,37 +18,18 @@ using namespace SPOT::MFUpdate;
 void MFNativeUpdate::_cctor( HRESULT &hr )
 {
     (void)hr;
-/*
+
     MFUpdate_Initialize();
-*/
 }
 
-signed int MFNativeUpdate::Initialize( unsigned int param0, unsigned int param1, unsigned int param2, unsigned short param3, unsigned short param4, signed int param5, signed int param6, signed int param7, signed int param8, HRESULT &hr )
+signed int MFNativeUpdate::Initialize( unsigned int param0, unsigned int param1, unsigned int param2, unsigned short param3, unsigned short param4, signed int param5, signed int param6, signed int param7, signed int param8, const char* param9, HRESULT &hr )
 {
     (void)hr;
-    (void)param0;
-    (void)param1;
-    (void)param2;
-    (void)param3;
-    (void)param4;
-    (void)param5;
-    (void)param6;
-    (void)param7;
-    (void)param8;
-    CLR_INT32 retVal = 0; 
-/*
-    MFUpdateHeader header;
-    LPCSTR szProvider;
+    // param9 ^= szProvider
 
-    FAULT_ON_NULL(param0);
-    FAULT_ON_NULL(param1);
-    FAULT_ON_NULL(param2);
-    FAULT_ON_NULL(param3);
-    FAULT_ON_NULL(param4);
-    //FAULT_ON_NULL(param5);
-    //FAULT_ON_NULL(param6);
-    //FAULT_ON_NULL(param7);
-    //FAULT_ON_NULL(param8);
+    CLR_INT32 retVal = 0; 
+
+    MFUpdateHeader header;
 
     // Set UpdateHeader Properties
     header.PacketSize = param0;
@@ -59,173 +40,169 @@ signed int MFNativeUpdate::Initialize( unsigned int param0, unsigned int param1,
 
     header.Version.usMajor = (unsigned short) param5;
     header.Version.usMinor = (unsigned short) param6;
-    header.Verison.usBuild = (unsigned short) param7;
-    header.Verison.usRevision = (unsigned short) param8;
+    header.Version.usBuild = (unsigned short) param7;
+    header.Version.usRevision = (unsigned short) param8;
 
-    szProvider = pUpdateBase[Library_spot_update_native_Microsoft_SPOT_MFUpdate_MFUpdateBase::FIELD__m_provider].Dereference()->StringText();
+    retVal = MFUpdate_InitUpdate(param9, header);
 
-    retVal = MFUpdate_InitUpdate(szProvider, header);
-*/
     return retVal;
 }
 
 bool MFNativeUpdate::Authenticate( signed int param0, CLR_RT_TypedArray_UINT8 param1, HRESULT &hr )
 {
     (void)hr;
-    (void)param0;
-    (void)param1;
+    // param0 ^= handle
+    // param1 ^= AuthenticationData (param1) for the moment always given as null
 
     bool retVal = 0; 
-/*
-    CLR_INT32               handle  = param0;
-    CLR_RT_HeapBlock_Array* paArgs  = param1;
-    CLR_UINT8*              pArgs   = paArgs == NULL ? NULL : paArgs->GetFirstElement();
-    CLR_INT32               argsLen = paArgs == NULL ? 0    : paArgs->m_numOfElements;
 
-    retVal = MFUpdate_Authenticate(handle, pArgs, argsLen);
-*/
+    CLR_UINT8* pAuthData;
+    CLR_INT32 authLen;
+
+    if(param1.GetBuffer() == NULL)
+    {
+        pAuthData = NULL;
+        authLen = 0;
+    }
+    else
+    {
+        pAuthData = param1.GetBuffer();
+        authLen = param1.GetSize();
+    }
+
+    retVal = MFUpdate_Authenticate(param0, pAuthData, authLen);
+
     return retVal;
 }
 
 bool MFNativeUpdate::Open( signed int param0, HRESULT &hr )
 {
     (void)hr;
-    (void)param0;
+    // param0 ^= handle
 
     bool retVal = 0; 
-/*
-    CLR_INT32 handle = param0;
 
-    retVal = MFUpdate_Open(handle);
-*/
+    retVal = MFUpdate_Open(param0);
+
     return retVal;
 }
 
 bool MFNativeUpdate::Create( signed int param0, HRESULT &hr )
 {
     (void)hr;
-    (void)param0;
+    // param0 ^= handle
 
     bool retVal = 0;
-/*
-    CLR_INT32 handle = param0;
 
-    retVal = MFUpdate_Create(handle);
-*/
+    retVal = MFUpdate_Create(param0);
+
     return retVal;
 }
 
 void MFNativeUpdate::GetMissingPackets( signed int param0, CLR_RT_TypedArray_UINT32 param1, HRESULT &hr )
 {
     (void)hr;
-    (void)param0;
-    (void)param1;
-/*
-    CLR_INT32 handle = param0;
-    CLR_RT_HeapBlock_Array* pArray = param1; 
+    // param0 ^= handle
+    // param1 ^= packetBitCheck
+
     CLR_INT32 pktCount;
 
-    FAULT_ON_NULL(pArray);
+    FAULT_ON_NULL(param1.GetBuffer());
 
-    pktCount = pArray->m_numOfElements;
+    pktCount = param1.GetSize();
 
-    if(!MFUpdate_GetMissingPackets(handle, (UINT32*)pArray->GetFirstElement(), &pktCount))
+    if(!MFUpdate_GetMissingPackets(param0, (UINT32*)param1.GetBuffer(), &pktCount))
     {
-        TINYCLR_SET_AND_LEAVE(CLR_E_FAIL);
+        NANOCLR_SET_AND_LEAVE(CLR_E_FAIL);
     }
-*/
+
+    NANOCLR_CLEANUP();
 }
 
 bool MFNativeUpdate::AddPacket( signed int param0, signed int param1, CLR_RT_TypedArray_UINT8 param2, CLR_RT_TypedArray_UINT8 param3, HRESULT &hr )
 {
     (void)hr;
-    (void)param0;
-    (void)param1;
-    (void)param2;
-    (void)param3;
+    // param0 ^= handle
+    // param1 ^= pktIndex
+    // param2 ^= pPacket
+    // param3 ^= pValidation
 
     bool retVal = 0;
-/*
-    CLR_INT32  handle       = param0;
-    CLR_INT32  pktIndex     = param1;
-    CLR_RT_HeapBlock_Array* pPacket     = param2;
-    CLR_RT_HeapBlock_Array* pValidation = param3;
+
     CLR_UINT8* pValidData;
     CLR_INT32 validLen;
 
-    FAULT_ON_NULL(pPacket);
+    FAULT_ON_NULL(param2.GetBuffer());
 
-    if(pValidation == NULL)
+    if(param3.GetBuffer() == NULL)
     {
         pValidData = NULL;
         validLen = 0;
     }
     else
     {
-        pValidData = pValidation->GetFirstElement();
-        validLen = pValidation->m_numOfElements;
+        pValidData = param3.GetBuffer();
+        validLen = param3.GetSize();
     }
 
-    retVal = MFUpdate_AddPacket(handle, pktIndex, pPacket->GetFirstElement(), pPacket->m_numOfElements, pValidData, validLen);
-*/
+    retVal = MFUpdate_AddPacket(param0, param1, param2.GetBuffer(), param2.GetSize(), pValidData, validLen);
+
+    NANOCLR_CLEANUP();
+
     return retVal;
 }
 
 bool MFNativeUpdate::Validate( signed int param0, CLR_RT_TypedArray_UINT8 param1, HRESULT &hr )
 {
     (void)hr;
-    (void)param0;
-    (void)param1;
+    // param0 ^= handle
+    // param1 ^= pValidation
 
     bool retVal = 0;
-/*
-    CLR_INT32               handle      = param0;
-    CLR_RT_HeapBlock_Array* pValidation = param1;
+
     CLR_UINT8*              pValidData;
     CLR_INT32               validLen;
 
-    if(pValidation == NULL)
+    if(param1.GetBuffer() == NULL)
     {
         pValidData = NULL;
         validLen = 0;
     }
     else
     {
-        pValidData = pValidation->GetFirstElement();
-        validLen = pValidation->m_numOfElements;
+        pValidData = param1.GetBuffer();
+        validLen = param1.GetSize();
     }
 
-    retVal = MFUpdate_Validate(handle, pValidData, validLen);
-*/
+    retVal = MFUpdate_Validate(param0, pValidData, validLen);
+
     return retVal;
 }
 
 bool MFNativeUpdate::Install( signed int param0, CLR_RT_TypedArray_UINT8 param1, HRESULT &hr )
 {
     (void)hr;
-    (void)param0;
-    (void)param1;
+    // param0 ^= handle
+    // param1 ^= pValidation
 
     bool retVal = 0; 
-/*
-    CLR_INT32               handle      = param0;
-    CLR_RT_HeapBlock_Array* pValidation = param1;
+
     CLR_UINT8*              pValidData;
     CLR_INT32               validLen;
 
-    if(pValidation == NULL)
+    if(param1.GetBuffer() == NULL)
     {
         pValidData = NULL;
         validLen = 0;
     }
     else
     {
-        pValidData = pValidation->GetFirstElement();
-        validLen = pValidation->m_numOfElements;
+        pValidData = param1.GetBuffer();
+        validLen = param1.GetSize();
     }
 
-    retVal = MFUpdate_Install(handle, pValidData, validLen);
-*/
+    retVal = MFUpdate_Install(param0, pValidData, validLen);
+
     return retVal;
 }
 
