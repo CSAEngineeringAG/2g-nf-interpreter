@@ -683,6 +683,9 @@ int LWIP_SOCKETS_Driver::SetSockOpt( SOCK_SOCKET socket, int level, int optname,
                     break;
 
                 case SOCK_SOCKO_DONTLINGER:
+                    pNativeOptionValue = (char*)&lopt;
+                    optlen = sizeof(lopt);
+                    break;
                 case SOCK_SOCKO_EXCLUSIVEADDRESSUSE:
                     nativeIntValue     = !*(int*)optval;
                     pNativeOptionValue = (char*)&nativeIntValue;
