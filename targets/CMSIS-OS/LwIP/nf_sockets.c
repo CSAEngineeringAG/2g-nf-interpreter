@@ -664,6 +664,13 @@ lwip_connect(int s, const struct sockaddr *name, socklen_t namelen)
     ip_addr_t remote_addr;
     u16_t remote_port;
 
+    // check if socket is already connected
+    if (sock->conn->pcb.tcp->state == ESTABLISHED)
+    {
+      sock_set_errno(sock, err_to_errno(ERR_ISCONN));
+      return -1;
+    }
+    
     /* check size, family and alignment of 'name' */
     LWIP_ERROR("lwip_connect: invalid address", IS_SOCK_ADDR_LEN_VALID(namelen) &&
                IS_SOCK_ADDR_TYPE_VALID_OR_UNSPEC(name) && IS_SOCK_ADDR_ALIGNED(name),
