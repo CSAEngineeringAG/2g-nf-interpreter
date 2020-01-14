@@ -1,9 +1,9 @@
-/*
-//#include <nanohal.h>
+
+#include <nanohal.h>
 #include <mfupdate_decl.h>
-//#include <Drivers\Oberon\Prime\MFUpdateFlag\MicroBooterFlashUpdate.h>
-//#include <Drivers\MFUpdate\Validation\crc\CrcUpdateValidation.h>
-//#include <Drivers\MFUpdate\Storage\BlockStorageUpdate.h>
+#include <MicroBooterFlashUpdate.h>
+#include <CrcUpdateValidation.h>
+#include <BlockStorageUpdate.h>
 
 static const IUpdatePackage s_UpdatePackages[] =
 {
@@ -20,4 +20,4 @@ static const IUpdatePackage s_UpdatePackages[] =
 
 const IUpdatePackage* g_UpdatePackages     = s_UpdatePackages;
 const INT32           g_UpdatePackageCount = ARRAYSIZE(s_UpdatePackages);
-*/
+

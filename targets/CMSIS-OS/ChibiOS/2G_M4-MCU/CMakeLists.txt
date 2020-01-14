@@ -144,11 +144,22 @@ add_executable(
     # sources for nanoFramework APIs
     ${TARGET_NANO_APIS_SOURCES}
 	
-    # add implementations (and stubs) for MFUpdate
+    # MFUpdate: Implementations (and stubs)
     "${PROJECT_SOURCE_DIR}/src/PAL/MFUpdate/MFUpdate.cpp"
     #"${PROJECT_SOURCE_DIR}/src/PAL/MFUpdate/stubs/MFUpdate_stub.cpp"
-    "${PROJECT_SOURCE_DIR}/src/PAL/MFUpdate/stubs/Config/MFUpdate_config_stub.cpp"
-    #"${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/MFUpdate_config_PAL/MFUpdate_config_M4MCU.cpp"
+
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/MFUpdate_config_PAL/MFUpdate_config_M4MCU.cpp"
+    #"${PROJECT_SOURCE_DIR}/src/PAL/MFUpdate/stubs/Config/MFUpdate_config_stub.cpp"
+
+    #MFUpdate Storage
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Storage/BlockStorageUpdate.cpp"
+
+    #MFUpdate Validation
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFupdate/Validation/CRC/CrcUpdateValidation.cpp"
+
+    #MFUpdate Flag
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFupdateFlag/MicroBooterFlashUpdate.cpp"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFupdateFlag/UpdateFlashConfig.cpp"
 )
 
 # add dependency from ChibiOS (this is required to make sure the ChibiOS repo is downloaded before the build starts)
@@ -234,6 +245,11 @@ target_include_directories(${NANOCLR_PROJECT_NAME}.elf PUBLIC
 
     # includes for SPIFFS
     ${SPIFFS_INCLUDE_DIRS}
+
+    #MFUpdate
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Storage/"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Validation/CRC/"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdateFlag/"
 )
 
 # set compiler options
