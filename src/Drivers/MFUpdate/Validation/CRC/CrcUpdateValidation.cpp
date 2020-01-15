@@ -81,7 +81,7 @@ BOOL UpdateValidationCRC::AuthCommand( MFUpdate* pUpdate, UINT32 cmd, UINT8* pAr
                 responseLen = sizeof(UINT32);
                 fRet = TRUE;
             }
-            else if((unsigned int)responseLen >= sizeof(UINT32))
+            else if((unsigned long long)responseLen >= sizeof(UINT32))
             {
                 *(UINT32*)pResponse = MFUPDATE_AUTHENTICATION_TYPE__CRC;
 

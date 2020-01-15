@@ -79,7 +79,6 @@ static MFUpdate* GetUpdate(int handle)
 
 static const IUpdatePackage* GetProviderByName(LPCSTR szProvider)
 {
-
     for(int i=0; i<g_UpdatePackageCount; i++)
     {
         if(g_UpdatePackages[i].ProviderName != NULL && hal_stricmp(szProvider, g_UpdatePackages[i].ProviderName) == 0)
@@ -93,7 +92,6 @@ static const IUpdatePackage* GetProviderByName(LPCSTR szProvider)
 
 INT32 MFUpdate_InitUpdate( LPCSTR szProvider, MFUpdateHeader& update )
 {
-    
     MFUpdate*             pUpdate;
 
     if(!s_updatesInitialized) MFUpdate_Initialize();
@@ -113,11 +111,6 @@ INT32 MFUpdate_InitUpdate( LPCSTR szProvider, MFUpdateHeader& update )
     }
 
     return updateHandle;
-    /*
-    (void)szProvider;
-    (void)update;
-    return -1;
-    */
 }
 
 /*
@@ -152,12 +145,6 @@ BOOL MFUpdate_Authenticate( INT32 updateHandle, UINT8* pAuthData, INT32 authLen 
     }
 
     return fRet;
-    /*
-    (void)updateHandle;
-    (void)pAuthData;
-    (void)authLen;
-    return false;
-    */
 }
 
 /*
@@ -212,10 +199,6 @@ BOOL MFUpdate_Open( INT32 updateHandle )
     memcpy(&update->Header, &header, sizeof(header));
 
     return TRUE;
-    /*
-    (void)updateHandle;
-    return false;
-    */
 }
 
 
@@ -243,10 +226,6 @@ BOOL MFUpdate_Create( INT32 updateHandle )
     }
 
     return TRUE;
-    /*
-    (void)updateHandle;
-    return false;
-    */
 }
 
 
@@ -299,12 +278,6 @@ BOOL MFUpdate_GetMissingPackets( INT32 updateHandle, UINT32* pPacketBits, INT32*
     }
 
     return TRUE;
-    /*
-    (void)updateHandle;
-    (void)pPacketBits;
-    (void)pCount;
-    return false;
-    */
 }
 
 BOOL MFUpdate_AddPacket( INT32 updateHandle, INT32 packetIndex, UINT8* packetData, INT32 packetLen, UINT8* pValidationData, INT32 validationLen )
@@ -328,15 +301,6 @@ BOOL MFUpdate_AddPacket( INT32 updateHandle, INT32 packetIndex, UINT8* packetDat
     ret = packetLen == update->Providers->Storage->Write( update->StorageHandle, packetIndex * update->Header.PacketSize, packetData, packetLen );
 
     return ret;
-    /*
-    (void)updateHandle;
-    (void)packetIndex;
-    (void)packetData;
-    (void)packetLen;
-    (void)pValidationData;
-    (void)validationLen;
-    return false;
-    */
 }
 
 BOOL MFUpdate_Validate( INT32 updateHandle, UINT8* pValidationData, INT32 validationLen )
@@ -364,12 +328,6 @@ BOOL MFUpdate_Validate( INT32 updateHandle, UINT8* pValidationData, INT32 valida
     update->Flags |= MFUPDATE_FLAGS__VALIDATED;
 
     return fValid;
-    /*
-    (void)updateHandle;
-    (void)pValidationData;
-    (void)validationLen;
-    return false;
-    */
 }
 
 BOOL MFUpdate_Install( INT32 updateHandle, UINT8* pValidationData, INT32 validationLen )
@@ -388,12 +346,6 @@ BOOL MFUpdate_Install( INT32 updateHandle, UINT8* pValidationData, INT32 validat
     }
 
     return update->Providers->Update->InstallUpdate( update, pValidationData, validationLen );
-    /*
-    (void)updateHandle;
-    (void)pValidationData;
-    (void)validationLen;
-    return false;
-    */
 }
 
 /*

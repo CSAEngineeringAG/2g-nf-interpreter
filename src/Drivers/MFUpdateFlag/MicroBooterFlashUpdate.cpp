@@ -65,7 +65,7 @@ BOOL MicroBooterFlashUpdateProvider::InstallUpdate( MFUpdate* pUpdate, UINT8* pV
             {
                 HAL_UPDATE_CONFIG cfg;
 
-                if(sizeof(cfg.UpdateSignature) < (unsigned int) validationLen) return FALSE;
+                if(sizeof(cfg.UpdateSignature) < (unsigned long long) validationLen) return FALSE;
                 
                 cfg.Header.Enable = TRUE;
                 cfg.UpdateID = pUpdate->Header.UpdateID;
@@ -146,7 +146,7 @@ BOOL MicroBooterFlashUpdateProvider::InstallUpdate( MFUpdate* pUpdate, UINT8* pV
                                 
                                 if(BlockStorageStream_IsErased(&stream, pUpdate->Header.UpdateSize))
                                 {
-                                    while((unsigned int) offset < pUpdate->Header.UpdateSize)
+                                    while(offset < (signed int) pUpdate->Header.UpdateSize)
                                     {
                                         if((signed int)(pUpdate->Header.UpdateSize - offset) < len)
                                         {
