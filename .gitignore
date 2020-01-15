@@ -14,7 +14,6 @@ InteropAssemblies/*
 !InteropAssemblies/System.IO.FileSystem
 !InteropAssemblies/USB.Host
 !InteropAssemblies/Oberon.NaCl
-!InteropAssemblies/NETIF
 
 # Visual Studio Code
 # ignore C/C++ launch file (will change frequently per user/board setup, use should derive content from launch.TEMPLATE.json)
@@ -31,7 +30,6 @@ CMake/Modules/FindINTEROP*.cmake
 !CMake/Modules/FindINTEROP-System.IO.FileSystem.cmake
 !CMake/Modules/FindINTEROP-USB.Host.cmake
 !CMake/Modules/FindINTEROP-Oberon.NaCl.cmake
-!CMake/Modules/FindINTEROP-NETIF.cmake
 
 # Visual Studio
 ## Ignore Visual Studio temporary files, build results, and
