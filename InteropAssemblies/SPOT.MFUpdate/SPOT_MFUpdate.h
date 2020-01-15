@@ -12,22 +12,6 @@
 
 #include <nanoCLR_Interop.h>
 #include <nanoCLR_Runtime.h>
-struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate
-{
-    NANOCLR_NATIVE_DECLARE(_cctor___STATIC__VOID);
-    NANOCLR_NATIVE_DECLARE(Initialize___STATIC__I4__U4__U4__U4__U2__U2__I4__I4__I4__I4__STRING);
-    NANOCLR_NATIVE_DECLARE(Authenticate___STATIC__BOOLEAN__I4__SZARRAY_U1);
-    NANOCLR_NATIVE_DECLARE(Open___STATIC__BOOLEAN__I4);
-    NANOCLR_NATIVE_DECLARE(Create___STATIC__BOOLEAN__I4);
-    NANOCLR_NATIVE_DECLARE(GetMissingPackets___STATIC__VOID__I4__SZARRAY_U4);
-    NANOCLR_NATIVE_DECLARE(AddPacket___STATIC__BOOLEAN__I4__I4__SZARRAY_U1__SZARRAY_U1);
-    NANOCLR_NATIVE_DECLARE(Validate___STATIC__BOOLEAN__I4__SZARRAY_U1);
-    NANOCLR_NATIVE_DECLARE(Install___STATIC__BOOLEAN__I4__SZARRAY_U1);
-
-    //--//
-
-};
-
 struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFUpdateBase
 {
     static const int FIELD__m_provider = 65535;
@@ -50,6 +34,22 @@ struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFUpdate
     static const int FIELD__m_maxPkt = 65535;
     static const int FIELD__m_authenticated = 65535;
 
+
+    //--//
+
+};
+
+struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate
+{
+    NANOCLR_NATIVE_DECLARE(_cctor___STATIC__VOID);
+    NANOCLR_NATIVE_DECLARE(Initialize___STATIC__I4__U4__U4__U4__U2__U2__I4__I4__I4__I4__STRING);
+    NANOCLR_NATIVE_DECLARE(Authenticate___STATIC__BOOLEAN__I4__SZARRAY_U1);
+    NANOCLR_NATIVE_DECLARE(Open___STATIC__BOOLEAN__I4);
+    NANOCLR_NATIVE_DECLARE(Create___STATIC__BOOLEAN__I4);
+    NANOCLR_NATIVE_DECLARE(GetMissingPackets___STATIC__VOID__I4__SZARRAY_U4);
+    NANOCLR_NATIVE_DECLARE(AddPacket___STATIC__BOOLEAN__I4__I4__SZARRAY_U1__SZARRAY_U1);
+    NANOCLR_NATIVE_DECLARE(Validate___STATIC__BOOLEAN__I4__SZARRAY_U1);
+    NANOCLR_NATIVE_DECLARE(Install___STATIC__BOOLEAN__I4__SZARRAY_U1);
 
     //--//
 
