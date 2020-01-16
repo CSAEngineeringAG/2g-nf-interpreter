@@ -154,7 +154,7 @@ INT32 BlockStorageUpdate::Create( MFUpdateHeader& storageHeader, UINT32 flags )
     // If we are creating a new deployment we should erase any other of the same type 
     Delete( MFUPDATE_UPDATEID_ANY, storageHeader.UpdateType, MFUPDATE_UPDATESUBTYPE_ANY );
 
-    for(i=0; (unsigned long) i < ARRAYSIZE(g_BlockStorageUpdate.m_files); i++)
+    for(i=0; (unsigned int) i < ARRAYSIZE(g_BlockStorageUpdate.m_files); i++)
     {
         if( g_BlockStorageUpdate.m_files[i].Type    == storageHeader.UpdateType    && 
             g_BlockStorageUpdate.m_files[i].SubType == storageHeader.UpdateSubType && 
@@ -221,7 +221,7 @@ INT32 BlockStorageUpdate::Open( INT32 storageID, UINT16 storageType, UINT16 stor
 
     if(!g_BlockStorageUpdate.m_initialized) g_BlockStorageUpdate.InitializeFiles(BlockUsage::BlockUsage_UPDATE);
 
-    for(i = 0; (unsigned long) i <  ARRAYSIZE(g_BlockStorageUpdate.m_files); i++)
+    for(i = 0; (unsigned int) i <  ARRAYSIZE(g_BlockStorageUpdate.m_files); i++)
     {
         if( (MFUPDATE_UPDATEID_ANY      == (unsigned int) storageID      || g_BlockStorageUpdate.m_files[i].ID      == (unsigned int) storageID     ) && 
             (MFUPDATE_UPDATETYPE_ANY    == storageType    || g_BlockStorageUpdate.m_files[i].Type    == storageType   ) &&
@@ -243,7 +243,7 @@ void  BlockStorageUpdate::Close     ( INT32 handleStorage )
 
 BOOL BlockStorageUpdate::Delete( INT32 storageID, UINT16 storageType, UINT16 storageSubType )
 {
-    for(int i = 0; (unsigned long) i < ARRAYSIZE(g_BlockStorageUpdate.m_files); i++)
+    for(int i = 0; (unsigned int) i < ARRAYSIZE(g_BlockStorageUpdate.m_files); i++)
     {
         if( (MFUPDATE_UPDATEID_ANY      == (unsigned int) storageID   || g_BlockStorageUpdate.m_files[i].ID      == (unsigned int) storageID     ) && 
             (MFUPDATE_UPDATETYPE_ANY    == storageType || g_BlockStorageUpdate.m_files[i].Type    == storageType   ) &&
@@ -261,7 +261,7 @@ BOOL BlockStorageUpdate::Delete( INT32 storageID, UINT16 storageType, UINT16 sto
                 int size = g_BlockStorageUpdate.m_files[i].Size;
                 int start = g_BlockStorageUpdate.m_files[i].StartAddress;
                 
-                if((unsigned long) pCur->File.StartAddress > size)
+                if((signed long) pCur->File.StartAddress > size)
                 {
                     if((unsigned long) (size + start) == pCur->File.StartAddress)
                     {
@@ -315,7 +315,7 @@ BOOL BlockStorageUpdate::GetFiles( UINT16 storageType, INT32* storageIDs, INT32*
 
     if(!g_BlockStorageUpdate.m_initialized) g_BlockStorageUpdate.InitializeFiles(BlockUsage::BlockUsage_UPDATE);
         
-    for(int i = 0; (unsigned long) i < ARRAYSIZE(g_BlockStorageUpdate.m_files); i++)
+    for(int i = 0; (unsigned int) i < ARRAYSIZE(g_BlockStorageUpdate.m_files); i++)
     {
         if((MFUPDATE_UPDATETYPE_ANY == storageType || g_BlockStorageUpdate.m_files[i].Type == storageType) && 
             g_BlockStorageUpdate.m_files[i].Size > 0)
@@ -343,7 +343,7 @@ BOOL BlockStorageUpdate::GetFiles( UINT16 storageType, INT32* storageIDs, INT32*
 
 BOOL BlockStorageUpdate::IsErased ( INT32  handleStorage, INT32 fileOffset, INT32  len )
 {
-    if(handleStorage < 0 || (unsigned long) handleStorage >= ARRAYSIZE(g_BlockStorageUpdate.m_files) || g_BlockStorageUpdate.m_files[handleStorage].Size <= 0) return FALSE;
+    if(handleStorage < 0 || (unsigned int) handleStorage >= ARRAYSIZE(g_BlockStorageUpdate.m_files) || g_BlockStorageUpdate.m_files[handleStorage].Size <= 0) return FALSE;
 
     BlockStorageStream_Seek(&g_BlockStorageUpdate.m_stream, g_BlockStorageUpdate.m_files[handleStorage].StartAddress + sizeof(UpdateBlockHeader) + fileOffset, SeekOrigin::BlockStorageStream_SeekBegin);
         
@@ -352,7 +352,7 @@ BOOL BlockStorageUpdate::IsErased ( INT32  handleStorage, INT32 fileOffset, INT3
 
 INT32 BlockStorageUpdate::Write( INT32  handleStorage, INT32 fileOffset, UINT8* pData, INT32 len )
 {
-    if(handleStorage < 0 || (unsigned long) handleStorage >= ARRAYSIZE(g_BlockStorageUpdate.m_files) || g_BlockStorageUpdate.m_files[handleStorage].Size <= 0) return FALSE;
+    if(handleStorage < 0 || (unsigned int) handleStorage >= ARRAYSIZE(g_BlockStorageUpdate.m_files) || g_BlockStorageUpdate.m_files[handleStorage].Size <= 0) return FALSE;
 
     BlockStorageStream_Seek(&g_BlockStorageUpdate.m_stream, g_BlockStorageUpdate.m_files[handleStorage].StartAddress + sizeof(UpdateBlockHeader) + fileOffset, SeekOrigin::BlockStorageStream_SeekBegin );
         
@@ -361,7 +361,7 @@ INT32 BlockStorageUpdate::Write( INT32  handleStorage, INT32 fileOffset, UINT8* 
 
 INT32 BlockStorageUpdate::Read( INT32  handleStorage, INT32 fileOffset, UINT8* pData, INT32 len )
 {
-    if(handleStorage < 0 || (unsigned long) handleStorage >= ARRAYSIZE(g_BlockStorageUpdate.m_files) || g_BlockStorageUpdate.m_files[handleStorage].Size <= 0) return FALSE;
+    if(handleStorage < 0 || (unsigned int) handleStorage >= ARRAYSIZE(g_BlockStorageUpdate.m_files) || g_BlockStorageUpdate.m_files[handleStorage].Size <= 0) return FALSE;
 
     BlockStorageStream_Seek(&g_BlockStorageUpdate.m_stream, g_BlockStorageUpdate.m_files[handleStorage].StartAddress + sizeof(UpdateBlockHeader) + fileOffset, SeekOrigin::BlockStorageStream_SeekBegin );
         
@@ -372,7 +372,7 @@ BOOL BlockStorageUpdate::GetHeader( INT32 handleStorage, MFUpdateHeader* pHeader
 {
     UpdateBlockHeader hdr;
     
-    if(handleStorage < 0 || (unsigned long) handleStorage >= ARRAYSIZE(g_BlockStorageUpdate.m_files) || g_BlockStorageUpdate.m_files[handleStorage].Size <= 0) return FALSE;
+    if(handleStorage < 0 || (unsigned int) handleStorage >= ARRAYSIZE(g_BlockStorageUpdate.m_files) || g_BlockStorageUpdate.m_files[handleStorage].Size <= 0) return FALSE;
 
     BlockStorageStream_Seek(&g_BlockStorageUpdate.m_stream, g_BlockStorageUpdate.m_files[handleStorage].StartAddress, SeekOrigin::BlockStorageStream_SeekBegin );
         
@@ -385,7 +385,7 @@ BOOL BlockStorageUpdate::GetHeader( INT32 handleStorage, MFUpdateHeader* pHeader
 
 UINT32 BlockStorageUpdate::GetEraseSize( INT32 handleStorage )
 {
-    if(handleStorage < 0 || (unsigned long) handleStorage >= ARRAYSIZE(g_BlockStorageUpdate.m_files) || g_BlockStorageUpdate.m_files[handleStorage].Size <= 0) return FALSE;
+    if(handleStorage < 0 || (unsigned int) handleStorage >= ARRAYSIZE(g_BlockStorageUpdate.m_files) || g_BlockStorageUpdate.m_files[handleStorage].Size <= 0) return FALSE;
 
     return g_BlockStorageUpdate.m_stream.BlockLength;
 }
