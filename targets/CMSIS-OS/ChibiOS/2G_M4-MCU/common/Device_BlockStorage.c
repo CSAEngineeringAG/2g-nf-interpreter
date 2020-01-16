@@ -12,14 +12,14 @@
 // 16kB blocks
 const BlockRange STM32F4_BlockRange1[] = 
 {
-    { BlockRange_BLOCKTYPE_BOOTSTRAP ,   0, 1 },            // 0x08000000 nanoBooter 16k
+    { BlockRange_BLOCKTYPE_BOOTSTRAP ,   0, 3 },            // 0x08000000 nanoBooter 48k
 	
 	///////////////////////////////////////////////////////////////////////////////////////
     // because this target is using a configuration block need to add the
     // configuration manager files to the CMake and call ConfigurationManager_Initialize()
     // in nanoBooter so the configuration can be managed when in booter mode
     ///////////////////////////////////////////////////////////////////////////////////////
-    { BlockRange_BLOCKTYPE_CONFIG    ,   2, 3 },            // 0x08004000 configuration block 32kB
+    { BlockRange_BLOCKTYPE_CONFIG    ,   3, 3 },            // 0x0800C000 configuration block 16kB
     ///////////////////////////////////////////////////////////////////////////////////////
 	
     //{ BlockRange_BLOCKTYPE_CODE      ,   3, 3 }             // 0x0800C000 nanoCLR
