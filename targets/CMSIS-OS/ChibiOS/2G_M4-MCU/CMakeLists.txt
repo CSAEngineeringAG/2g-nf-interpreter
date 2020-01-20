@@ -96,6 +96,17 @@ add_executable(
     ${ChibiOSnfOverlay_SOURCES}
 
     ${WireProtocol_SOURCES}
+    
+    #MFUpdate
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/nanoBooter/NanoBooterEntry.cpp"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFupdateFlag/UpdateFlashConfig.cpp"
+    
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/MicroBooter/MicroBooter.cpp"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Storage/BlockStorageUpdate.cpp"
+    #"${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/nanoCLR/targetHAL.cpp"
+
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Support/Compression.cpp"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Validation/CRC/CrcUpdateValidation.cpp"
 )
 
 #######################
@@ -215,6 +226,21 @@ target_include_directories(${NANOBOOTER_PROJECT_NAME}.elf PUBLIC
 
     # includes for ChibiOS LwIP
     ${CHIBIOS_LWIP_INCLUDE_DIRS}
+
+    #MFUpdate
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/nanoBooter/"
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/MicroBooter/"
+
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Storage/"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Validation/CRC/"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdateFlag/"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Support/"
+
+    "${PROJECT_SOURCE_DIR}/InteropAssemblies/SPOT.MFUpdate/include"
+    "${PROJECT_SOURCE_DIR}/src/HAL/Include/"
+    #"${PROJECT_SOURCE_DIR}/build/targets/CMSIS-OS/ChibiOS/nanoCLR/"
+
+    #"${PROJECT_SOURCE_DIR}/build/ChibiOS_Source/os/common/ext/ARM/CMSIS/Core/Include"
 )
 
 # include directories for nanoCLR

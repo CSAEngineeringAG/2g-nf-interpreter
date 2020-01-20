@@ -16,6 +16,7 @@
 #include <WireProtocol_ReceiverThread.h>
 #include <nanoPAL_BlockStorage.h>
 #include <LaunchCLR.h>
+#include <NanoBooterEntry.h>
 
 // need to declare the Receiver thread here
 osThreadDef(ReceiverThread, osPriorityHigh, 2048, "ReceiverThread");
@@ -44,8 +45,17 @@ int main(void) {
   // the user button in this board has a pull-up resistor so the check has to be inverted
   if (!palReadPad(GPIOH, GPIOH_ONBOARD_SW))
   {
+    // Check for Update
+    palSetPad(GPIOH, GPIOH_ONBOARD_LED1_GREEN);
+    palSetPad(GPIOH, GPIOH_ONBOARD_LED3_RED);
+
+    WaitForNanoBooterUpload();
+    
+    palClearPad(GPIOH, GPIOH_ONBOARD_LED1_GREEN);
+    palClearPad(GPIOH, GPIOH_ONBOARD_LED3_RED);
+
     // check for valid CLR image 
-    // this target DOES NOT have configuration block, so we need to use the __nanoImage_end__ address here
+    // this target DOES have configuration block, so we need to use the __nanoConfig_end__ address here
     if(CheckValidCLRImage((uint32_t)&__nanoConfig_end__))
     {
       // there seems to be a valid CLR image
