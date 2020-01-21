@@ -30,7 +30,7 @@ void LaunchCLR(uint32_t address)
     __set_MSP((uint32_t)nanoCLRVectorTable->init_stack);
 
     // make the jump to nanoCLR, at last
-    JumpToNanoCLR();
+    (*JumpToNanoCLR)();
 }
 
 bool CheckValidCLRImage(uint32_t address)

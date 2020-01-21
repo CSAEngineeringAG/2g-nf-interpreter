@@ -20,6 +20,12 @@ ENTRY(Reset_Handler)
 
 SECTIONS
 {
+    .netmfstart :
+    {
+        KEEP(*(.netmfstart))
+        . = ALIGN(256);
+    } > NETMF_START AT > NETMF_START_LMA
+
     .vectors : ALIGN(16)
     {
         KEEP(*(.vectors))

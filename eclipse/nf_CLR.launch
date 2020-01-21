@@ -6,7 +6,7 @@
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.doReset" value="false"/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.imageFileName" value=""/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.imageOffset" value=""/>
-<stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.initCommands" value="monitor reset_config none separate&#13;&#10;monitor reset halt&#13;&#10;mon poll&#13;&#10;set $sp = *(int*)0x08010000&#13;&#10;set $pc = *(int*)0x08010004&#13;&#10;set $lr = 0x00000000&#13;&#10;mon # set DBGMCU_CR DBG_STANDBY, DBG_STOP and DBG_SLEEP&#13;&#10;mon mww 0xE0042004 0x00000007"/>
+<stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.initCommands" value="monitor reset_config none separate&#13;&#10;monitor reset halt&#13;&#10;mon poll&#13;&#10;set $sp = *(int*)0x08000000&#13;&#10;set $pc = *(int*)0x08000004&#13;&#10;set $lr = 0x00000000&#13;&#10;mon # set DBGMCU_CR DBG_STANDBY, DBG_STOP and DBG_SLEEP&#13;&#10;mon mww 0xE0042004 0x00000007"/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.ipAddress" value="localhost"/>
 <stringAttribute key="org.eclipse.cdt.debug.gdbjtag.core.jtagDeviceId" value="org.eclipse.cdt.debug.gdbjtag.core.jtagdevice.OpenOCD"/>
 <booleanAttribute key="org.eclipse.cdt.debug.gdbjtag.core.loadImage" value="false"/>

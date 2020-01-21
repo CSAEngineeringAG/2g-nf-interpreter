@@ -46,11 +46,13 @@ int main(void) {
   {
     // check for valid CLR image 
     // this target DOES NOT have configuration block, so we need to use the __nanoImage_end__ address here
-    if(CheckValidCLRImage((uint32_t)&__nanoConfig_end__))
+    //if(CheckValidCLRImage(((uint32_t)&__nanoConfig_end__))+32)
+    if(CheckValidCLRImage((uint32_t)0x08010100))
     {
       // there seems to be a valid CLR image
       // launch nanoCLR
-      LaunchCLR((uint32_t)&__nanoConfig_end__);
+      //LaunchCLR(((uint32_t)&__nanoConfig_end__)+32);
+      LaunchCLR((uint32_t)0x08010100);
     }
   }
 

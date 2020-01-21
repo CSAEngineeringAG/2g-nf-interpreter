@@ -145,6 +145,8 @@ add_executable(
 
     # sources for nanoFramework APIs
     ${TARGET_NANO_APIS_SOURCES}
+
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/netmf_signature_compat.s"
 )
 
 # add dependency from ChibiOS (this is required to make sure the ChibiOS repo is downloaded before the build starts)
