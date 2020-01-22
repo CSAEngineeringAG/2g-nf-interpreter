@@ -45,14 +45,13 @@ int main(void) {
   if (!palReadPad(GPIOH, GPIOH_ONBOARD_SW))
   {
     // check for valid CLR image 
-    // this target DOES NOT have configuration block, so we need to use the __nanoImage_end__ address here
-    //if(CheckValidCLRImage(((uint32_t)&__nanoConfig_end__))+32)
-    if(CheckValidCLRImage((uint32_t)0x08010100))
+    // this target has a configuration block and a NETMF compatibility block.
+    // so we need to use the __netmfBlock_end__ address here (this is where the nanoCLR image starts)
+    if(CheckValidCLRImage((uint32_t)(&__netmfBlock_end__)))
     {
       // there seems to be a valid CLR image
       // launch nanoCLR
-      //LaunchCLR(((uint32_t)&__nanoConfig_end__)+32);
-      LaunchCLR((uint32_t)0x08010100);
+      LaunchCLR((uint32_t)(&__netmfBlock_end__));
     }
   }
 

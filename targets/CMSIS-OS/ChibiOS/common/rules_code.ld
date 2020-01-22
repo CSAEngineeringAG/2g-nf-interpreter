@@ -16,6 +16,15 @@ __deployment_start__    = ORIGIN(deployment);
 __deployment_size__     = LENGTH(deployment);
 __deployment_end__      = __deployment_start__ + __deployment_size__;
 
+/* 
+// insert 512 byte block at the beginning of the flash to make nanoCLR compatible 
+// with .NET MicroFramework tinyBooter
+// CSA Engineering AG 2020 (mku)
+*/
+__netmfBlock_start__    = ORIGIN(netmf);
+__netmfBlock_size__     = LENGTH(netmf);
+__netmfBlock_end__      = __netmfBlock_start__ + __netmfBlock_size__;
+
 ENTRY(Reset_Handler)
 
 SECTIONS
@@ -23,7 +32,7 @@ SECTIONS
     .netmfstart :
     {
         KEEP(*(.netmfstart))
-        . = ALIGN(256);
+        . = ALIGN(512);
     } > NETMF_START AT > NETMF_START_LMA
 
     .vectors : ALIGN(16)

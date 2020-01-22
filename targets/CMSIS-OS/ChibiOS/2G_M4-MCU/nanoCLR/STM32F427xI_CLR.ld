@@ -30,6 +30,10 @@ MEMORY
 /* For each data/text section two region are defined, a virtual region
    and a load region (_LMA suffix).*/
 
+/* Flash region to be used for compatibility with .NET MicroFramework booter.*/
+REGION_ALIAS("NETMF_START", flash);
+REGION_ALIAS("NETMF_START_LMA", flash);
+
 /* Flash region to be used for exception vectors.*/
 REGION_ALIAS("VECTORS_FLASH", flash);
 REGION_ALIAS("VECTORS_FLASH_LMA", flash);
