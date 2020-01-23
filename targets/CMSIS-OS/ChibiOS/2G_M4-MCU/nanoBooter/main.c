@@ -41,6 +41,12 @@ int main(void) {
   // the following IF is not mandatory, it's just providing a way for a user to 'force'
   // the board to remain in nanoBooter and not launching nanoCLR
 
+  // initialize block storage list and devices
+  // in CLR this is called in nanoHAL_Initialize()
+  // for nanoBooter we have to init it in order to provide the flash map for Monitor_FlashSectorMap command
+  BlockStorageList_Initialize();
+  BlockStorage_AddDevices();
+
   // if the USER button (blue one) is pressed, skip the check for a valid CLR image and remain in booter
   // the user button in this board has a pull-up resistor so the check has to be inverted
   if (!palReadPad(GPIOH, GPIOH_ONBOARD_SW))
@@ -80,12 +86,6 @@ int main(void) {
 
   // start kernel, after this main() will behave like a thread with priority osPriorityNormal
   osKernelStart();
-
-  // initialize block storage list and devices
-  // in CLR this is called in nanoHAL_Initialize()
-  // for nanoBooter we have to init it in order to provide the flash map for Monitor_FlashSectorMap command
-  BlockStorageList_Initialize();
-  BlockStorage_AddDevices();
 
   // initialize configuration manager
   // in CLR this is called in nanoHAL_Initialize()

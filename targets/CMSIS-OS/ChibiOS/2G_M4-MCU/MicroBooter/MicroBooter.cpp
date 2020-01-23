@@ -9,7 +9,7 @@
 static UINT8 s_WriteBuffer[512];
 static INT32 s_WriteBufferIndex = 0;
 
-static UINT8* s_ReadBuffer = NULL;
+//static UINT8* s_ReadBuffer = NULL;
 
 static BlockStorageStream            s_MemoryStreamDst;
 static const IUpdateStorageProvider* s_MemoryStreamSrc;
@@ -75,11 +75,14 @@ static BOOL Memory_Flush()
 
 static BOOL Memory_Read( UINT32 address, UINT32 length, UINT8* data )
 {
+    (void) address;
+
+    ASSERT(length == 1);
+
+    /*
     INT32 readBufferSize = 512;
     INT32 index = (address % readBufferSize);
 
-    ASSERT(length == 1);
-    
     if(s_ReadBuffer == NULL)
     {
         s_ReadBuffer = (UINT8*)platform_malloc(readBufferSize);
@@ -115,7 +118,7 @@ static BOOL Memory_Read( UINT32 address, UINT32 length, UINT8* data )
 
         return TRUE;
     }
-    
+    */
     return s_MemoryStreamSrc->Read(s_MemoryStreamSrcHandle, s_MemoryStreamSrcOffset++, data, length );
 }
 
