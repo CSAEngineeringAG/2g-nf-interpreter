@@ -32,7 +32,7 @@ NETMF_EntryPoint:
     .word     NETMF_Fault_Handler @ Usage Fault
 
 NETMF_Start:
-        b          _crt0_entry
+    b       _crt0_entry
 
 
 NETMF_Fault_Handler:

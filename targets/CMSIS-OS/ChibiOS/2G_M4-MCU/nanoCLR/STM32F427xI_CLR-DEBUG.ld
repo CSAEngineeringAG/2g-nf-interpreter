@@ -14,6 +14,7 @@ MEMORY
 {
     flash       : org = 0x08010000, len = 1M - 16k - 48k		/* flash size less the space reserved for nanoBooter, config block and application deployment*/
     config      : org = 0x0800C000, len = 16k                   /* space reserved for configuration block */
+    netmf       : org = 0x08010000, len = 512                   /* space reserved for .NET microFramework tinybooter compatibility*/
     deployment  : org = 0x60000000, len = 3456k                 /* space reserved for application deployment */
     ramvt       : org = 0x00000000, len = 0                     /* initial RAM address is reserved for a copy of the vector table */
     ram0        : org = 0x20000000, len = 192k                  /* SRAM1 + SRAM2 + SRAM3 */
@@ -78,4 +79,14 @@ REGION_ALIAS("HEAP_RAM", ext_ram);
 /* RAM region to be used for the nanoFramework CLR managed heap.*/
 REGION_ALIAS("CLR_MANAGED_HEAP_RAM", ext_ram);
 
-INCLUDE rules.ld
+/* Stack rules inclusion.*/
+INCLUDE rules_stacks.ld
+
+/* Code rules inclusion.*/
+INCLUDE rules_code_clr.ld 
+
+/* Data rules inclusion.*/
+INCLUDE rules_data.ld
+
+/* nanoCLR rules inclusion.*/
+INCLUDE rules_clr.ld
