@@ -133,10 +133,10 @@ int main(void) {
   palClearPad(GPIOI, GPIOI_VBUSEN);
 
   while (true) { 
-    //  osDelay(100);
-	palSetPad(GPIOH, GPIOH_ONBOARD_LED2_ORANGE);
-	osDelay(250);
-	palClearPad(GPIOH, GPIOH_ONBOARD_LED2_ORANGE);
-	osDelay(250);
+     osDelay(100);
+	// palSetPad(GPIOH, GPIOH_ONBOARD_LED2_ORANGE);
+	// osDelay(250);
+	// palClearPad(GPIOH, GPIOH_ONBOARD_LED2_ORANGE);
+	// osDelay(250);
   }
 }
