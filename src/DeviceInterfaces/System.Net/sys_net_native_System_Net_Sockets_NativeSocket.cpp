@@ -15,7 +15,7 @@ HRESULT Library_sys_net_native_System_Net_Sockets_NativeSocket::socket___STATIC_
     CLR_INT32 type     = stack.Arg1().NumericByRef().s4;
     CLR_INT32 protocol = stack.Arg2().NumericByRef().s4;
     
-    CLR_INT32 nonBlocking = 0;
+    CLR_INT32 nonBlocking = 1;
     CLR_INT32 sock        = SOCK_socket( family, type, protocol );
     
     NANOCLR_CHECK_HRESULT(ThrowOnError( stack, sock ));
@@ -101,7 +101,7 @@ HRESULT Library_sys_net_native_System_Net_Sockets_NativeSocket::accept___STATIC_
     CLR_RT_HeapBlock* socket = stack.Arg0().Dereference();
     CLR_INT32 handle;
     CLR_INT32 ret;
-    CLR_INT32 nonBlocking = 0;
+    CLR_INT32 nonBlocking = 1;
 
     FAULT_ON_NULL(socket);
     handle = socket[ FIELD__m_Handle ].NumericByRef().s4;
