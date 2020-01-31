@@ -1,0 +1,325 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SPOT.MFUpdate</name>
+    </assembly>
+    <members>
+        <member name="T:SPOT.MFUpdate.MFFirmwareUpdate">
+            <summary>
+            Represents a firmware update package.
+            </summary>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFFirmwareUpdate.#ctor(System.String,System.UInt32,System.Version,SPOT.MFUpdate.MFUpdateSubType,System.Int32,System.Int32)">
+            <summary>
+            Creates a firmware update package.
+            </summary>
+            <param name="provider">The update package provider name.</param>
+            <param name="updateID">The unique identification number for the update.</param>
+            <param name="version">The version of the update.</param>
+            <param name="firmwareType">The firmware subtype for the udpate.</param>
+            <param name="updateSize">The amount of space (in bytes) to store the update.</param>
+            <param name="pktSize">The size (in bytes) of each packet.</param>
+        </member>
+        <member name="T:SPOT.MFUpdate.MFUpdatePkt">
+            <summary>
+            Represents an single indexed update packet.  All packets for an update must
+            be the same length so that the storage facility can track which packets have
+            been installed.  The one exception is that the last packet may be smaller than 
+            the packet size if the update size is not a multiple of the packet size.
+            </summary>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFUpdatePkt.#ctor(System.Int32,System.Byte[],System.Byte[])">
+            <summary>
+            Creates an update packet.
+            </summary>
+            <param name="packetIndex">The index of the packet.</param>
+            <param name="data">The packet data to be stored.</param>
+            <param name="validationData">The validation data for the packet (e.g. CRC, signature, etc).</param>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdatePkt.PacketIndex">
+            <summary>
+            The readonly zero based packet index.
+            </summary>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdatePkt.ValidationData">
+            <summary>
+            The validation data for the packet.
+            </summary>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdatePkt.Data">
+            <summary>
+            The data bytes for the packet.
+            </summary>
+        </member>
+        <member name="T:SPOT.MFUpdate.MFUpdateProperty">
+            <summary>
+            Represents a user defined update property for an MFUpdate.
+            </summary>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFUpdateProperty.#ctor(System.String,System.Byte[])">
+            <summary>
+            Initializes and instance of the MFUpdateProperty class.
+            </summary>
+            <param name="name">The name of the property.</param>
+            <param name="value">The binary representation of the property value.</param>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdateProperty.Name">
+            <summary>
+            The name of the property;
+            </summary>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdateProperty.Value">
+            <summary>
+            The binary representation of the property value.
+            </summary>
+        </member>
+        <member name="T:SPOT.MFUpdate.MFUpdateType">
+            <summary>
+            Enumeration of the known update types.  This enumeration can be extended by
+            the user by performing a bitwise 'OR' operation with the UserDefined value and
+            the user identified value.  This must match the native code implemenation of 
+            the MFUpdate component.
+            </summary>
+        </member>
+        <member name="T:SPOT.MFUpdate.MFUpdateSubType">
+            <summary>
+            An enumeration of the MFUpdate sub types for an update.  These values must
+            match the native code implemenation of the MFUpdate component.
+            </summary>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdateSubType.AssemblyUpdate_NEW">
+            <summary>
+            Adds a new assembly to the deployment sector
+            </summary>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdateSubType.AssemblyUpdate_REPLACE_DEPLOY">
+            <summary>
+            Replaces the entire deployment sector with the assemblies in the 
+            update.
+            </summary>
+        </member>
+        <member name="T:SPOT.MFUpdate.MFUpdateBase">
+            <summary>
+            Abstract base class for MFUpdates.  The fields in this class
+            represent the required information needed by the native MFUpdate
+            component in order to perform an update.
+            </summary>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdateBase.m_provider">
+            <summary>
+            The update provider name.  This value is used to determine which
+            MFUpdate package to use for the update.
+            </summary>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdateBase.m_updateID">
+            <summary>
+            The identification number for the update.  This number should be unique
+            for a given update type/subtype.
+            </summary>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdateBase.m_updateVersion">
+            <summary>
+            The version of the update (Major, Minor, Build, Revision).
+            </summary>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdateBase.m_updateType">
+            <summary>
+            The type of the update (firmware, assembly, etc.).
+            </summary>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdateBase.m_updateSubType">
+            <summary>
+            The subtype of the update.
+            </summary>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdateBase.m_updateSize">
+            <summary>
+            The total amount of memory (in bytes) required to store the entire update.
+            </summary>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdateBase.m_packetSize">
+            <summary>
+            The packet size in bytes.  All packets (except the last one) are required
+            to be the same size.
+            </summary>
+        </member>
+        <member name="F:SPOT.MFUpdate.MFUpdateBase.m_updateHandle">
+            <summary>
+            The handle for the update.
+            </summary>
+        </member>
+        <member name="T:SPOT.MFUpdate.MFNativeUpdate">
+            <summary>
+            The interop class for the MFUpdate feature.
+            </summary>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFNativeUpdate.#cctor">
+            <summary>
+            static constructor that initializes the MFUpdate system.
+            </summary>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFNativeUpdate.Initialize(System.UInt32,System.UInt32,System.UInt32,System.UInt16,System.UInt16,System.Int32,System.Int32,System.Int32,System.Int32,System.String)">
+            <summary>
+            Initializes an MFUpdate.
+            </summary>
+            <param name="pktSize"></param>
+            <param name="updateID"></param>
+            <param name="updateSize"></param>
+            <param name="updateTyp"></param>
+            <param name="updateSubTyp"></param>
+            <param name="majorVersion"></param>
+            <param name="minorVersion"></param>
+            <param name="buildVersion"></param>
+            <param name="revisionVersion"></param>
+            <returns>Returns the update handle on success or -1 on failure.</returns>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFNativeUpdate.Authenticate(System.Int32,System.Byte[])">
+            <summary>
+            Performs the final authentication step for the update.  For updates that 
+            don't require authentication or perform authentication at a different level
+            (SSL), the authentication value can be null.  Then native MFUpdate component
+            requires that this call be made regardless if the underlying update package
+            uses it.
+            </summary>
+            <param name="updateHandle">The handle of the update.</param>
+            <param name="authentication">The data for the final authentication step.</param>
+            <returns>Returns true if successful or false otherwise.</returns>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFNativeUpdate.Open(System.Int32)">
+            <summary>
+            Attempts to open an existing update that matches the update properties assigned
+            in the constructor.
+            </summary>
+            <param name="updateHandle">The handle to the update.</param>
+            <returns>Returns false if the file could not be opened, true otherwise.</returns>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFNativeUpdate.Create(System.Int32)">
+            <summary>
+            Creates an update storage file for saving the udpate packets.
+            </summary>
+            <param name="updateHandle">The update handle.</param>
+            <returns>Returns true if the file was created, false otherwise.</returns>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFNativeUpdate.GetMissingPackets(System.Int32,System.UInt32[])">
+            <summary>
+            Gets an array of uints that represents the missing packets.  Each bit of each
+            uint represents an individual packet (starting with the first uint's least 
+            significant bit).   Any bit that is a '1' is missing from the update.
+            </summary>
+            <param name="updateHandle">The update handle.</param>
+            <param name="packetBitCheck">A bitfield representing the missing packets; 
+            where '1's denote a missing packet and '0's denote a saved packet.</param>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFNativeUpdate.AddPacket(System.Int32,System.Int32,System.Byte[],System.Byte[])">
+            <summary>
+            Adds an indexed packet to the given updates storage file.
+            </summary>
+            <param name="updateHandle">The update handle.</param>
+            <param name="packetIndex">The ordered index of the packet to be stored.</param>
+            <param name="packetData">The packet data.</param>
+            <param name="packetValidation">The packet validation data defined by the native update component (CRC value in moste cases).</param>
+            <returns>Returns true if the packet could be saved, false otherwise.</returns>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFNativeUpdate.Validate(System.Int32,System.Byte[])">
+            <summary>
+            Validates the entire update package with the given validation data.  The
+            validation data is determined by the native portion of the update component.
+            This method allows the update software to determine if an update installation
+            will likely succeed before calling the install which may require a reboot.
+            </summary>
+            <param name="updateHandle">The handle to the update.</param>
+            <param name="validation">The validation data for the entire update package (signature, CRC, etc).</param>
+            <returns>Returns true if the update was validated, false otherwise.</returns>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFNativeUpdate.Install(System.Int32,System.Byte[])">
+            <summary>
+            Validates the update with the given validation data (unless already validated)
+            and transfers control to the native install component (e.g. MicroBooter) for installation. 
+            </summary>
+            <param name="updateHandle">The update handle.</param>
+            <param name="validation">The validation data for the entire update package.</param>
+            <returns>Returns true if the install was successfully started, false otherwise.  Since
+            the install may require a reboot this method may not return.</returns>
+        </member>
+        <member name="T:SPOT.MFUpdate.MissingPacketEnumerator">
+            <summary>
+            Represents a missing packet enumeraion for an update. This helper class
+            converts the interop class's bitfield into a more user friendly enumerator.
+            </summary>
+        </member>
+        <member name="M:SPOT.MFUpdate.MissingPacketEnumerator.#ctor(System.UInt32[])">
+            <summary>
+            Creates a missing packet enumerator from the given bitfield.
+            </summary>
+            <param name="pktBitCheck">The bitfield retured by MFNativeUpdate.GetMissingPackets.</param>
+        </member>
+        <member name="P:SPOT.MFUpdate.MissingPacketEnumerator.Current">
+            <summary>
+            (Inherited from IEnumerator).  Gets the current missing packet index. 
+            MoveNext must be called prior to calling this method.
+            </summary>
+        </member>
+        <member name="M:SPOT.MFUpdate.MissingPacketEnumerator.MoveNext">
+            <summary>
+            (Inherited from IEnumerator).  Moves to the next available missing packet.
+            </summary>
+            <returns>Returns true if a missing packet remains, false otherwise.</returns>
+        </member>
+        <member name="M:SPOT.MFUpdate.MissingPacketEnumerator.Reset">
+            <summary>
+            (Inherited from IEnumerator).  Resets the enumerator.
+            </summary>
+        </member>
+        <member name="T:SPOT.MFUpdate.MFUpdate">
+            <summary>
+            Represents the abstract base class for MFUpdates.
+            </summary>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFUpdate.#ctor(System.String,System.UInt32,System.Version,SPOT.MFUpdate.MFUpdateType,SPOT.MFUpdate.MFUpdateSubType,System.Int32,System.Int32)">
+            <summary>
+            Creates an mfupdate object.
+            </summary>
+            <param name="provider">The name of the update provider that will service this update.</param>
+            <param name="updateID">The unique identification number of the update.</param>
+            <param name="version">The version of the update.</param>
+            <param name="updateType">The update type.</param>
+            <param name="updateSubType">The update subtype.</param>
+            <param name="updateSize">The total update size (in bytes).</param>
+            <param name="pktSize">The size (in bytes) of each packet.</param>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFUpdate.Open(System.Object)">
+            <summary>
+            Authenticates the update and opens the update storage file.  This method must be called prior to adding packets.
+            If authentication is not required by the underlying native update component null can be passed for the 
+            authenticationData parameter.
+            </summary>
+            <param name="authenticationData">The authentication data for starting the update (can be null).</param>
+            <returns></returns>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFUpdate.AddPacket(SPOT.MFUpdate.MFUpdatePkt)">
+            <summary>
+            Validates and stores an indexed packet to the update storage file.
+            </summary>
+            <param name="packet">The packet data to be stored.</param>
+            <returns>Returns true if successful, false otherwise.</returns>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFUpdate.ValidateUpdate(System.Byte[])">
+            <summary>
+            Validates the entire update package with the given validation data.  The validation data
+            is determined by the native update component.  
+            </summary>
+            <param name="updateValidation">The validation data for the entire update package.</param>
+            <returns>True if the validation succeeds, false otherwise.</returns>
+        </member>
+        <member name="M:SPOT.MFUpdate.MFUpdate.InstallUpdate(System.Byte[])">
+            <summary>
+            Validates and installs the update.  Because the install may reboot the device, a 
+            caller may want to call ValidateUpdate first in order to have confidence the install
+            will succeed.
+            </summary>
+            <param name="updateValidation">The validation data for the entire update package.</param>
+            <returns>true if successful, false otherwise.  This method may not return if the 
+            installer requires a reboot.</returns>
+        </member>
+    </members>
+</doc>
