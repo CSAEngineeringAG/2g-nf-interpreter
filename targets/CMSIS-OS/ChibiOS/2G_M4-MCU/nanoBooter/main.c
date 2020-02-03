@@ -41,6 +41,9 @@ int main(void) {
   // the following IF is not mandatory, it's just providing a way for a user to 'force'
   // the board to remain in nanoBooter and not launching nanoCLR
 
+  // config and init external memory
+  // this has to be called after osKernelInitialize, otherwise an hard fault will occur
+  Target_ExternalMemoryInit();
   // initialize block storage list and devices
   // in CLR this is called in nanoHAL_Initialize()
   // for nanoBooter we have to init it in order to provide the flash map for Monitor_FlashSectorMap command

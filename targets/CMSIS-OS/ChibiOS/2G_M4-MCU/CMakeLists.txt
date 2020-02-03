@@ -80,6 +80,9 @@ add_executable(
     "${CMAKE_CURRENT_SOURCE_DIR}/target_common.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/target_BlockStorage.c"
 
+    # the next one is required is the target implements and it's using external memory
+	"${CMAKE_CURRENT_SOURCE_DIR}/target_external_memory.c"
+
     # need to add configuration manager to allow get/store configuration blocks
     "${PROJECT_SOURCE_DIR}/src/HAL/nanoHAL_ConfigurationManager.c"
 
@@ -241,6 +244,9 @@ target_include_directories(${NANOBOOTER_PROJECT_NAME}.elf PUBLIC
     #"${PROJECT_SOURCE_DIR}/build/targets/CMSIS-OS/ChibiOS/nanoCLR/"
 
     #"${PROJECT_SOURCE_DIR}/build/ChibiOS_Source/os/common/ext/ARM/CMSIS/Core/Include"
+
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/nf-overlay/os/hal/ports/STM32/LLD/FSMCv1/"
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/nf-overlay/os/hal/include/stm32_fsmc/"
 )
 
 # include directories for nanoCLR
