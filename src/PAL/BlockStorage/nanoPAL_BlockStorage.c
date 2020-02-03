@@ -83,9 +83,9 @@ bool DeviceBlockInfo_FindForBlockUsage(DeviceBlockInfo* blockInfo, unsigned int 
     (void)blockInfo;
     (void)blockUsage;
 
-    address = 0;
-    blockRegionIndex = 0;
-    blockRangeIndex = 0;
+    *address = 0;
+    *blockRegionIndex = 0;
+    *blockRangeIndex = 0;
     
     return DeviceBlockInfo_FindNextUsageBlock(blockInfo, blockUsage, address, blockRegionIndex, blockRangeIndex );
 }

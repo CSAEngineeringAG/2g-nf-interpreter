@@ -32,9 +32,9 @@ struct BlockStorageUpdate
 
     static BOOL   Initialize();
     static INT32  Create   ( MFUpdateHeader& storageHeader, UINT32 flags                       );
-    static INT32  Open     ( INT32  storageID    , UINT16 storageType, UINT16 storageSubType    );
+    static INT32  Open     ( UINT32  storageID   , UINT16 storageType, UINT16 storageSubType    );
     static void   Close    ( INT32  handleStorage                                              );
-    static BOOL   Delete   ( INT32  storageID    , UINT16 storageType, UINT16 storageSubType    );
+    static BOOL   Delete   ( UINT32  storageID   , UINT16 storageType, UINT16 storageSubType    );
     static BOOL   GetFiles ( UINT16 storageType  , INT32* storageIDs , INT32* storageCount     );
     static BOOL   IsErased ( INT32  handleStorage, INT32 fileOffset  , INT32  len              );
     static INT32  Write    ( INT32  handleStorage, INT32 fileOffset  , UINT8* pData, INT32 len );

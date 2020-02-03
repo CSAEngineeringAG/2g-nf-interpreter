@@ -38,7 +38,7 @@ typedef bool            BOOL;
 
 struct MFUpdateHeader
 {
-    INT32      UpdateID;
+    UINT32      UpdateID;
     NFVersion  Version;
     UINT16     UpdateType;
     UINT16     UpdateSubType;
@@ -52,9 +52,9 @@ struct IUpdateStorageProvider
 {
     BOOL   (*Initialize  )( );
     INT32  (*Create      )( MFUpdateHeader& storageHeader, UINT32 flags );
-    INT32  (*Open        )( INT32  storageID    , UINT16 storageType, UINT16 storageSubType );
+    INT32  (*Open        )( UINT32  storageID    , UINT16 storageType, UINT16 storageSubType );
     void   (*Close       )( INT32  handleStorage );
-    BOOL   (*Delete      )( INT32  storageID    , UINT16 storageType, UINT16 storageSubType  );
+    BOOL   (*Delete      )( UINT32  storageID    , UINT16 storageType, UINT16 storageSubType  );
     BOOL   (*GetFiles    )( UINT16 storageType  , INT32* storageIDs, INT32* storageCount     );
     BOOL   (*IsErased    )( INT32  handleStorage, INT32 fileOffset  , INT32  len              );
     INT32  (*Write       )( INT32  handleStorage, INT32 fileOffset  , UINT8* pData, INT32 len );

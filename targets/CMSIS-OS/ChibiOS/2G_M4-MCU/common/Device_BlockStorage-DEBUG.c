@@ -69,8 +69,8 @@ const BlockRegionInfo STM32F4_BlockRegions[] =
 
 const DeviceBlockInfo STM32F4_Device_BlockInfo =
 {
-    (MediaAttribute_SupportsXIP),           // STM32 flash memory is XIP
-    2,                                      // UINT32 BytesPerSector
+    (MediaAttribute_SupportsXIP),           		// STM32 flash memory is XIP
+    2,                                      		// UINT32 BytesPerSector
     ARRAYSIZE_CONST_EXPR(STM32F4_BlockRegions),     // UINT32 NumRegions;
     (BlockRegionInfo*)STM32F4_BlockRegions,         // const BlockRegionInfo* pRegions;
 };
@@ -130,12 +130,14 @@ BlockStorageDevice    STM32F4_BS;
 // BlockDeviceInformation
 #define MX29__NUM_REGIONS       1
 
+#define BLOCKTYPE_UPDATE_FLAG (BlockRange_BLOCKTYPE_UPDATE + 1)
+
 // 64kB Blocks
 const BlockRange MX29_BlockRange[] =
 {
     { BlockRange_BLOCKTYPE_DEPLOYMENT,   0,  53 },  // deployment:  3'456 KB
     { BlockRange_BLOCKTYPE_UPDATE,      54, 122 },  // update:      4'416 KB
-    { BlockRange_BLOCKTYPE_UPDATE,     123, 123 },  // update flag:    64 KB
+    { BLOCKTYPE_UPDATE_FLAG,           123, 123 },  // update flag:    64 KB
     { BlockRange_BLOCKTYPE_FILESYSTEM, 124, 127 }   // filesystem:    256 KB
 };
 

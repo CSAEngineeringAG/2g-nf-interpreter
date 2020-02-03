@@ -12,7 +12,7 @@
 // 16kB blocks
 const BlockRange STM32F4_BlockRange1[] = 
 {
-    { BlockRange_BLOCKTYPE_BOOTSTRAP ,   0, 3 },            // 0x08000000 nanoBooter 48k
+    { BlockRange_BLOCKTYPE_BOOTSTRAP ,   0, 2 },            // 0x08000000 nanoBooter 48kB
 	
 	///////////////////////////////////////////////////////////////////////////////////////
     // because this target is using a configuration block need to add the
@@ -21,8 +21,7 @@ const BlockRange STM32F4_BlockRange1[] =
     ///////////////////////////////////////////////////////////////////////////////////////
     { BlockRange_BLOCKTYPE_CONFIG    ,   3, 3 },            // 0x0800C000 configuration block 16kB
     ///////////////////////////////////////////////////////////////////////////////////////
-	
-    //{ BlockRange_BLOCKTYPE_CODE      ,   3, 3 }             // 0x0800C000 nanoCLR
+
 };
 
 // 64kB blocks
@@ -35,9 +34,8 @@ const BlockRange STM32F4_BlockRange2[] =
 const BlockRange STM32F4_BlockRange3[] =
 {
     { BlockRange_BLOCKTYPE_CODE      ,   0, 6 },            // 0x08020000 nanoCLR
-    //{ BlockRange_BLOCKTYPE_DEPLOYMENT,   3, 6 },            // 0x08080000 deployment
-};
 
+};
 
 const BlockRegionInfo STM32F4_BlockRegions[] = 
 {

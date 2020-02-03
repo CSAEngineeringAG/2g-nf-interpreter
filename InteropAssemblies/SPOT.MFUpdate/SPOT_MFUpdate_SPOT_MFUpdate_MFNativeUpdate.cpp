@@ -33,7 +33,7 @@ signed int MFNativeUpdate::Initialize( unsigned int param0, unsigned int param1,
 
     // Set UpdateHeader Properties
     header.PacketSize = param0;
-    header.UpdateID = (int) param1;
+    header.UpdateID = param1;
     header.UpdateSize  = param2;
     header.UpdateType = param3;
     header.UpdateSubType = param4;
