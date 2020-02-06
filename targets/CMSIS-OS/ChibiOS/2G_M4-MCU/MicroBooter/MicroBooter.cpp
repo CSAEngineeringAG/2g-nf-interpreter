@@ -189,7 +189,8 @@ BOOL MicroBooter_Install(HAL_UPDATE_CONFIG updateCfg)
 
     if(s_MemoryStreamSrcHandle == -1) return FALSE;
 
-    s_MemoryStreamSrcOffset = sizeof(CompressedImage_Header);
+    // we have to move this into the while loop, because there could be a second header
+    //s_MemoryStreamSrcOffset = sizeof(CompressedImage_Header);
 
     s_MemoryStreamSrcEraseSize = s_MemoryStreamSrc->GetEraseSize( s_MemoryStreamSrcHandle );
     
@@ -201,13 +202,19 @@ BOOL MicroBooter_Install(HAL_UPDATE_CONFIG updateCfg)
         // erase Deployment region
         BlockStorageStream stream;
         if (BlockStorageStream_Initialize(&stream, BlockUsage::BlockUsage_DEPLOYMENT)) {
-            do BlockStorageStream_Erase(&stream, stream.Length); while(BlockStorageStream_NextStream(&stream));
+            //do BlockStorageStream_Erase(&stream, stream.Length); while(BlockStorageStream_NextStream(&stream));
+            BlockStorageStream_Erase(&stream, stream.Length);
+            //--> ATTENTION: with the do...while the whole external flash gets erased!
         }
     }
 
     while(src < header.UpdateSize)
     {
         if(!s_MemoryStreamSrc->Read(s_MemoryStreamSrcHandle, src, (UINT8*)&hdr, sizeof(hdr))) return FALSE;
+
+        // we have to add the header offset to the memory stream offset here
+        // otherwise, the LZ77_Decompress method starts with decoding the header, which would be wrong
+        s_MemoryStreamSrcOffset += sizeof(CompressedImage_Header);
 
         srcEnd = hdr.Compressed;
         dest = 0; 
@@ -223,7 +230,9 @@ BOOL MicroBooter_Install(HAL_UPDATE_CONFIG updateCfg)
 
         if(0 != (src % 4))
         {
-            src += (4 - (src % 4));
+        	UINT32 align = (4 - (src % 4));
+            src += align;
+            s_MemoryStreamSrcOffset += align; // this is to be added to the memory stream offset too!
         }
     }
 

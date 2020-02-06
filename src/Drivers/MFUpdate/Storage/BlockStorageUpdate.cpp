@@ -374,6 +374,10 @@ BOOL BlockStorageUpdate::GetHeader( INT32 handleStorage, MFUpdateHeader* pHeader
     
     if(handleStorage < 0 || handleStorage >= (signed int) ARRAYSIZE(g_BlockStorageUpdate.m_files) || g_BlockStorageUpdate.m_files[handleStorage].Size <= 0) return FALSE;
 
+    // we have to re-init this stream here, otherwise data may not be found
+    if(!BlockStorageStream_Initialize(&g_BlockStorageUpdate.m_stream, BlockUsage::BlockUsage_UPDATE)) return FALSE;
+    
+    // ?? TODO FIXME: check return value (if Seek returns the backup stream, garbage may be written into the header!)
     BlockStorageStream_Seek(&g_BlockStorageUpdate.m_stream, g_BlockStorageUpdate.m_files[handleStorage].StartAddress, SeekOrigin::BlockStorageStream_SeekBegin );
         
     if(!BlockStorageStream_ReadIntoBuffer(&g_BlockStorageUpdate.m_stream, (UINT8*)&hdr, sizeof(hdr))) return FALSE;

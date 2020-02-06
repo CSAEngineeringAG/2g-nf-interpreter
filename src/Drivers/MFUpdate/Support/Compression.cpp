@@ -8,6 +8,7 @@
 #define FAKE2REAL_POS(x)   ((x) & (WINSIZE - 1))
 #define BITSET(byte, bit)  (((byte) & (1<<bit)) > 0)
 
+UINT8  window[ WINSIZE ];
 
 int LZ77_Decompress( UINT8* inBuf, INT32 inSize, UINT8* outBuf, INT32 outSize, WRITE_MEMORY_FUNCT writeMem, READ_MEMORY_FUNCT readMem)
 {
@@ -15,7 +16,6 @@ int LZ77_Decompress( UINT8* inBuf, INT32 inSize, UINT8* outBuf, INT32 outSize, W
     UINT8* outBufEnd = outBuf + outSize;
     INT32    counter;
     INT32    currPos = 0;
-    UINT8  window[ WINSIZE ];
 
     for(counter = 0; counter < WINSIZE; counter ++)
     {
@@ -36,9 +36,9 @@ int LZ77_Decompress( UINT8* inBuf, INT32 inSize, UINT8* outBuf, INT32 outSize, W
         
         CHECKEDREAD(bitMap, inBuf++);
 
-        //
-        // Go through and decode data.
-        //
+        
+        //Go through and decode data.
+        
         for(counter = 0; counter < 8 && outBuf < outBufEnd; counter++)
         {
             //

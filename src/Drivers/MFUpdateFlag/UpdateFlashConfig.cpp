@@ -26,7 +26,8 @@ BOOL InvalidateUpdateFlashConfig()
     ByteAddress address;
     if (GetConfigFlashBlock(device, address)) {
         // clear config.header
-        return BlockStorageDevice_Memset(device, address, 0, sizeof(HAL_UPDATE_CONFIG));
+        //return BlockStorageDevice_Memset(device, address, 0, sizeof(HAL_UPDATE_CONFIG));
+        return BlockStorageDevice_EraseBlock(device, address);
     }
     return FALSE;
 }

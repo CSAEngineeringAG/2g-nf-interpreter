@@ -119,6 +119,9 @@ bool BlockStorageStream_SetReadModifyWrite(BlockStorageStream *stream)
 
 bool BlockStorageStream_Initialize(BlockStorageStream *stream, unsigned int blockUsage)
 {
+    // Clear data of the current stream
+    memset(stream, 0, sizeof(BlockStorageStream));
+
     return BlockStorageStream_InitializeWithBlockStorageDevice(stream, blockUsage, NULL);
 }
 
@@ -212,7 +215,7 @@ bool BlockStorageStream_NextStream(BlockStorageStream* stream)
     {
         stream->Device = BlockStorageList_GetFirstDevice();
 
-        if(stream->Device == NULL || BlockStorageDevice_Next(stream->Device) == NULL) return false;
+        if(stream->Device == NULL) return false;
 
         const DeviceBlockInfo* deviceInfo = BlockStorageDevice_GetDeviceInfo(stream->Device);
         
@@ -233,7 +236,7 @@ bool BlockStorageStream_NextStream(BlockStorageStream* stream)
 
     while(true)
     {
-        if(stream->Device == NULL || BlockStorageDevice_Next(stream->Device) == NULL) break;
+        if(stream->Device == NULL ) break;
 
         if(BlockStorageDevice_FindNextUsageBlock(stream->Device, stream->Usage, &stream->BaseAddress, &stream->RegionIndex, &stream->RangeIndex))
         {
@@ -248,7 +251,7 @@ bool BlockStorageStream_NextStream(BlockStorageStream* stream)
 
         stream->Device = BlockStorageDevice_Next(stream->Device);
 
-        if(BlockStorageDevice_Next(stream->Device) != NULL)
+        if(stream->Device != NULL)
         {
             const DeviceBlockInfo* deviceInfo = BlockStorageDevice_GetDeviceInfo(stream->Device);
         
