@@ -132,11 +132,30 @@ int main(void) {
   // Activate VBUS for USB Host
   palClearPad(GPIOI, GPIOI_VBUSEN);
 
+  int clrLedAnimation = 0;  // Define a given LED Animation for CLR
+
   while (true) { 
-    osDelay(100);
-	// palSetPad(GPIOH, GPIOH_ONBOARD_LED2_ORANGE);
-	// osDelay(250);
-	// palClearPad(GPIOH, GPIOH_ONBOARD_LED2_ORANGE);
-	// osDelay(250);
+    if(clrLedAnimation == 1)  // Fast LED Animation
+    {
+      palSetPad(GPIOH, GPIOH_ONBOARD_LED2_ORANGE);
+      osDelay(125);
+      palClearPad(GPIOH, GPIOH_ONBOARD_LED2_ORANGE);
+      osDelay(125);
+      palSetPad(GPIOH, GPIOH_ONBOARD_LED2_ORANGE);
+      osDelay(125);
+      palClearPad(GPIOH, GPIOH_ONBOARD_LED2_ORANGE);
+      osDelay(625);
+    }
+    else if(clrLedAnimation == 2)  // Slow Animation
+    {
+      palSetPad(GPIOH, GPIOH_ONBOARD_LED2_ORANGE);
+      osDelay(500);
+      palClearPad(GPIOH, GPIOH_ONBOARD_LED2_ORANGE);
+      osDelay(500);
+    }
+    else    // No Animation
+    {
+      osDelay(100);
+    }
   }
 }
