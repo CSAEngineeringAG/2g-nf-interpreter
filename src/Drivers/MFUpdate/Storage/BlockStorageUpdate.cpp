@@ -63,8 +63,19 @@ BOOL BlockStorageUpdate::InitializeFiles( UINT32 blockTypes )
 
     if(!BlockStorageStream_Initialize(&g_BlockStorageUpdate.m_stream, blockTypes)) return FALSE;
 
+    // BackUp Stream
+    BlockStorageStream orig;
+    memcpy(&orig, &g_BlockStorageUpdate.m_stream, sizeof(BlockStorageStream));
+
     do
     {
+        if(g_BlockStorageUpdate.m_stream.RangeIndex != orig.RangeIndex)
+        {
+            // go back to original stream if no others can be found
+            memcpy(&g_BlockStorageUpdate.m_stream, &orig, sizeof(orig)); 
+            break;
+        }
+
         if(!BlockStorageStream_IsErased(&g_BlockStorageUpdate.m_stream, g_BlockStorageUpdate.m_stream.BlockLength))
         {
             if(BlockStorageStream_ReadIntoBuffer(&g_BlockStorageUpdate.m_stream, (UINT8*)&header, sizeof(header)))
