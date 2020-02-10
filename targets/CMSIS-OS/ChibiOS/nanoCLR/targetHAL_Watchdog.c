@@ -19,6 +19,8 @@
 #error "The LSI value for this STM32 series hasn't been defined."
 #endif
 
+#if (HAL_USE_WDG)
+
 
 //Watchdog configuration structure required by ChibiOS
 #if (STM32_IWDG_IS_WINDOWED == TRUE)
@@ -84,3 +86,5 @@ void Watchdog_Reset()
 {        
     wdgReset(&WDGD1);
 }
+
+#endif

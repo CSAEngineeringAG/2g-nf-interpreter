@@ -355,6 +355,7 @@
  * WDG driver system settings.
  */
 #define STM32_WDG_USE_IWDG                  TRUE
+#define IWATCHDOG_TIMEOUT_MILLIS            30000
 
 // header for nanoFramework overlay drivers
 #include "mcuconf_nf.h"

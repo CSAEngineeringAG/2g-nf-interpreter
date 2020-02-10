@@ -45,7 +45,9 @@ void CPU_SetPowerMode(PowerLevel_type powerLevel)
     {
         case PowerLevel__Off:
             // stop watchdog
+          #if (HAL_USE_WDG)
             wdgStop(&WDGD1);
+          #endif
 
             #if (HAL_USE_FSMC == TRUE)
                 // shutdown memory

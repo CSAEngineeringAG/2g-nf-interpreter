@@ -72,5 +72,6 @@ extern uint32_t __nanoConfig_start__;
 extern uint32_t __nanoConfig_end__;
 extern uint32_t __deployment_start__;
 extern uint32_t __deployment_end__;
-
+extern uint32_t __netmfBlock_start__;
+extern uint32_t __netmfBlock_end__;
 #endif //_TARGET_HAL_H_

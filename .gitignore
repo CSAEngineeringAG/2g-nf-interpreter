@@ -66,3 +66,6 @@ CMake/Modules/FindINTEROP*.cmake
 **/packages/*
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
+
+# ignore OpenOCD log files
+openocd.log

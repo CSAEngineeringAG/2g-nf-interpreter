@@ -64,12 +64,13 @@ int main(void) {
     palClearPad(GPIOH, GPIOH_ONBOARD_LED3_RED);
 
     // check for valid CLR image 
-    // this target DOES have configuration block, so we need to use the __nanoConfig_end__ address here
-    if(CheckValidCLRImage((uint32_t)&__nanoConfig_end__))
+    // this target has a configuration block and a NETMF compatibility block.
+    // this target DOES NOT have configuration block, so we need to use the __nanoImage_end__ address here
+    if(CheckValidCLRImage((uint32_t)(&__netmfBlock_end__)))
     {
       // there seems to be a valid CLR image
       // launch nanoCLR
-      LaunchCLR((uint32_t)&__nanoConfig_end__);
+      LaunchCLR((uint32_t)(&__netmfBlock_end__));
     }
   }
 

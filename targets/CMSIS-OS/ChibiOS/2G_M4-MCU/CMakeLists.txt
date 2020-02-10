@@ -85,6 +85,8 @@ add_executable(
 
     # need to add configuration manager to allow get/store configuration blocks
     "${PROJECT_SOURCE_DIR}/src/HAL/nanoHAL_ConfigurationManager.c"
+	"${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/nanoCLR/Windows.Devices.I2c/win_dev_i2c_native_Windows_Devices_I2C_I2cDevice.cpp"
+	"${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/target_windows_devices_i2c_config.cpp"
 
     ${COMMON_PROJECT_SOURCES}
     ${NANOBOOTER_PROJECT_SOURCES}
@@ -157,6 +159,8 @@ add_executable(
 
     # sources for nanoFramework APIs
     ${TARGET_NANO_APIS_SOURCES}
+    
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/netmf_signature_compat.s"
 	
     # MFUpdate: Implementations (and stubs)
     "${PROJECT_SOURCE_DIR}/src/PAL/MFUpdate/MFUpdate.cpp"
@@ -217,6 +221,10 @@ include_directories(
 
     ${TARGET_CMSIS_COMMON_INCLUDE_DIRS}
     ${TARGET_CHIBIOS_COMMON_INCLUDE_DIRS}
+	
+	# #includes for i2c
+	# ${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/nanoCLR/Windows.Devices.I2c
+	# ${PROJECT_SOURCE_DIR}/src/Windows.Devices.I2c
 )
 
 # include directories for nanoBooter
@@ -229,6 +237,10 @@ target_include_directories(${NANOBOOTER_PROJECT_NAME}.elf PUBLIC
 
     # includes for ChibiOS LwIP
     ${CHIBIOS_LWIP_INCLUDE_DIRS}
+
+    #includes for i2c
+    ${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/nanoCLR/Windows.Devices.I2c
+    ${PROJECT_SOURCE_DIR}/src/Windows.Devices.I2c
 
     #MFUpdate
     "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/nanoBooter/"

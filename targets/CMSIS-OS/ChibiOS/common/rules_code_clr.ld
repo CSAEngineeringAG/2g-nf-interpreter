@@ -54,6 +54,8 @@ SECTIONS
 
     .text : ALIGN(16)
     {
+        targets/CMSIS-OS/ChibiOS/2G_M4-MCU/CMakeFiles/nanoCLR.elf.dir/__/__/__/__/ChibiOS_Source/os/common/startup/ARMCMx/compilers/GCC/vectors.S.obj(.text)
+        targets/CMSIS-OS/ChibiOS/2G_M4-MCU/CMakeFiles/nanoCLR.elf.dir/__/__/__/__/ChibiOS_Source/os/common/startup/ARMCMx/compilers/GCC/crt0_v7m.S.obj(.text)
         *(.text)
         *(.text.*)
         *(.glue_7t)
