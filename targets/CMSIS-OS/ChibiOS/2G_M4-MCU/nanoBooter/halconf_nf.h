@@ -12,8 +12,8 @@
 #endif
 
 //  Enables the FSMC subsystem.
-#if !defined(HAL_USE_FSMC)
-#define HAL_USE_FSMC                TRUE
+#if !defined(HAL_NF_USE_FSMC)
+#define HAL_NF_USE_FSMC                TRUE
 #endif
 
 #endif // _HALCONF_NF_H_
