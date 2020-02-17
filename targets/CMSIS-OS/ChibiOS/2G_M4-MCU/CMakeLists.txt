@@ -108,7 +108,6 @@ add_executable(
     
     "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/MicroBooter/MicroBooter.cpp"
     "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Storage/BlockStorageUpdate.cpp"
-    #"${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/nanoCLR/targetHAL.cpp"
 
     "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Support/Compression.cpp"
     "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Validation/CRC/CrcUpdateValidation.cpp"
@@ -162,12 +161,10 @@ add_executable(
     
     "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/netmf_signature_compat.s"
 	
-    # MFUpdate: Implementations (and stubs)
+    # MFUpdate: Implementations
     "${PROJECT_SOURCE_DIR}/src/PAL/MFUpdate/MFUpdate.cpp"
-    #"${PROJECT_SOURCE_DIR}/src/PAL/MFUpdate/stubs/MFUpdate_stub.cpp"
 
     "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/MFUpdate_config_PAL/MFUpdate_config_M4MCU.cpp"
-    #"${PROJECT_SOURCE_DIR}/src/PAL/MFUpdate/stubs/Config/MFUpdate_config_stub.cpp"
 
     #MFUpdate Storage
     "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Storage/BlockStorageUpdate.cpp"
@@ -253,9 +250,6 @@ target_include_directories(${NANOBOOTER_PROJECT_NAME}.elf PUBLIC
 
     "${PROJECT_SOURCE_DIR}/InteropAssemblies/SPOT.MFUpdate/include"
     "${PROJECT_SOURCE_DIR}/src/HAL/Include/"
-    #"${PROJECT_SOURCE_DIR}/build/targets/CMSIS-OS/ChibiOS/nanoCLR/"
-
-    #"${PROJECT_SOURCE_DIR}/build/ChibiOS_Source/os/common/ext/ARM/CMSIS/Core/Include"
 
     "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/nf-overlay/os/hal/ports/STM32/LLD/FSMCv1/"
     "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/nf-overlay/os/hal/include/stm32_fsmc/"

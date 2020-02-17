@@ -155,7 +155,7 @@ int main(void) {
     }
     else    // No Animation
     {
-    osDelay(100);
+      osDelay(100);
     }
   }
 }

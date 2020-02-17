@@ -59,7 +59,7 @@ int main(void) {
     palSetPad(GPIOH, GPIOH_ONBOARD_LED3_RED);
 
     WaitForNanoBooterUpload();
-    
+
     palClearPad(GPIOH, GPIOH_ONBOARD_LED1_GREEN);
     palClearPad(GPIOH, GPIOH_ONBOARD_LED3_RED);
 
