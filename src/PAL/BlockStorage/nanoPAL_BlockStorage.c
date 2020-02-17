@@ -83,40 +83,45 @@ bool DeviceBlockInfo_FindForBlockUsage(DeviceBlockInfo* blockInfo, unsigned int 
     (void)blockInfo;
     (void)blockUsage;
 
-    address = 0;
-    blockRegionIndex = 0;
-    blockRangeIndex = 0;
+    *address = 0;
+    *blockRegionIndex = 0;
+    *blockRangeIndex = 0;
     
     return DeviceBlockInfo_FindNextUsageBlock(blockInfo, blockUsage, address, blockRegionIndex, blockRangeIndex );
 }
 
 
 /////////////////////////////////////////////////////
-// BlockStorageStream stubs
+// BlockStorageStream
 
 bool BlockStorageStream_IsXIP(BlockStorageStream *stream)
 {
-    (void)stream;
-
-    return false;
+    return 0 != (stream->Flags & BLOCKSTORAGESTREAM_c_BlockStorageStream__XIP);
 }
 
 bool BlockStorageStream_IsReadModifyWrite(BlockStorageStream *stream)
 {
-    (void)stream;
-
-    return false;
+    return 0 != (stream->Flags & BLOCKSTORAGESTREAM_c_BlockStorageStream__ReadModWrite);
 }
 
 bool BlockStorageStream_SetReadModifyWrite(BlockStorageStream *stream)
 {
-    (void)stream;
-
-    return false;
+    if(stream != NULL)
+    {
+        stream->Flags |= BLOCKSTORAGESTREAM_c_BlockStorageStream__ReadModWrite;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 bool BlockStorageStream_Initialize(BlockStorageStream *stream, unsigned int blockUsage)
 {
+    // Clear data of the current stream
+    memset(stream, 0, sizeof(BlockStorageStream));
+
     return BlockStorageStream_InitializeWithBlockStorageDevice(stream, blockUsage, NULL);
 }
 
@@ -141,7 +146,7 @@ bool BlockStorageStream_InitializeWithBlockStorageDevice(BlockStorageStream *str
         {
             device = g_BlockStorage.DeviceList[i];
 
-            deviceInfo = BlockStorageDevice_GetDeviceInfo(g_BlockStorage.DeviceList[i]);
+            deviceInfo = BlockStorageDevice_GetDeviceInfo(device);
             
             if(DeviceBlockInfo_FindNextUsageBlock(deviceInfo, blockUsage, &stream->BaseAddress, &stream->RegionIndex, &stream->RangeIndex))
             {
@@ -200,71 +205,74 @@ bool BlockStorageStream_InitializeWithBlockStorageDevice(BlockStorageStream *str
 
 bool BlockStorageStream_NextStream(BlockStorageStream* stream)
 {
-    if(stream->Device == NULL || BlockStorageDevice_Prev(stream->Device) == NULL) return false;
-
-    const BlockRegionInfo* pRegion;
-    const DeviceBlockInfo* deviceInfo = BlockStorageDevice_GetDeviceInfo(stream->Device);
+    bool fFirstDevice = (stream->Device == NULL);
 
     BlockStorageStream orig;
 
     memcpy(&orig, stream, sizeof(orig));
 
-    do
+    if(fFirstDevice)
     {
-        bool fLastIndex = false;
-        
-        if(stream->RangeIndex == 0) 
-        {
-            if(stream->RegionIndex == 0)
-            {
-                stream->Device = BlockStorageDevice_Prev(stream->Device);
-                
-                if(stream->Device == NULL || BlockStorageDevice_Prev(stream->Device) == NULL)
-                {
-                    memcpy(stream, &orig, sizeof(orig));
-                    return false;
-                }
-                
-                deviceInfo = BlockStorageDevice_GetDeviceInfo(stream->Device);
-            
-                stream->RegionIndex = deviceInfo->NumRegions - 1;
-            }
-            else
-            {
-                stream->RegionIndex--;
-            }
+        stream->Device = BlockStorageList_GetFirstDevice();
 
-            fLastIndex = true;
+        if(stream->Device == NULL) return false;
+
+        const DeviceBlockInfo* deviceInfo = BlockStorageDevice_GetDeviceInfo(stream->Device);
+        
+        if(deviceInfo->Attribute & MediaAttribute_SupportsXIP)
+        {
+            stream->Flags |= BLOCKSTORAGESTREAM_c_BlockStorageStream__XIP;
         }
         else
         {
-            stream->RangeIndex--;
+            stream->Flags &= ~BLOCKSTORAGESTREAM_c_BlockStorageStream__XIP;
         }
-
-        pRegion = &deviceInfo->Regions[stream->RegionIndex];
-
-        if(fLastIndex)
-        {
-            stream->RangeIndex = pRegion->NumBlockRanges - 1;
-        }
-
-    } while( BlockRange_GetBlockUsage(pRegion->BlockRanges[stream->RangeIndex]) != stream->Usage );
-
-    if(deviceInfo->Attribute & MediaAttribute_SupportsXIP)
-    {
-        stream->Flags |= BLOCKSTORAGESTREAM_c_BlockStorageStream__XIP;
     }
     else
     {
-        stream->Flags &= ~BLOCKSTORAGESTREAM_c_BlockStorageStream__XIP;
+        // move to the next range
+        stream->RangeIndex++;
     }
-    
-    stream->BlockLength  = pRegion->BytesPerBlock;
-    stream->BaseAddress  = pRegion->Start + pRegion->BlockRanges[stream->RangeIndex].StartBlock * stream->BlockLength;
-    stream->Length       = BlockRange_GetBlockCount(pRegion->BlockRanges[stream->RangeIndex]) * stream->BlockLength;
-    stream->CurrentIndex = 0;
 
-    return true;
+    while(true)
+    {
+        if(stream->Device == NULL ) break;
+
+        if(BlockStorageDevice_FindNextUsageBlock(stream->Device, stream->Usage, &stream->BaseAddress, &stream->RegionIndex, &stream->RangeIndex))
+        {
+            const BlockRegionInfo* pRegion = &(BlockStorageDevice_GetDeviceInfo(stream->Device)->Regions[stream->RegionIndex]);
+
+            stream->CurrentIndex = 0;
+            stream->Length       = BlockRange_GetBlockCount(pRegion->BlockRanges[stream->RangeIndex]) * pRegion->BytesPerBlock;
+            stream->BlockLength  = pRegion->BytesPerBlock;
+            stream->CurrentUsage = (pRegion->BlockRanges[stream->RangeIndex].RangeType & BlockRange_USAGE_MASK);
+            return true;
+        }
+
+        stream->Device = BlockStorageDevice_Next(stream->Device);
+
+        if(stream->Device != NULL)
+        {
+            const DeviceBlockInfo* deviceInfo = BlockStorageDevice_GetDeviceInfo(stream->Device);
+        
+            if(deviceInfo->Attribute & MediaAttribute_SupportsXIP)
+            {
+                stream->Flags |= BLOCKSTORAGESTREAM_c_BlockStorageStream__XIP;
+            }
+            else
+            {
+                stream->Flags &= ~BLOCKSTORAGESTREAM_c_BlockStorageStream__XIP;
+            }
+        }  
+
+        stream->RegionIndex = 0;
+        stream->RangeIndex  = 0;
+    }
+
+    // go back to original stream if no others can be found
+    memcpy(stream, &orig, sizeof(orig)); 
+
+    return false;
 }
 
 bool BlockStorageStream_PrevStream(BlockStorageStream* stream)
@@ -359,18 +367,29 @@ bool BlockStorageStream_Seek(BlockStorageStream *stream, unsigned int offset, Se
         return false;
     }
 
+    if(offset == BLOCKSTORAGESTREAM_STREAM_SEEK_NEXT_BLOCK || offset == BLOCKSTORAGESTREAM_STREAM_SEEK_PREV_BLOCK)
+    {
+        int32_t blkOffset = seekIndex % stream->BlockLength;
+
+        if(offset == BLOCKSTORAGESTREAM_STREAM_SEEK_NEXT_BLOCK) offset = stream->BlockLength - blkOffset;
+        else if(blkOffset != 0)              offset = -blkOffset; 
+        else                                 offset = -(int32_t)stream->BlockLength;
+    }
+
     seekIndex += offset;
 
     while (seekIndex >= (int32_t)stream->Length)
     {
-        // out of region address space
-        return false;
+        seekIndex -= stream->Length; // subtract the length of the current stream to get the correct offset for the new stream
+        
+        if(!BlockStorageStream_NextStream(stream)) return false;
     }
 
     while (seekIndex < 0)
     {
-        // out of region address space
-        return false;
+        if(!BlockStorageStream_PrevStream(stream)) return false;
+
+        seekIndex += stream->Length; // add the length of the new stream to get the correct offset for the new stream
     }
 
     stream->CurrentIndex = seekIndex;
@@ -380,26 +399,94 @@ bool BlockStorageStream_Seek(BlockStorageStream *stream, unsigned int offset, Se
 
 bool BlockStorageStream_Write(BlockStorageStream *stream, unsigned char *data, unsigned int length)
 {
-    (void)stream;
-    (void)data;
-    (void)length;
+    //if(stream->Device == NULL || BlockStorageDevice_Next(stream->Device) == NULL || !data) return FALSE;
+    if(stream->Device == NULL || !data) return FALSE;
 
-    return false;
+    unsigned char* pData = data;
+
+    while(length > 0)
+    {
+        if(stream->CurrentIndex == stream->Length)
+        {
+            if(!BlockStorageStream_NextStream(stream)) return false;
+        }
+
+        int writeLen = length;
+        
+        if((stream->CurrentIndex + writeLen) > stream->Length)
+        {
+            writeLen = stream->Length - stream->CurrentIndex;
+        }
+        
+        if(!BlockStorageDevice_Write(stream->Device, BlockStorageStream_CurrentAddress(stream), writeLen, pData, BlockStorageStream_IsReadModifyWrite(stream)))
+        {
+            return false;
+        }
+
+        pData        += writeLen;
+        length       -= writeLen;
+        stream->CurrentIndex += writeLen;
+    }
+
+    return true;
 }
 
 bool BlockStorageStream_Erase(BlockStorageStream *stream, unsigned int length)
 {
-    (void)stream;
-    (void)length;
+    bool fRet = true;
+    
+    //if(stream->Device == NULL || BlockStorageDevice_Next(stream->Device) == NULL) return FALSE;
+    if(stream->Device == NULL) return FALSE;
 
-    return false;
+    BlockStorageStream orig;
+    memcpy(&orig, stream, sizeof(orig));
+
+    if(stream->CurrentIndex == stream->Length)
+    {
+        if(!BlockStorageStream_NextStream(stream)) return false;
+    }
+
+    signed int len = (signed int)length;
+
+    while(len > 0)
+    {
+        if(!BlockStorageDevice_EraseBlock(stream->Device, BlockStorageStream_CurrentAddress(stream) )) return FALSE;
+
+        len -= stream->BlockLength;
+
+        if(len > 0 && !BlockStorageStream_Seek(stream, BLOCKSTORAGESTREAM_STREAM_SEEK_NEXT_BLOCK, BlockStorageStream_SeekCurrent ))
+        {
+            if(!BlockStorageStream_NextStream(stream))
+            {
+                fRet = false;
+                break;
+            }
+        }
+    }
+
+    // always return stream back to its original position for erases
+    memcpy(stream, &orig, sizeof(orig));
+
+    return fRet;
 }
 
 bool BlockStorageStream_ReadIntoBuffer(BlockStorageStream *stream, unsigned char *buffer, unsigned int length)
 {
-    (void)stream;
-    (void)buffer;
-    (void)length;
+    if(!BlockStorageStream_IsXIP(stream))
+    {
+        return BlockStorageStream_Read(stream, &buffer, length);
+    }
+    else
+    {
+        unsigned char* pTmp = NULL;
+
+        if(BlockStorageStream_Read(stream, &pTmp, length))
+        {
+            memcpy(buffer, pTmp, length);
+
+            return true;
+        }
+    }
 
     return false;
 }
@@ -423,7 +510,7 @@ bool BlockStorageStream_Read(BlockStorageStream* stream, unsigned char** buffer,
         {
             // TODO FIXME
             // need to check implementation of this call to get pointers to stream continuation
-            //if(!NextStream()) return FALSE;
+            if(!BlockStorageStream_NextStream(stream)) return FALSE;
         }
 
         if((stream->CurrentIndex + readLen) > stream->Length)
@@ -475,27 +562,148 @@ unsigned int BlockStorageStream_CurrentMappedAddress(BlockStorageStream *stream)
 
 bool BlockStorageStream_IsErased(BlockStorageStream *stream, unsigned int length)
 {
-    (void)stream;
-    (void)length;
-    
-    return false;
+    unsigned int bkupIdx   = stream->CurrentIndex;
+    signed int  rem       = bkupIdx % stream->BlockLength;
+    unsigned char  compValue = (unsigned int) BlockStorageDevice_GetDeviceInfo(stream->Device)->Attribute & MediaAttribute_ErasedBitsAreZero ? 0 : 0xFF;
+
+    signed int  len       = (signed int) length;
+
+    if(rem != 0)
+    {
+        if(length > stream->BlockLength)
+        {
+            rem = stream->BlockLength - rem;
+            len -= rem;
+        }
+        else
+        {
+            rem = length;
+            len = 0;
+        }
+        
+        while(rem > 0)
+        {
+            unsigned char tmp[512];
+            signed int left = ((unsigned long long)rem < sizeof(tmp) ? rem : (signed int) sizeof(tmp));
+
+            BlockStorageStream_ReadIntoBuffer(stream, tmp, left);
+
+            for(int i=0; i<left; i++)
+            {
+                if(tmp[i] != compValue)
+                {
+                    return FALSE;
+                }
+            }
+
+            rem -= left;
+        }
+    }
+
+    while((unsigned int) len >= stream->BlockLength)
+    {
+        if(!BlockStorageDevice_IsBlockErased(stream->Device, stream->BaseAddress + stream->CurrentIndex, stream->BlockLength)) return FALSE;
+
+        len                  -= stream->BlockLength;
+        stream->CurrentIndex += stream->BlockLength;
+    }
+
+    while(len > 0)
+    {
+        unsigned char tmp[512];
+        signed int left = (len < (signed int) sizeof(tmp) ? len : (signed int) sizeof(tmp));
+
+        BlockStorageStream_ReadIntoBuffer(stream, tmp, left);
+
+        for(int i=0; i<left; i++)
+        {
+            if(tmp[i] != compValue)
+            {
+                return FALSE;
+            }
+        }
+
+        len -= left;
+    }
+
+    stream->CurrentIndex = bkupIdx;
+
+    return TRUE;
 }
 
 /////////////////////////////////////////////////////
-// BlockStorageDevice stubs
+// BlockStorageDevice
 
 BlockStorageDevice* BlockStorageDevice_Next(BlockStorageDevice* device)
 {
     (void)device;
 
-    return NULL;
+    if(g_BlockStorage.DeviceCount > 1)
+    {
+        signed int pos = -1;
+        unsigned int i;
+
+        // Search position of actual device
+        for(i = 0; i < g_BlockStorage.DeviceCount; i++)
+        {
+            // Check if pointer adress is identical
+            if (device == g_BlockStorage.DeviceList[i])
+            {
+                pos = (signed int) i;
+                break;
+            }
+        }
+
+        // Check if another device is following actual
+        if ((pos >= 0) & (pos < (signed int) g_BlockStorage.DeviceCount - 1))
+        {
+            return g_BlockStorage.DeviceList[pos + 1];
+        }
+        else
+        {
+            return NULL;
+        }
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 BlockStorageDevice* BlockStorageDevice_Prev(BlockStorageDevice* device)
 {
     (void)device;
 
-    return NULL;
+    if(g_BlockStorage.DeviceCount > 1)
+    {
+        signed int pos = -1;
+        unsigned int i;
+
+        // Search position of actual device
+        for(i = 0; i < g_BlockStorage.DeviceCount; i++)
+        {
+            // Check if pointer adress is identical
+            if (device == g_BlockStorage.DeviceList[i])
+            {
+                pos = (signed int) i;
+                break;
+            }
+        }
+
+        // Check if another device is in front of actual
+        if ((pos >= 1) & (pos < (signed int) g_BlockStorage.DeviceCount - 1))
+        {
+            return g_BlockStorage.DeviceList[pos - 1];
+        }
+        else
+        {
+            return NULL;
+        }
+    }
+    else
+    {
+        return NULL;
+    }
 }
 
 /////////////////////////////////////////////////////////

@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>USB.Host</name>
+    </assembly>
+    <members>
+        <member name="M:USB.Host.Info.IsDevicePresent">
+            <summary>
+            Checks if a USB device is available.
+            </summary>
+            <returns>
+            This method returns true, if a USB device is present and configured.
+            </returns>
+        </member>
+        <member name="M:USB.Host.Info.GetVID">
+            <summary>
+            Gets the Vendor ID of the currently connected USB device.
+            </summary>
+            <returns>
+            When this method completes successfully, it returns the Vendor ID as a unsigned integer.
+            </returns>
+        </member>
+        <member name="M:USB.Host.Info.GetPID">
+            <summary>
+            Gets the Product ID of the currently connected USB device.
+            </summary>
+            <returns>
+            When this method completes successfully, it returns the Product ID as a unsigned integer.
+            </returns>
+        </member>
+        <member name="M:USB.Host.Info.GetSerialNumber">
+            <summary>
+            Gets the Serial Number of the currently connected USB device.
+            </summary>
+            <returns>
+            When this method completes successfully, it returns the products serial number name as a string.
+            </returns>
+        </member>
+        <member name="M:USB.Host.Info.GetManufacturerString">
+            <summary>
+            Gets the Manufacturer of the currently connected USB device.
+            </summary>
+            <returns>
+            When this method completes successfully, it returns the Manufacturer name as a string.
+            </returns>
+        </member>
+        <member name="M:USB.Host.Info.GetProductString">
+            <summary>
+            Gets the Product name of the currently connected USB device.
+            </summary>
+            <returns>
+            When this method completes successfully, it returns the Product name as a string.
+            </returns>
+        </member>
+    </members>
+</doc>

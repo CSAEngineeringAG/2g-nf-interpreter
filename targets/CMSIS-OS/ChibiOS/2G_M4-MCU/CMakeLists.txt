@@ -80,6 +80,9 @@ add_executable(
     "${CMAKE_CURRENT_SOURCE_DIR}/target_common.c"
     "${CMAKE_CURRENT_SOURCE_DIR}/target_BlockStorage.c"
 
+    # the next one is required is the target implements and it's using external memory
+	"${CMAKE_CURRENT_SOURCE_DIR}/target_external_memory.c"
+
     # need to add configuration manager to allow get/store configuration blocks
     "${PROJECT_SOURCE_DIR}/src/HAL/nanoHAL_ConfigurationManager.c"
 	"${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/nanoCLR/Windows.Devices.I2c/win_dev_i2c_native_Windows_Devices_I2C_I2cDevice.cpp"
@@ -98,6 +101,16 @@ add_executable(
     ${ChibiOSnfOverlay_SOURCES}
 
     ${WireProtocol_SOURCES}
+    
+    #MFUpdate
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/nanoBooter/NanoBooterEntry.cpp"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFupdateFlag/UpdateFlashConfig.cpp"
+    
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/MicroBooter/MicroBooter.cpp"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Storage/BlockStorageUpdate.cpp"
+
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Support/Compression.cpp"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Validation/CRC/CrcUpdateValidation.cpp"
 )
 
 #######################
@@ -145,8 +158,23 @@ add_executable(
 
     # sources for nanoFramework APIs
     ${TARGET_NANO_APIS_SOURCES}
-
+    
     "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/netmf_signature_compat.s"
+	
+    # MFUpdate: Implementations
+    "${PROJECT_SOURCE_DIR}/src/PAL/MFUpdate/MFUpdate.cpp"
+
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/MFUpdate_config_PAL/MFUpdate_config_M4MCU.cpp"
+
+    #MFUpdate Storage
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Storage/BlockStorageUpdate.cpp"
+
+    #MFUpdate Validation
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFupdate/Validation/CRC/CrcUpdateValidation.cpp"
+
+    #MFUpdate Flag
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFupdateFlag/MicroBooterFlashUpdate.cpp"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFupdateFlag/UpdateFlashConfig.cpp"
 )
 
 # add dependency from ChibiOS (this is required to make sure the ChibiOS repo is downloaded before the build starts)
@@ -206,10 +234,25 @@ target_include_directories(${NANOBOOTER_PROJECT_NAME}.elf PUBLIC
 
     # includes for ChibiOS LwIP
     ${CHIBIOS_LWIP_INCLUDE_DIRS}
-	
-	#includes for i2c
-	${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/nanoCLR/Windows.Devices.I2c
-	${PROJECT_SOURCE_DIR}/src/Windows.Devices.I2c
+
+    #includes for i2c
+    ${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/nanoCLR/Windows.Devices.I2c
+    ${PROJECT_SOURCE_DIR}/src/Windows.Devices.I2c
+
+    #MFUpdate
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/nanoBooter/"
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/2G_M4-MCU/MicroBooter/"
+
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Storage/"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Validation/CRC/"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdateFlag/"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Support/"
+
+    "${PROJECT_SOURCE_DIR}/InteropAssemblies/SPOT.MFUpdate/include"
+    "${PROJECT_SOURCE_DIR}/src/HAL/Include/"
+
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/nf-overlay/os/hal/ports/STM32/LLD/FSMCv1/"
+    "${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/nf-overlay/os/hal/include/stm32_fsmc/"
 )
 
 # include directories for nanoCLR
@@ -240,6 +283,11 @@ target_include_directories(${NANOCLR_PROJECT_NAME}.elf PUBLIC
 
     # includes for SPIFFS
     ${SPIFFS_INCLUDE_DIRS}
+
+    #MFUpdate
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Storage/"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdate/Validation/CRC/"
+    "${PROJECT_SOURCE_DIR}/src/Drivers/MFUpdateFlag/"
 )
 
 # set compiler options

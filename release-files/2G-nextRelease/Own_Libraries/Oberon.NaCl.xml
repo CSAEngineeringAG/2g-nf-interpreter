@@ -1,0 +1,812 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Oberon.NaCl</name>
+    </assembly>
+    <members>
+        <member name="T:Oberon.NaCl.BufferExtensions">
+            <summary>
+            Extensions class for data checks.
+            </summary>
+        </member>
+        <member name="M:Oberon.NaCl.BufferExtensions.CheckRange(System.Byte[],System.Int32,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Verifies the boundary parameters <paramref name="offset"/> and <paramref name="count"/> on the array <paramref name="buffer"/>. This function avoids code duplication in Oberon.NaCl. 
+            <para>It checks the following conditions:</para>
+            <para> - <paramref name="buffer"/> != null</para>
+            <para> - <paramref name="offset"/> >= 0</para>
+            <para> - <paramref name="offset"/> &lt;= <paramref name="buffer"/>.Length</para>
+            <para> - <paramref name="count"/> >= 0</para>
+            <para> - <paramref name="buffer"/>.Length - <paramref name="offset"/> >= <paramref name="count"/> </para>
+            <para>And throws an exception if one of these conditions fails.</para>
+            </summary>
+            <param name="buffer">Buffer to be verified</param>
+            <param name="offset">The desired offset that will be used</param>
+            <param name="count">The amount of data to be stored/accessed in the buffer</param>
+            <param name="bufferName">The name of the buffer (error messages)</param>
+            <param name="offsetName">The name of the offset (error messages)</param>
+            <param name="countName">The name of length variable (error messages)</param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="buffer"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="offset"/> or <paramref name="count"/> are &lt; 0.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="offset"/> > <paramref name="buffer"/>.Length
+                , or
+                <paramref name="buffer"/>.Length - <paramref name="offset"/> &lt; <paramref name="count"/>.
+             </exception>
+        </member>
+        <member name="M:Oberon.NaCl.BufferExtensions.CheckLength(System.Byte[],System.Int32,System.String,System.String)">
+            <summary>
+            Verifies the length of a buffer. This function avoids code duplication in Oberon.NaCl.
+            <para>It checks the following conditions:</para>
+            <para> - <paramref name="buffer"/> != null,</para>
+            <para> - <paramref name="buffer"/>.Length != <paramref name="count"/>.</para>
+            <para>If one of these conditions fails, then an exception is thrown.</para>
+            </summary>
+            <param name="buffer">Buffer to be verified</param>
+            <param name="count">Required length of the buffer</param>
+            <param name="bufferName">The name of the buffer (error messages)</param>
+            <param name="countName">The name of the count (error messages)</param>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="buffer"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="buffer"/>.Length != <paramref name="count"/>.
+            </exception>
+        </member>
+        <member name="T:Oberon.NaCl.CryptoBox">
+            <summary>
+            Wrapper class for the NaCl crypto_box public key authenticated encryption C interface:
+            http://nacl.cr.yp.to/box.html
+            
+            <para>This class implements all default features except for the crypto_box_keypair function. The function ComputeKeyPair is provided as a drop-in replacement for the latter.</para>
+            <para>The interop uses the NaCl default primitives curve25519, xsalsa20 and poly1305. All indexing operations are done as ints (instead of unsigned long in the standard implementation).</para>
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoBox._random">
+            <summary>
+            RandomNumberGenerator used by the ComputeKeyPair function. 
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoBox._lock">
+            <summary>
+            Lock object for accessing the RandomNumberGenerator
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoBox.PublicKeyBytes">
+            <summary>
+            Represents NaCl crypto_box_PUBLICKEYBYTES.
+            Length of public keys.
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoBox.SecretKeyBytes">
+            <summary>
+            Represents NaCl crypto_box_SECRETKEYBYTES.
+            Length of secret keys.
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoBox.NonceBytes">
+            <summary>
+            Represents NaCl crypto_box_NONCEBYTES.
+            Length of nonces.
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoBox.ZeroBytes">
+            <summary>
+            Represents NaCl crypto_box_ZEROBYTES.
+            Length of the message padding.
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoBox.BoxZeroBytes">
+            <summary>
+            Represents NaCl crypto_box_BOXZEROBYTES.
+            Length of the ciphertext padding.
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoBox.BeforeNmBytes">
+            <summary>
+            Represents NaCl crypto_box_BEFORENMBYTES.
+            Length of shared key used in BoxBeforeNm and BoxAfterNm.
+            </summary>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoBox.ComputeKeyPair(System.Byte[],System.Byte[])">
+            <summary>
+            Creates a public/secret key keypair in <paramref name="pk"/> and <paramref name="sk"/>.
+            Replacement for the NaCl crypto_box_keypair function, that behaves identically, except that it uses the class <see cref="T:System.Random"/> to generate random numbers. 
+            </summary>
+            <param name="pk">Public key. Length: <see cref="F:Oberon.NaCl.CryptoBox.PublicKeyBytes"/></param>
+            <param name="sk">Secret key. Length: <see cref="F:Oberon.NaCl.CryptoBox.SecretKeyBytes"/></param>
+            <returns>Returns 0.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="pk"/> or <paramref name="sk"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="pk"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.PublicKeyBytes"/> and <br />
+                <paramref name="sk"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.SecretKeyBytes"/>.
+            </exception>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoBox.Box(System.Byte[],System.Int32,System.Byte[],System.Int32,System.Int32,System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            Represents the NaCl crypto_box function. 
+            <para>Encrypts the message from input buffer <paramref name="m"/> and stores the ciphertext in the output buffer <paramref name="c"/>.</para>
+            </summary>
+            <param name="c">Destination buffer with minimal length (<paramref name="coff"/> + <paramref name="mlen"/>). When this method returns, the buffer contains the ciphertext between (<paramref name="coff"/> + <see cref="F:Oberon.NaCl.CryptoBox.BoxZeroBytes"/>) and (<paramref name="coff"/> + <paramref name="mlen"/> - 1).</param>
+            <param name="coff">The zero-based byte offset into <paramref name="c"/>.</param>
+            <param name="m">Input buffer. Contains the message between index (<paramref name="moff"/> + <see cref="F:Oberon.NaCl.CryptoBox.ZeroBytes"/>) and (<paramref name="moff"/> + <paramref name="mlen"/> - 1). Values between index <paramref name="moff"/> and (<paramref name="moff"/> + <see cref="F:Oberon.NaCl.CryptoBox.ZeroBytes"/>) must be zero.</param>
+            <param name="moff">The zero-based byte offset into <paramref name="m"/>.</param>
+            <param name="mlen">The length of the input. This includes <see cref="F:Oberon.NaCl.CryptoBox.ZeroBytes"/> zero bytes at offset <paramref name="moff"/>.</param>
+            <param name="n">Nonce. Length: <see cref="F:Oberon.NaCl.CryptoBox.NonceBytes"/>.</param>
+            <param name="pk">Public Key. Length: <see cref="F:Oberon.NaCl.CryptoBox.PublicKeyBytes"/>.</param>
+            <param name="sk">Secret Key. Length: <see cref="F:Oberon.NaCl.CryptoBox.SecretKeyBytes"/>.</param>
+            <returns>The return value from NaCl crypto_box. Returns 0.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="c"/>, <paramref name="m"/>,
+                <paramref name="n"/>, <paramref name="pk"/> or <paramref name="sk"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="coff"/> &lt; 0,<br />
+                <paramref name="moff"/> or <paramref name="mlen"/> are &lt; 0. <br />
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="pk"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.PublicKeyBytes"/>, <br />
+                <paramref name="sk"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.SecretKeyBytes"/>, <br />
+                <paramref name="n"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.NonceBytes"/>, <br />
+                <paramref name="mlen"/> &lt;  <see cref="F:Oberon.NaCl.CryptoBox.ZeroBytes"/>, <br />
+                <paramref name="moff"/> > <paramref name="m"/>.Length, 
+                <paramref name="m"/>.Length - <paramref name="moff"/> &lt; <paramref name="mlen"/>, <br />
+                <paramref name="coff"/> > <paramref name="c"/>.Length, 
+                <paramref name="c"/>.Length - <paramref name="coff"/> &lt; <paramref name="mlen"/>, <br />
+                <paramref name="m"/>[i] != 0 for all i ∈ [<paramref name="moff"/>, (<paramref name="moff"/> + <see cref="F:Oberon.NaCl.CryptoBox.ZeroBytes"/>)].
+            </exception>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoBox.Open(System.Byte[],System.Int32,System.Byte[],System.Int32,System.Int32,System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            Represents the NaCl crypto_box_open function.
+            <para>Decrypts the ciphertext from input buffer <paramref name="c"/> and stores the decrypted message in the output buffer <paramref name="m"/>.</para>
+            </summary>
+            <param name="m">Destination buffer with minimal length (<paramref name="clen"/> + <paramref name="moff"/>). When this method returns, the buffer contains the decrypted message between (<paramref name="moff"/>+<see cref="F:Oberon.NaCl.CryptoBox.ZeroBytes"/>) and (<paramref name="moff"/> + <paramref name="clen"/> - 1).</param>
+            <param name="moff">The zero-based byte offset into <paramref name="m"/>.</param>
+            <param name="c">Input buffer. Contains the ciphertext between index (<paramref name="coff"/> + <see cref="F:Oberon.NaCl.CryptoBox.BoxZeroBytes"/>) and (<paramref name="moff"/> + <paramref name="clen"/> - 1). Values between index <paramref name="coff"/> and (<paramref name="coff"/> + <see cref="F:Oberon.NaCl.CryptoBox.BoxZeroBytes"/>) must be zero.</param>
+            <param name="coff">The zero-based byte offset into <paramref name="c"/>.</param>
+            <param name="clen">The length of the input. This includes <see cref="F:Oberon.NaCl.CryptoBox.ZeroBytes"/> zero bytes at offset coff.</param>
+            <param name="n">Nonce. Length: <see cref="F:Oberon.NaCl.CryptoBox.NonceBytes"/>.</param>
+            <param name="pk">Public Key. Length: <see cref="F:Oberon.NaCl.CryptoBox.PublicKeyBytes"/>.</param>
+            <param name="sk">Secret Key. Length: <see cref="F:Oberon.NaCl.CryptoBox.SecretKeyBytes"/>.</param>
+            <returns>The return value from NaCl crypto_box_open: 0 if ciphertext verification succeeds, -1 otherwise (<paramref name="m"/> might have been modified).</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="m"/>, <paramref name="c"/>,
+                <paramref name="n"/>, <paramref name="pk"/> or <paramref name="sk"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="moff"/> &lt; 0,<br />
+                <paramref name="coff"/> or <paramref name="clen"/> are &lt; 0. <br />
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="pk"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.PublicKeyBytes"/>, <br />
+                <paramref name="sk"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.SecretKeyBytes"/>, <br />
+                <paramref name="n"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.NonceBytes"/>, <br />
+                <paramref name="clen"/> &lt;  <see cref="F:Oberon.NaCl.CryptoBox.BoxZeroBytes"/>, <br />
+                <paramref name="coff"/> > <paramref name="c"/>.Length, 
+                <paramref name="c"/>.Length - <paramref name="coff"/> &lt; <paramref name="clen"/>, <br />
+                <paramref name="moff"/> > <paramref name="m"/>.Length, 
+                <paramref name="m"/>.Length - <paramref name="moff"/> &lt; <paramref name="clen"/>, <br />
+                <paramref name="c"/>[i] != 0 for all i ∈ [<paramref name="coff"/>, (<paramref name="coff"/> + <see cref="F:Oberon.NaCl.CryptoBox.BoxZeroBytes"/>)].
+            </exception>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoBox.BeforeNm(System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            Represents the NaCl crypto_box_boxbeforenm function.
+            <para>The function computes the shared key <paramref name="k"/> from public key <paramref name="pk"/> and secret key <paramref name="sk"/>.</para>
+            </summary>
+            <param name="k">Shared key. Length: <see cref="F:Oberon.NaCl.CryptoBox.BeforeNmBytes"/></param>
+            <param name="pk">Public Key. Length: <see cref="F:Oberon.NaCl.CryptoBox.PublicKeyBytes"/>.</param>
+            <param name="sk">Secret Key. Length: <see cref="F:Oberon.NaCl.CryptoBox.SecretKeyBytes"/>.</param>
+            <returns>The return value from NaCl crypto_box_boxbeforenm. Returns 0.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="k"/>, <paramref name="pk"/> or <paramref name="sk"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="k"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.BeforeNmBytes"/>, <br />
+                <paramref name="pk"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.PublicKeyBytes"/>, <br />
+                <paramref name="sk"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.SecretKeyBytes"/>.
+            </exception>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoBox.AfterNm(System.Byte[],System.Int32,System.Byte[],System.Int32,System.Int32,System.Byte[],System.Byte[])">
+            <summary>
+            Represents the NaCl crypto_box_afternm function. 
+            <para>Encrypts the message from input buffer <paramref name="m"/> and stores the ciphertext in the output buffer <paramref name="c"/>.</para>
+            </summary>
+            <param name="c">Destination buffer with minimal length (<paramref name="coff"/> + <paramref name="mlen"/>). When this method returns, the buffer contains the ciphertext between (<paramref name="coff"/> + <see cref="F:Oberon.NaCl.CryptoBox.BoxZeroBytes"/>) and (<paramref name="coff"/> + <paramref name="mlen"/> - 1).</param>
+            <param name="coff">The zero-based byte offset into <paramref name="c"/>.</param>
+            <param name="m">Input buffer. Contains the message between index (<paramref name="moff"/> + <see cref="F:Oberon.NaCl.CryptoBox.ZeroBytes"/>) and (<paramref name="moff"/> + <paramref name="mlen"/> - 1). Values between index <paramref name="moff"/> and (<paramref name="moff"/> + <see cref="F:Oberon.NaCl.CryptoBox.ZeroBytes"/>) must be zero.</param>
+            <param name="moff">The zero-based byte offset into <paramref name="m"/>.</param>
+            <param name="mlen">The length of the input. This includes <see cref="F:Oberon.NaCl.CryptoBox.ZeroBytes"/> zero bytes at offset <paramref name="moff"/>.</param>
+            <param name="n">Nonce. Length: <see cref="F:Oberon.NaCl.CryptoBox.NonceBytes"/>.</param>
+            <param name="k">Shared Key. Length: <see cref="F:Oberon.NaCl.CryptoBox.BeforeNmBytes"/>.</param>
+            <returns>The return value from NaCl crypto_box_afternm. Returns 0.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="c"/>, <paramref name="m"/>,
+                <paramref name="n"/> or <paramref name="k"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="coff"/> &lt; 0,<br />
+                <paramref name="moff"/> or <paramref name="mlen"/> are &lt; 0. <br />
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="k"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.BeforeNmBytes"/>, <br />
+                <paramref name="n"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.NonceBytes"/>, <br />
+                <paramref name="mlen"/> &lt;  <see cref="F:Oberon.NaCl.CryptoBox.ZeroBytes"/>, <br />
+                <paramref name="moff"/> > <paramref name="m"/>.Length, 
+                <paramref name="m"/>.Length - <paramref name="moff"/> &lt; <paramref name="mlen"/>, <br />
+                <paramref name="coff"/> > <paramref name="c"/>.Length, 
+                <paramref name="c"/>.Length - <paramref name="coff"/> &lt; <paramref name="mlen"/>, <br />
+                <paramref name="m"/>[i] != 0 for all i ∈ [<paramref name="moff"/>, (<paramref name="moff"/> + <see cref="F:Oberon.NaCl.CryptoBox.ZeroBytes"/>)].
+            </exception>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoBox.OpenAfterNm(System.Byte[],System.Int32,System.Byte[],System.Int32,System.Int32,System.Byte[],System.Byte[])">
+            <summary>
+            Represents the NaCl crypto_box_open_afternm function.
+            <para>Decrypts the ciphertext from input buffer <paramref name="c"/> and stores the decrypted message in the output buffer <paramref name="m"/>.</para>
+            </summary>
+            <param name="m">Destination buffer with minimal length (<paramref name="clen"/> + <paramref name="moff"/>). When this method returns, the buffer contains the decrypted message between (<paramref name="moff"/>+<see cref="F:Oberon.NaCl.CryptoBox.ZeroBytes"/>) and (<paramref name="moff"/> + <paramref name="clen"/> - 1).</param>
+            <param name="moff">The zero-based byte offset into <paramref name="m"/>.</param>
+            <param name="c">Input buffer. Contains the ciphertext between index (<paramref name="coff"/> + <see cref="F:Oberon.NaCl.CryptoBox.BoxZeroBytes"/>) and (<paramref name="moff"/> + <paramref name="clen"/> - 1). Values between index <paramref name="coff"/> and (<paramref name="coff"/> + <see cref="F:Oberon.NaCl.CryptoBox.BoxZeroBytes"/>) must be zero.</param>
+            <param name="coff">The zero-based byte offset into <paramref name="c"/>.</param>
+            <param name="clen">The length of the input. This includes <see cref="F:Oberon.NaCl.CryptoBox.ZeroBytes"/> zero bytes at offset coff.</param>
+            <param name="n">Nonce. Length: <see cref="F:Oberon.NaCl.CryptoBox.NonceBytes"/>.</param>
+            <param name="k">Shared Key. Length: <see cref="F:Oberon.NaCl.CryptoBox.BeforeNmBytes"/>.</param>
+            <returns>The return value from NaCl crypto_box_open_afternm: 0 if ciphertext verification succeeds, otherwise -1 (<paramref name="m"/> might have changed).</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="m"/>, <paramref name="c"/>,
+                <paramref name="n"/> or <paramref name="k"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="moff"/> &lt; 0,<br />
+                <paramref name="coff"/> or <paramref name="clen"/> are &lt; 0. <br />
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="k"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.BeforeNmBytes"/>, <br />
+                <paramref name="n"/>.Length != <see cref="F:Oberon.NaCl.CryptoBox.NonceBytes"/>, <br />
+                <paramref name="clen"/> &lt;  <see cref="F:Oberon.NaCl.CryptoBox.BoxZeroBytes"/>, <br />
+                <paramref name="coff"/> > <paramref name="c"/>.Length, 
+                <paramref name="c"/>.Length - <paramref name="coff"/> &lt; <paramref name="clen"/>, <br />
+                <paramref name="moff"/> > <paramref name="m"/>.Length, 
+                <paramref name="m"/>.Length - <paramref name="moff"/> &lt; <paramref name="clen"/>, <br />
+                <paramref name="c"/>[i] != 0 for all i ∈ [<paramref name="coff"/>, (<paramref name="coff"/> + <see cref="F:Oberon.NaCl.CryptoBox.BoxZeroBytes"/>)].
+            </exception>
+        </member>
+        <member name="T:Oberon.NaCl.CryptoException">
+            <summary>
+            Exception class for NaCl postcondition violations.
+            </summary>
+        </member>
+        <member name="T:Oberon.NaCl.CryptoHash">
+            <summary>
+            Wrapper class for the NaCl crypto_hash hash C interface:
+            http://nacl.cr.yp.to/hash.html
+            
+            <para>This class gives access to the sha512 hash function.</para>
+            <para>The interop uses the NaCl primitive sha512. All indexing operations are done as ints (instead of unsigned long in the standard implementation).</para>
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoHash.Bytes">
+            <summary>
+            Represents NaCl crypto_hash_BYTES.
+            Length of the computed hash
+            </summary>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoHash.Hash(System.Byte[],System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Represents the NaCl crypto_hash function.
+            Computes a sha512 hash from input buffer <paramref name="m"/> and stores the result in <paramref name="h"/>.
+            </summary>
+            <param name="h">Destination value. Contains the computed hash. Length: <see cref="F:Oberon.NaCl.CryptoHash.Bytes"/>.</param>
+            <param name="m">Input buffer. Contains the message between index <paramref name="moff"/> and (<paramref name="moff"/> + <paramref name="mlen"/>).</param>
+            <param name="moff">The zero-based byte offset into <paramref name="m"/>.</param>
+            <param name="mlen">The length of the input.</param>
+            <returns>The return value from NaCl crypto_hash. Returns 0.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="h"/> or <paramref name="m"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="moff"/> or <paramref name="mlen"/> are &lt; 0.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="h"/>.Length != <see cref="F:Oberon.NaCl.CryptoHash.Bytes"/>, <br />
+                <paramref name="moff"/> > <paramref name="m"/>.Length, 
+                <paramref name="m"/>.Length - <paramref name="moff"/> &lt; <paramref name="mlen"/>. <br />
+             </exception>
+        </member>
+        <member name="T:Oberon.NaCl.CryptoOneTimeAuth">
+            <summary>
+            Wrapper class for the NaCl crypto_onetimeauth single-message authentication C interface:
+            http://nacl.cr.yp.to/onetimeauth.html
+            <para>The interop uses the NaCl default primitive poly1305. All indexing operations are done as ints (instead of unsigned long in the standard implementation).</para>
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoOneTimeAuth.Bytes">
+            <summary>
+            Represents NaCl crypto_onetimeauth_BYTES.
+            Length of the authenticator. 
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoOneTimeAuth.KeyBytes">
+            <summary>
+            Represents NaCl crypto_onetimeauth_KEYBYTES.
+            Length of the secret key that is used to authenticate a message. 
+            </summary>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoOneTimeAuth.OneTimeAuth(System.Byte[],System.Byte[],System.Int32,System.Int32,System.Byte[])">
+            <summary>
+            Represents NaCl crypto_onetimeauth.
+            
+            <para>Authenticates a message <paramref name="m"/> using secret key <paramref name="k"/> and stores the authenticator in output buffer <paramref name="a"/>.</para>
+            </summary>
+            <param name="a">Destination buffer. Contains the authenticator. Length: <see cref="F:Oberon.NaCl.CryptoOneTimeAuth.Bytes"/></param>
+            <param name="m">Input buffer. Contains the message between index <paramref name="moff"/> and (<paramref name="moff"/> + <paramref name="mlen"/>).</param>
+            <param name="moff">The zero-based byte offset into <paramref name="m"/>.</param>
+            <param name="mlen">The length of the input.</param>
+            <param name="k">Secret key. Length: <see cref="F:Oberon.NaCl.CryptoOneTimeAuth.KeyBytes"/></param>
+            <returns>The return value from NaCl crypto_onetimeauth. Returns 0.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="a"/>, <paramref name="m"/> or <paramref name="k"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="moff"/> or <paramref name="mlen"/> are &lt; 0.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="k"/>.Length != <see cref="F:Oberon.NaCl.CryptoOneTimeAuth.KeyBytes"/>, <br />
+                <paramref name="a"/>.Length != <see cref="F:Oberon.NaCl.CryptoOneTimeAuth.Bytes"/>, <br />
+                <paramref name="moff"/> > <paramref name="m"/>.Length, 
+                <paramref name="m"/>.Length - <paramref name="moff"/> &lt; <paramref name="mlen"/>. <br />
+             </exception>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoOneTimeAuth.Verify(System.Byte[],System.Byte[],System.Int32,System.Int32,System.Byte[])">
+            <summary>
+            Represents NaCl crypto_onetimeauth_verify.
+            
+            <para>Checks if authenticator <paramref name="a"/> is a correct authenticator for a message <paramref name="m"/> under a secret key <paramref name="k"/>.</para>
+            </summary>
+            <param name="a">Authenticator for message <paramref name="m"/>. Length: <see cref="F:Oberon.NaCl.CryptoOneTimeAuth.Bytes"/></param>
+            <param name="m">Input buffer. Contains the message between index <paramref name="moff"/> and (<paramref name="moff"/> + <paramref name="mlen"/>).</param>
+            <param name="moff">The zero-based byte offset into <paramref name="m"/>.</param>
+            <param name="mlen">The length of the input.</param>
+            <param name="k">Secret key. Length: <see cref="F:Oberon.NaCl.CryptoOneTimeAuth.KeyBytes"/></param>
+            <returns>The return value from NaCl crypto_onetimeauth_verify: 0 if message verification succeeds, otherwise -1.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="a"/>, <paramref name="m"/> or <paramref name="k"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="moff"/> or <paramref name="mlen"/> are &lt; 0.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="k"/>.Length != <see cref="F:Oberon.NaCl.CryptoOneTimeAuth.KeyBytes"/>, <br />
+                <paramref name="a"/>.Length != <see cref="F:Oberon.NaCl.CryptoOneTimeAuth.Bytes"/>, <br />
+                <paramref name="moff"/> > <paramref name="m"/>.Length, 
+                <paramref name="m"/>.Length - <paramref name="moff"/> &lt; <paramref name="mlen"/>. <br />
+             </exception>
+        </member>
+        <member name="T:Oberon.NaCl.CryptoScalarMult">
+            <summary>
+            Wrapper class for the NaCl crypto_scalarmult scalar multiplication C interface:
+            http://nacl.cr.yp.to/scalarmult.html
+            <para>The interop uses the NaCl default primitive curve25519. All indexing operations are done as ints (instead of unsigned long in the standard implementation).</para>
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoScalarMult.Bytes">
+            <summary>
+            Represents NaCl crypto_scalarmult_BYTES.
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoScalarMult.ScalarBytes">
+            <summary>
+            Represents NaCl crypto_scalarmult_SCALARBYTES.
+            </summary>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoScalarMult.Base(System.Byte[],System.Byte[])">
+            <summary>
+            Represents crypto_scalarmult_base.
+            <para>Computes the scalar product of the standard group element and integer <paramref name="n"/> and stores the result in <paramref name="q"/>.</para>
+            </summary>
+            <param name="q">Result. Length: <see cref="F:Oberon.NaCl.CryptoScalarMult.Bytes"/>.</param>
+            <param name="n">Input integer. Length: <see cref="F:Oberon.NaCl.CryptoScalarMult.ScalarBytes"/>.</param>
+            <returns>The return value from NaCl crypto_scalarmult_base. Returns 0.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="q"/> or <paramref name="n"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="q"/>.Length != <see cref="F:Oberon.NaCl.CryptoScalarMult.Bytes"/>, <br />
+                <paramref name="n"/>.Length != <see cref="F:Oberon.NaCl.CryptoScalarMult.ScalarBytes"/>. <br />
+            </exception>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoScalarMult.ScalarMult(System.Byte[],System.Byte[],System.Byte[])">
+            <summary>
+            Represents crypto_scalarmult.
+            <para>Multiplies a group element <paramref name="p"/> by an integer <paramref name="n"/> and stores the result in <paramref name="q"/>.</para>
+            </summary>
+            <param name="q">Result. Length: <see cref="F:Oberon.NaCl.CryptoScalarMult.Bytes"/>.</param>
+            <param name="n">Input integer. Length: <see cref="F:Oberon.NaCl.CryptoScalarMult.ScalarBytes" />.</param>
+            <param name="p">Group element. Length: Length: <see cref="F:Oberon.NaCl.CryptoScalarMult.Bytes"/>.</param>
+            <returns>The return value from NaCl crypto_scalarmult. Returns 0.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="q"/>, <paramref name="n"/> or <paramref name="p"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="q"/>.Length != <see cref="F:Oberon.NaCl.CryptoScalarMult.Bytes"/>, <br />
+                <paramref name="n"/>.Length != <see cref="F:Oberon.NaCl.CryptoScalarMult.ScalarBytes"/>, <br />
+                <paramref name="p"/>.Length != <see cref="F:Oberon.NaCl.CryptoScalarMult.Bytes"/>. <br />
+            </exception>
+        </member>
+        <member name="T:Oberon.NaCl.CryptoSecretBox">
+            <summary>
+            Wrapper class for the NaCl crypto_secretbox secret key authenticated encryption C interface:
+            http://nacl.cr.yp.to/secretbox.html
+            <para>The interop uses the NaCl default primitives xsalsa20 and poly1305. All indexing operations are done as ints (instead of unsigned long in the standard implementation).</para>
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoSecretBox.KeyBytes">
+            <summary>
+            Represents NaCl crypto_secretbox_KEYBYTES.
+            Length of secret keys.
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoSecretBox.NonceBytes">
+            <summary>
+            Represents NaCl crypto_secretbox_NONCEBYTES.
+            Length of the nonce.
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoSecretBox.ZeroBytes">
+            <summary>
+            Represents NaCl crypto_secretbox_ZEROBYTES.
+            Length of the message padding.
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoSecretBox.BoxZeroBytes">
+            <summary>
+            Represents NaCl crypto_secretbox_BOXZEROBYTES.
+            Length of the ciphertext padding.
+            </summary>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoSecretBox.Box(System.Byte[],System.Int32,System.Byte[],System.Int32,System.Int32,System.Byte[],System.Byte[])">
+            <summary>
+            Represents the NaCl crypto_secretbox function.
+            <para>Encrypts and authenticates a message from input buffer <paramref name="m"/> using secret key <paramref name="k"/> and nonce <paramref name="n"/>. The ciphertext is stored in the output buffer <paramref name="c"/>.</para>
+            </summary>
+            <param name="c">Destination buffer with minimal length (<paramref name="coff"/> + <paramref name="mlen"/>). When this method returns, the buffer contains the ciphertext between (<paramref name="coff"/> + <see cref="F:Oberon.NaCl.CryptoSecretBox.BoxZeroBytes"/>) and (<paramref name="coff"/> + <paramref name="mlen"/> - 1).</param>
+            <param name="coff">The zero-based byte offset into <paramref name="c"/>.</param>
+            <param name="m">Input buffer. Contains the message between index (<paramref name="moff"/> + <see cref="F:Oberon.NaCl.CryptoSecretBox.ZeroBytes"/>) and (<paramref name="moff"/> + <paramref name="mlen"/> - 1). Values between index <paramref name="moff"/> and (<paramref name="moff"/> + <see cref="F:Oberon.NaCl.CryptoSecretBox.ZeroBytes"/>) must be zero.</param>
+            <param name="moff">The zero-based byte offset into <paramref name="m"/>.</param>
+            <param name="mlen">The length of the input. This includes <see cref="F:Oberon.NaCl.CryptoSecretBox.ZeroBytes"/> zero bytes at offset <paramref name="moff"/>.</param>
+            <param name="n">Nonce. Length: <see cref="F:Oberon.NaCl.CryptoSecretBox.NonceBytes"/>.</param>
+            <param name="k">Secret Key. Length: <see cref="F:Oberon.NaCl.CryptoSecretBox.KeyBytes"/>.</param>
+            <returns>The return value from NaCl crypto_secretbox. Returns 0.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="c"/>, <paramref name="m"/>,
+                <paramref name="n"/> or <paramref name="k"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="coff"/> &lt; 0,<br />
+                <paramref name="moff"/> or <paramref name="mlen"/> are &lt; 0. <br />
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="k"/>.Length != <see cref="F:Oberon.NaCl.CryptoSecretBox.KeyBytes"/>, <br />
+                <paramref name="n"/>.Length != <see cref="F:Oberon.NaCl.CryptoSecretBox.NonceBytes"/>, <br />
+                <paramref name="mlen"/> &lt;  <see cref="F:Oberon.NaCl.CryptoSecretBox.ZeroBytes"/>, <br />
+                <paramref name="moff"/> > <paramref name="m"/>.Length, 
+                <paramref name="m"/>.Length - <paramref name="moff"/> &lt; <paramref name="mlen"/>, <br />
+                <paramref name="coff"/> > <paramref name="c"/>.Length, 
+                <paramref name="c"/>.Length - <paramref name="coff"/> &lt; <paramref name="mlen"/>, <br />
+                <paramref name="m"/>[i] != 0 for all i ∈ [<paramref name="moff"/>, (<paramref name="moff"/> + <see cref="F:Oberon.NaCl.CryptoSecretBox.ZeroBytes"/>)].
+            </exception>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoSecretBox.Open(System.Byte[],System.Int32,System.Byte[],System.Int32,System.Int32,System.Byte[],System.Byte[])">
+            <summary>
+            Represents the NaCl crypto_secretbox_open function.
+            <para>Verifies and decrypts a ciphertext from input buffer <paramref name="c"/> using secret key <paramref name="k"/> and nonce <paramref name="n"/>.</para>
+            </summary>
+            <param name="m">Destination buffer with minimal length (<paramref name="clen"/> + <paramref name="moff"/>). When this method returns, the buffer contains the decrypted message between (<paramref name="moff"/>+<see cref="F:Oberon.NaCl.CryptoSecretBox.ZeroBytes"/>) and (<paramref name="moff"/> + <paramref name="clen"/> - 1).</param>
+            <param name="moff">The zero-based byte offset into <paramref name="m"/>.</param>
+            <param name="c">Input buffer. Contains the ciphertext between index (<paramref name="coff"/> + <see cref="F:Oberon.NaCl.CryptoSecretBox.BoxZeroBytes"/>) and (<paramref name="moff"/> + <paramref name="clen"/> - 1). Values between index <paramref name="coff"/> and (<paramref name="coff"/> + <see cref="F:Oberon.NaCl.CryptoSecretBox.BoxZeroBytes"/>) must be zero.</param>
+            <param name="coff">The zero-based byte offset into <paramref name="c"/>.</param>
+            <param name="clen">The length of the input. This includes <see cref="F:Oberon.NaCl.CryptoSecretBox.ZeroBytes"/> zero bytes at offset <paramref name="coff"/>.</param>
+            <param name="n">Nonce. Length: <see cref="F:Oberon.NaCl.CryptoSecretBox.NonceBytes"/>.</param>
+            <param name="k">Secret Key. Length: <see cref="F:Oberon.NaCl.CryptoSecretBox.KeyBytes"/>.</param>
+            <returns>The return value from NaCl crypto_secretbox_open: 0 if ciphertext verification succeeds, otherwise -1 (<paramref name="m"/> might have changed).</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="m"/>, <paramref name="c"/>,
+                <paramref name="n"/> or <paramref name="k"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="moff"/> &lt; 0,<br />
+                <paramref name="coff"/> or <paramref name="clen"/> are &lt; 0. <br />
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="k"/>.Length != <see cref="F:Oberon.NaCl.CryptoSecretBox.KeyBytes"/>, <br />
+                <paramref name="n"/>.Length != <see cref="F:Oberon.NaCl.CryptoSecretBox.NonceBytes"/>, <br />
+                <paramref name="clen"/> &lt;  <see cref="F:Oberon.NaCl.CryptoSecretBox.ZeroBytes"/>, <br />
+                <paramref name="coff"/> > <paramref name="c"/>.Length, 
+                <paramref name="c"/>.Length - <paramref name="coff"/> &lt; <paramref name="clen"/>, <br />
+                <paramref name="moff"/> > <paramref name="m"/>.Length, 
+                <paramref name="m"/>.Length - <paramref name="moff"/> &lt; <paramref name="clen"/>, <br />
+                <paramref name="c"/>[i] != 0 for all i ∈ [<paramref name="coff"/>, (<paramref name="coff"/> + <see cref="F:Oberon.NaCl.CryptoSecretBox.BoxZeroBytes"/>)].
+            </exception>
+        </member>
+        <member name="T:Oberon.NaCl.CryptoSign">
+            <summary>
+            Wrapper class for the NaCl crypto_sign sign interface:
+            http://nacl.cr.yp.to/sign.html
+            
+            <para>The interop uses the SUPERCOP Ed25519 primitive (http://ed25519.cr.yp.to/) and NaCl sha512. All indexing operations are done as ints (instead of unsigned long in the standard implementation).</para>
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoSign._random">
+            <summary>
+            RandomNumberGenerator used by the ComputeKeyPair function. 
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoSign._lock">
+            <summary>
+            Lock object for accessing the RandomNumberGenerator
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoSign.PublicKeyBytes">
+            <summary>
+            Represents NaCl crypto_sign_PUBLICKEYBYTES.
+            Length of public keys.
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoSign.SecretKeyBytes">
+            <summary>
+            Represents NaCl crypto_sign_SECRETKEYBYTES.
+            Length of secret keys.
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoSign.Bytes">
+            <summary>
+            Represents NaCl crypto_sign_BYTES.
+            Padding for signed messages.
+            </summary>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoSign.ComputeKeyPair(System.Byte[],System.Byte[])">
+            <summary>
+            Creates a public/secret key keypair in <paramref name="pk"/> and <paramref name="sk"/>.
+            Replacement for the NaCl crypto_sign_keypair function, that behaves identically, except that it uses the class <see cref="T:System.Random"/> to generate random numbers. 
+            </summary>
+            <param name="pk">Public key. Length: <see cref="F:Oberon.NaCl.CryptoSign.PublicKeyBytes"/></param>
+            <param name="sk">Secret key. Length: <see cref="F:Oberon.NaCl.CryptoSign.SecretKeyBytes"/></param>
+            <returns>Returns 0.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="pk"/> or <paramref name="sk"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="pk"/>.Length != <see cref="F:Oberon.NaCl.CryptoSign.PublicKeyBytes"/> and <br />
+                <paramref name="sk"/>.Length != <see cref="F:Oberon.NaCl.CryptoSign.SecretKeyBytes"/>.
+            </exception>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoSign.Sign(System.Byte[],System.Int32,System.Int32@,System.Byte[],System.Int32,System.Int32,System.Byte[])">
+            <summary>
+            Represents the NaCl crypto_sign function.
+            <para>Signs message from input buffer <paramref name="m"/> and stores the signed message in output buffer <paramref name="sm"/>.</para>
+            </summary>
+            <param name="sm">Destination buffer with minimal length (<paramref name="smoff"/> + <paramref name="mlen"/> + <see cref="F:Oberon.NaCl.CryptoSign.Bytes"/>). When this method returns, the buffer contains the signed message between <paramref name="smoff"/> and (<paramref name="smoff"/> + <paramref name="smlen"/> - 1).</param>
+            <param name="smoff">The zero-based byte offset into <paramref name="sm"/>.</param>
+            <param name="smlen">The total length of the signed message.</param>
+            <param name="m">Input buffer. Contains the message between index <paramref name="moff"/> and (<paramref name="moff"/> + <paramref name="mlen"/> - 1).</param>
+            <param name="moff">The zero-based byte offset into <paramref name="m"/>.</param>
+            <param name="mlen">The length of the input.</param>
+            <param name="sk">Secret key. Length <see cref="F:Oberon.NaCl.CryptoSign.SecretKeyBytes"/>.</param>
+            <returns>The return value from NaCl crypto_sign. Returns 0.</returns>
+            
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="sm"/>, <paramref name="m"/>
+                or <paramref name="sk"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="smoff"/> &lt; 0,<br />
+                <paramref name="moff"/> or <paramref name="mlen"/> are &lt; 0. <br />
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="sk"/>.Length != <see cref="F:Oberon.NaCl.CryptoSign.SecretKeyBytes"/>, <br />
+                <paramref name="mlen"/> > <see cref="F:System.Int32.MaxValue"/> - <see cref="F:Oberon.NaCl.CryptoSign.Bytes"/>, <br />
+                <paramref name="moff"/> > <paramref name="m"/>.Length, 
+                <paramref name="m"/>.Length - <paramref name="moff"/> &lt; <paramref name="mlen"/>, <br />
+                <paramref name="smoff"/> > <paramref name="sm"/>.Length, 
+                (<paramref name="sm"/>.Length - <paramref name="smoff"/>) &lt; (<paramref name="mlen"/> + <see cref="F:Oberon.NaCl.CryptoSign.Bytes"/>).
+            </exception>
+            <exception cref="T:Oberon.NaCl.CryptoException">
+                Postcondition violation: Output buffer length too big. Buffer might be corrupt.
+            </exception>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoSign.Open(System.Byte[],System.Int32,System.Int32@,System.Byte[],System.Int32,System.Int32,System.Byte[])">
+            <summary>
+            Represents the NaCl crypto_sign_open function.
+            <para>Verifies the signature in input buffer <paramref name="sm"/> using public key <paramref name="pk"/>. The verified message is stored in output buffer <paramref name="m"/>.</para>
+            </summary>
+            <param name="m">Destination buffer with minimal length (<paramref name="smlen"/> + <paramref name="moff"/>). When this method returns, the buffer contains the message between <paramref name="moff"/> and (<paramref name="moff"/> + <paramref name="mlen"/> - 1).</param>
+            <param name="moff">The zero-based byte offset into <paramref name="m"/>.</param>
+            <param name="mlen">The length of the signed message.</param>
+            <param name="sm">Input buffer. Contains the signed message between index <paramref name="smoff"/> and (<paramref name="smoff"/> + <paramref name="smlen"/>).</param>
+            <param name="smoff">The zero-based byte offset into <paramref name="sm"/>.</param>
+            <param name="smlen">The total length of the signed message.</param>
+            <param name="pk">Public key. Length: <see cref="F:Oberon.NaCl.CryptoSign.PublicKeyBytes"/>.</param>
+            <returns>The return value from NaCl crypto_sign_open: 0 if message verification succeeds, otherwise -1 (<paramref name="m"/> might have been modified).</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="m"/>, <paramref name="sm"/>
+                or <paramref name="pk"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="moff"/> &lt; 0,<br />
+                <paramref name="smoff"/> or <paramref name="smlen"/> are &lt; 0. <br />
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="pk"/>.Length != <see cref="F:Oberon.NaCl.CryptoSign.PublicKeyBytes"/>, <br />
+                <paramref name="smoff"/> > <paramref name="sm"/>.Length, 
+                <paramref name="sm"/>.Length - <paramref name="smoff"/> &lt; <paramref name="smlen"/>, <br />
+                <paramref name="moff"/> > <paramref name="m"/>.Length, 
+                <paramref name="sm"/>.Length - <paramref name="smoff"/> &lt; <paramref name="smlen"/>, <br />
+            </exception>
+            <exception cref="T:Oberon.NaCl.CryptoException">
+                Postcondition violation: Output buffer length too big. Buffer might be corrupt.
+            </exception>        
+        </member>
+        <member name="T:Oberon.NaCl.CryptoStream">
+            <summary>
+            Wrapper class for the NaCl crypto_stream secret-key encryption C interface:
+            http://nacl.cr.yp.to/stream.html
+            <para>The interop uses the NaCl default primitive xsalsa20 . All indexing operations are done as ints (instead of unsigned long in the standard implementation).</para>
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoStream.KeyBytes">
+            <summary>
+            Represents NaCl crypto_stream_KEYBYTES.
+            Length of secret keys.
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoStream.NonceBytes">
+            <summary>
+            Represents NaCl crypto_stream_NONCEBYTES.
+            Length of nonces.
+            </summary>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoStream.Stream(System.Byte[],System.Int32,System.Int32,System.Byte[],System.Byte[])">
+            <summary>
+            Represents the NaCl crypto_stream function. 
+            <para>Creates a byte stream into output buffer <paramref name="c"/> as a function of secret key <paramref name="k"/> and nonce <paramref name="n"/>.</para>
+            </summary>
+            <param name="c">Destination buffer with minimal length (<paramref name="coff"/> + <paramref name="clen"/>).</param>
+            <param name="coff">The zero-based byte offset into <paramref name="c"/>.</param>
+            <param name="clen">The length of the byte stream to be created.</param>
+            <param name="n">Nonce. Length: <see cref="F:Oberon.NaCl.CryptoStream.NonceBytes"/>.</param>
+            <param name="k">Secret key. Length: <see cref="F:Oberon.NaCl.CryptoStream.KeyBytes"/>.</param>
+            <returns>The return value from NaCl crypto_stream_xor. Returns 0.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="c"/>, <paramref name="n"/> or <paramref name="k"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="coff"/> or <paramref name="clen"/> are &lt; 0.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="k"/>.Length != <see cref="F:Oberon.NaCl.CryptoStream.KeyBytes"/>, <br />
+                <paramref name="n"/>.Length != <see cref="F:Oberon.NaCl.CryptoStream.NonceBytes"/>, <br />
+                <paramref name="coff"/> > <paramref name="c"/>.Length, 
+                <paramref name="c"/>.Length - <paramref name="coff"/> &lt; <paramref name="clen"/>. <br />
+             </exception>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoStream.Xor(System.Byte[],System.Int32,System.Byte[],System.Int32,System.Int32,System.Byte[],System.Byte[])">
+            <summary>
+            Represents the NaCl crypto_stream_xor function.
+            <para>Encrypts message from input buffer <paramref name="m"/> using secret key <paramref name="k"/> and nonce <paramref name="n"/>. When this method returns, the ciphertext is stored in output buffer <paramref name="c"/>.</para>
+            <para>The function can also be used to decrypt ciphertext.</para>
+            </summary>
+            <param name="c">Destination buffer with minimal length (<paramref name="coff"/> + <paramref name="mlen"/>).</param>
+            <param name="coff">The zero-based byte offset into <paramref name="c"/>.</param>
+            <param name="m">Input buffer. Contains the message between index <paramref name="moff"/> and (<paramref name="moff"/> + <paramref name="mlen"/> - 1).</param>
+            <param name="moff">The zero-based byte offset into <paramref name="m"/>.</param>
+            <param name="mlen">The length of the input.</param>
+            <param name="n">Nonce. Length: <see cref="F:Oberon.NaCl.CryptoStream.NonceBytes"/>.</param>
+            <param name="k">Secret key. Length: <see cref="F:Oberon.NaCl.CryptoStream.KeyBytes"/></param>
+            <returns>The return value from NaCl crypto_stream_xor. Returns 0.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="c"/>, <paramref name="m"/>,
+                <paramref name="n"/> or <paramref name="k"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="coff"/> &lt; 0,<br />
+                <paramref name="moff"/> or <paramref name="mlen"/> are &lt; 0. <br />
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="k"/>.Length != <see cref="F:Oberon.NaCl.CryptoStream.KeyBytes"/>, <br />
+                <paramref name="n"/>.Length != <see cref="F:Oberon.NaCl.CryptoStream.NonceBytes"/>, <br />
+                <paramref name="moff"/> > <paramref name="m"/>.Length, 
+                <paramref name="m"/>.Length - <paramref name="moff"/> &lt; <paramref name="mlen"/>, <br />
+                <paramref name="coff"/> > <paramref name="c"/>.Length, 
+                <paramref name="c"/>.Length - <paramref name="coff"/> &lt; <paramref name="mlen"/>.
+            </exception>
+        </member>
+        <member name="T:Oberon.NaCl.CryptoVerify">
+            <summary>
+            Wrapper class for the NaCl crypto_verify string comparison C interface
+            http://nacl.cr.yp.to/verify.html
+            <para>The interop uses the NaCl primitives crypto_verify_16 and crypto_verify_32. All indexing operations are done as ints (instead of unsigned long in the standard implementation).</para>
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoVerify.Bytes16">
+            <summary>
+            Represents NaCl crypto_verify_16_BYTES.
+            Length of the input for the Verify16 function. 
+            </summary>
+        </member>
+        <member name="F:Oberon.NaCl.CryptoVerify.Bytes32">
+            <summary>
+            Represents NaCl crypto_verify_32_BYTES.
+            Length of the input for the Verify32 function.
+            </summary>
+        </member>
+        <member name="M:Oberon.NaCl.CryptoVerify.Verify16(System.Byte[],System.Int32,System.Byte[],System.Int32)">
+            <summary>
+            Represents the NaCl crypto_verify_16 function. 
+            <para>A constant time array comparison function over a range of 16 bytes (<see cref="F:Oberon.NaCl.CryptoVerify.Bytes16"/>).</para>
+            </summary>
+            <param name="x">Input buffer with minimal length (<paramref name="xoff"/> + <see cref="F:Oberon.NaCl.CryptoVerify.Bytes16"/>)</param>
+            <param name="xoff">The zero-based offset into <paramref name="x"/>.</param>
+            <param name="y">Input buffer with minimal length (<paramref name="yoff"/> + <see cref="F:Oberon.NaCl.CryptoVerify.Bytes16"/>)</param>
+            <param name="yoff">The zero-based offset into <paramref name="y"/>.</param>
+            <returns>The return value from NaCl crypto_verify_16: 0 if both arrays contain the same values over a range of 16bytes at their respective offsets. -1 otherwise.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="x"/> or <paramref name="y"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="xoff"/> or <paramref name="yoff"/> are &lt; 0.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="xoff"/> > <paramref name="x"/>.Length,
+                <paramref name="x"/>.Length - <paramref name="xoff"/> &lt; <see cref="F:Oberon.NaCl.CryptoVerify.Bytes16"/>, <br />
+                <paramref name="yoff"/> > <paramref name="y"/>.Length,
+                <paramref name="y"/>.Length - <paramref name="yoff"/> &lt; <see cref="F:Oberon.NaCl.CryptoVerify.Bytes16"/>.
+             </exception>        
+        </member>
+        <member name="M:Oberon.NaCl.CryptoVerify.Verify32(System.Byte[],System.Int32,System.Byte[],System.Int32)">
+            <summary>
+            Represents the NaCl crypto_verify_32 function. 
+            <para>A constant time array comparison function over a range of 32 bytes (<see cref="F:Oberon.NaCl.CryptoVerify.Bytes32"/>).</para>
+            </summary>
+            <param name="x">Input buffer with minimal length (<paramref name="xoff"/> + <see cref="F:Oberon.NaCl.CryptoVerify.Bytes32"/>)</param>
+            <param name="xoff">The zero-based offset into <paramref name="x"/>.</param>
+            <param name="y">Input buffer with minimal length (<paramref name="yoff"/> + <see cref="F:Oberon.NaCl.CryptoVerify.Bytes32"/>)</param>
+            <param name="yoff">The zero-based offset into <paramref name="y"/>.</param>
+            <returns>The return value from NaCl crypto_verify_32: 0 if both arrays contain the same values over a range of 16bytes at their respective offsets. -1 otherwise.</returns>
+            <exception cref="T:System.ArgumentNullException">
+                <paramref name="x"/> or <paramref name="y"/> is null.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                <paramref name="xoff"/> or <paramref name="yoff"/> are &lt; 0.
+            </exception>
+            <exception cref="T:System.ArgumentException">
+                <paramref name="xoff"/> > <paramref name="x"/>.Length,
+                <paramref name="x"/>.Length - <paramref name="xoff"/> &lt; <see cref="F:Oberon.NaCl.CryptoVerify.Bytes32"/>, <br />
+                <paramref name="yoff"/> > <paramref name="y"/>.Length,
+                <paramref name="y"/>.Length - <paramref name="yoff"/> &lt; <see cref="F:Oberon.NaCl.CryptoVerify.Bytes32"/>.
+             </exception>   
+        </member>
+        <member name="T:Oberon.NaCl.InteropChecks">
+            <summary>
+            Wrapper class for some basic interop checks
+            </summary>
+        </member>
+        <member name="M:Oberon.NaCl.InteropChecks.CompatibilityCheck">
+            <summary>
+            Native interop verification function. Verifies if the library has been compiled correctly.
+            </summary>
+            <returns>True if the interop call reported no problem with the library. False otherwise.</returns>
+        </member>
+        <member name="T:Oberon.NaCl.Native">
+            <summary>
+            Native interop class for the .Net MicroFramework supprt.
+            </summary>
+        </member>
+    </members>
+</doc>

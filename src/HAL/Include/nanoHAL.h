@@ -1332,10 +1332,26 @@ public:
 
 //#include <..\Initialization\MasterConfig.h>
 
+#ifdef PLATFORM_DEPENDENT__UPDATE_SIGNATURE_SIZE
+#define HAL_UPDATE_SIGNATURE_SIZE PLATFORM_DEPENDENT__UPDATE_SIGNATURE_SIZE
+#else
+#define HAL_UPDATE_SIGNATURE_SIZE 4
+#endif
 
+#define HAL_UPDATE_CONFIG_SIGN_TYPE__SIGNATURE 0x0000
+#define HAL_UPDATE_CONFIG_SIGN_TYPE__CRC       0x0001
+#define HAL_UPDATE_CONFIG_SIGN_TYPE__USER_DEF  0x8000
 
+struct HAL_UPDATE_CONFIG
+{
+    HAL_DRIVER_CONFIG_HEADER Header;
 
+    unsigned int UpdateID;
+    unsigned int UpdateSignType;
+    unsigned int UpdateSignature[(HAL_UPDATE_SIGNATURE_SIZE+sizeof(unsigned int)-1)/sizeof(unsigned int)];
 
+    static LPCSTR GetDriverName() { return "BTLD"; }
+};
 
 //--//
 

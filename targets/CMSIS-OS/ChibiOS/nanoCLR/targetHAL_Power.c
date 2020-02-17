@@ -11,7 +11,7 @@
 #include <target_platform.h>
 #include <cmsis_os.h>
 
-#if (HAL_USE_FSMC == TRUE)
+#if (HAL_NF_USE_FSMC == TRUE)
 #include <fsmc_sdram_lld.h>
 #include <fsmc_sram_lld.h>
 #endif
@@ -49,7 +49,7 @@ void CPU_SetPowerMode(PowerLevel_type powerLevel)
             wdgStop(&WDGD1);
           #endif
 
-            #if (HAL_USE_FSMC == TRUE)
+            #if (HAL_NF_USE_FSMC == TRUE)
                 // shutdown memory
                 #if (STM32_USE_FSMC_SDRAM == TRUE)
 				  fsmcSdramStop(&SDRAMD);

@@ -16,6 +16,7 @@
 #include <WireProtocol_ReceiverThread.h>
 #include <nanoPAL_BlockStorage.h>
 #include <LaunchCLR.h>
+#include <NanoBooterEntry.h>
 
 // need to declare the Receiver thread here
 osThreadDef(ReceiverThread, osPriorityHigh, 2048, "ReceiverThread");
@@ -40,13 +41,31 @@ int main(void) {
   // the following IF is not mandatory, it's just providing a way for a user to 'force'
   // the board to remain in nanoBooter and not launching nanoCLR
 
+  // config and init external memory
+  // this has to be called after osKernelInitialize, otherwise an hard fault will occur
+  Target_ExternalMemoryInit();
+  // initialize block storage list and devices
+  // in CLR this is called in nanoHAL_Initialize()
+  // for nanoBooter we have to init it in order to provide the flash map for Monitor_FlashSectorMap command
+  BlockStorageList_Initialize();
+  BlockStorage_AddDevices();
+
   // if the USER button (blue one) is pressed, skip the check for a valid CLR image and remain in booter
   // the user button in this board has a pull-up resistor so the check has to be inverted
   if (!palReadPad(GPIOH, GPIOH_ONBOARD_SW))
   {
+    // Check for Update
+    palSetPad(GPIOH, GPIOH_ONBOARD_LED1_GREEN);
+    palSetPad(GPIOH, GPIOH_ONBOARD_LED3_RED);
+
+    WaitForNanoBooterUpload();
+
+    palClearPad(GPIOH, GPIOH_ONBOARD_LED1_GREEN);
+    palClearPad(GPIOH, GPIOH_ONBOARD_LED3_RED);
+
     // check for valid CLR image 
     // this target has a configuration block and a NETMF compatibility block.
-    // so we need to use the __netmfBlock_end__ address here (this is where the nanoCLR image starts)
+    // this target DOES NOT have configuration block, so we need to use the __nanoImage_end__ address here
     if(CheckValidCLRImage((uint32_t)(&__netmfBlock_end__)))
     {
       // there seems to be a valid CLR image
@@ -71,12 +90,6 @@ int main(void) {
 
   // start kernel, after this main() will behave like a thread with priority osPriorityNormal
   osKernelStart();
-
-  // initialize block storage list and devices
-  // in CLR this is called in nanoHAL_Initialize()
-  // for nanoBooter we have to init it in order to provide the flash map for Monitor_FlashSectorMap command
-  BlockStorageList_Initialize();
-  BlockStorage_AddDevices();
 
   // initialize configuration manager
   // in CLR this is called in nanoHAL_Initialize()
