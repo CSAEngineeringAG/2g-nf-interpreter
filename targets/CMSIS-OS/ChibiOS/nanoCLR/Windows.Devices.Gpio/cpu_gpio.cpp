@@ -189,17 +189,20 @@ bool   CPU_GPIO_ReservePin(GPIO_PIN pinNumber, bool fReserve)
 	if (!IsValidGpioPin(pinNumber)) return false;
 
 	int port = pinNumber >> 4, bit = 1 << (pinNumber & 0x0F);
+	bool ret = true;
 	GLOBAL_LOCK();
 
 	if (fReserve)
 	{
 		if (pinReserved[port] & bit)
 		{
-			GLOBAL_UNLOCK();
-			return false; // already reserved
+			ret = false; // already reserved
 		}
+		else
+		{
 
 		pinReserved[port] |= bit;
+		}
 	}
 	else
 	{
@@ -207,7 +210,7 @@ bool   CPU_GPIO_ReservePin(GPIO_PIN pinNumber, bool fReserve)
 	}
 
 	GLOBAL_UNLOCK();
-	return true;
+	return ret;
 }
 
 // Return if Pin is reserved
