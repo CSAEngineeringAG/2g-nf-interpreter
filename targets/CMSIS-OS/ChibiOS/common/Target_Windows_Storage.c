@@ -77,7 +77,7 @@ static void SdCardDetectCallback(void *arg)
     sdCardPresent = blkIsInserted(bbdp);
 
     // setup timer
-    chVTSetI(&sdCardDebounceTimer, TIME_MS2I(SDCARD_POLLING_DELAY), SdCardInsertionMonitorCallback, arg);
+    chVTSet(&sdCardDebounceTimer, TIME_MS2I(SDCARD_POLLING_DELAY), SdCardInsertionMonitorCallback, arg);
 }
 
 // Card insertion event handler
