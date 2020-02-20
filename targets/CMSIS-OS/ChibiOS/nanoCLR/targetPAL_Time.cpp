@@ -62,10 +62,14 @@ void Time_SetCompare ( uint64_t compareValueTicks )
             // compareValueTicks is the time (in sys ticks) that is being requested to fire an HAL_COMPLETION::DequeueAndExec()
             // need to subtract the current system time to set when the timer will fire
             compareValueTicks -= HAL_Time_CurrentTime();
+            uint64_t delay = TIME_MS2I(compareValueTicks/ TIME_CONVERSION__TO_MILLISECONDS);
+            if (delay == 0) {
+            	delay = 1;
+            }
 
             // no need to stop the timer if it's running because the API does it anyway
             // need to convert from nF ticks to milliseconds and then to ChibiOS sys ticks to load the timer
-            chVTSet(&nextEventTimer, TIME_MS2I(compareValueTicks/ TIME_CONVERSION__TO_MILLISECONDS), NextEventTimer_Callback, nextEventCallbackDummyArg);
+            chVTSet(&nextEventTimer, delay, NextEventTimer_Callback, nextEventCallbackDummyArg);
         }
     }
 }
