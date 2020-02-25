@@ -95,22 +95,40 @@ void nanoHAL_Uninitialize()
 #if (HAL_USE_SPI == TRUE)
 
     #if STM32_SPI_USE_SPI1
-    spiReleaseBus(&SPID1);
+    if (SPID1.mutex.owner !=0)
+    {
+    	spiReleaseBus(&SPID1);
+	}
     #endif
     #if STM32_SPI_USE_SPI2
-    spiReleaseBus(&SPID2);
+    if (SPID2.mutex.owner !=0)
+    {
+    	spiReleaseBus(&SPID2);
+	}
     #endif
     #if STM32_SPI_USE_SPI3
-    spiReleaseBus(&SPID3);
+    if (SPID3.mutex.owner !=0)
+    {
+    	spiReleaseBus(&SPID3);
+	}
     #endif
     #if STM32_SPI_USE_SPI4
-    spiReleaseBus(&SPID4);
+    if (SPID4.mutex.owner !=0)
+    {
+    	spiReleaseBus(&SPID4);
+	}
     #endif
     #if STM32_SPI_USE_SPI5
-    spiReleaseBus(&SPID5);
+    if (SPID5.mutex.owner !=0)
+    {
+    	spiReleaseBus(&SPID5);
+	}
     #endif
     #if STM32_SPI_USE_SPI6
-    spiReleaseBus(&SPID6);
+    if (SPID6.mutex.owner !=0)
+    {
+    	spiReleaseBus(&SPID6);
+	}
     #endif
 
 #endif
@@ -118,16 +136,28 @@ void nanoHAL_Uninitialize()
 #if (HAL_USE_I2C == TRUE)
 
     #if STM32_I2C_USE_I2C1
-    i2cReleaseBus(&I2CD1);
+    if (I2CD1.mutex.owner != 0)
+    {
+    	i2cReleaseBus(&I2CD1);
+	}
     #endif
     #if STM32_I2C_USE_I2C2
-    i2cReleaseBus(&I2CD2);
+    if (I2CD2.mutex.owner != 0)
+    {
+		i2cReleaseBus(&I2CD2);
+	}
     #endif
     #if STM32_I2C_USE_I2C3
-    i2cReleaseBus(&I2CD3);
+    if (I2CD3.mutex.owner != 0)
+    {
+		i2cReleaseBus(&I2CD3);
+	}
     #endif
     #if STM32_I2C_USE_I2C4
-    i2cReleaseBus(&I2CD4);
+    if (I2CD4.mutex.owner != 0)
+    {
+		i2cReleaseBus(&I2CD4);
+	}
     #endif
 
 #endif
@@ -135,28 +165,52 @@ void nanoHAL_Uninitialize()
 #if (HAL_USE_UART == TRUE)
 
     #if NF_SERIAL_COMM_STM32_UART_USE_USART1
-    uartReleaseBus(&UARTD1);
+    if (UARTD1.mutex.owner != 0)
+    {
+    	uartReleaseBus(&UARTD1);
+	}
     #endif
     #if NF_SERIAL_COMM_STM32_UART_USE_USART2
-    uartReleaseBus(&UARTD2);
+    if (UARTD2.mutex.owner != 0)
+	{
+		uartReleaseBus(&UARTD2);
+	}
     #endif
     #if NF_SERIAL_COMM_STM32_UART_USE_USART3
-    uartReleaseBus(&UARTD3);
+    if (UARTD3.mutex.owner != 0)
+	{
+		uartReleaseBus(&UARTD3);
+	}
     #endif
     #if NF_SERIAL_COMM_STM32_UART_USE_UART4
-    uartReleaseBus(&UARTD4);
+    if (UARTD4.mutex.owner != 0)
+	{
+		uartReleaseBus(&UARTD4);
+	}
     #endif
     #if NF_SERIAL_COMM_STM32_UART_USE_UART5
-    uartReleaseBus(&UARTD5);
+    if (UARTD5.mutex.owner != 0)
+	{
+		uartReleaseBus(&UARTD5);
+	}
     #endif
     #if NF_SERIAL_COMM_STM32_UART_USE_USART6
-    uartReleaseBus(&UARTD6);
+    if (UARTD6.mutex.owner != 0)
+	{
+		uartReleaseBus(&UARTD6);
+	}
     #endif
     #if NF_SERIAL_COMM_STM32_UART_USE_UART7
-    uartReleaseBus(&UARTD7);
+    if (UARTD7.mutex.owner != 0)
+	{
+		uartReleaseBus(&UARTD7);
+	}
     #endif
     #if NF_SERIAL_COMM_STM32_UART_USE_UART8
-    uartReleaseBus(&UARTD8);
+    if (UARTD8.mutex.owner != 0)
+	{
+		uartReleaseBus(&UARTD8);
+	}
     #endif
 
 #endif
