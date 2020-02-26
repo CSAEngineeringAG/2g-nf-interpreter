@@ -1,0 +1,23 @@
+From e9d306b25b3801a904c4bdb8de5ada753b380412 Mon Sep 17 00:00:00 2001
+From: Michael Bernhard <michael.bernhard@csa.ch>
+Date: Thu, 20 Feb 2020 06:34:06 +0100
+Subject: Use correct allocator
+
+
+diff --git a/os/common/abstractions/cmsis_os/cmsis_os.c b/os/common/abstractions/cmsis_os/cmsis_os.c
+index d155660..af1c85f 100644
+--- a/os/common/abstractions/cmsis_os/cmsis_os.c
++++ b/os/common/abstractions/cmsis_os/cmsis_os.c
+@@ -88,10 +88,10 @@ osStatus osKernelInitialize(void) {
+   chSysInit();
+   chThdSetPriority(HIGHPRIO);
+ 
+-  chPoolObjectInit(&sempool, sizeof(semaphore_t), chCoreAllocAligned);
++  chPoolObjectInit(&sempool, sizeof(semaphore_t), chCoreAllocAlignedI);
+   chPoolLoadArray(&sempool, semaphores, CMSIS_CFG_NUM_SEMAPHORES);
+ 
+-  chPoolObjectInit(&timpool, sizeof(struct os_timer_cb), chCoreAllocAligned);
++  chPoolObjectInit(&timpool, sizeof(struct os_timer_cb), chCoreAllocAlignedI);
+   chPoolLoadArray(&timpool, timers, CMSIS_CFG_NUM_TIMERS);
+ 
+   return osOK;
