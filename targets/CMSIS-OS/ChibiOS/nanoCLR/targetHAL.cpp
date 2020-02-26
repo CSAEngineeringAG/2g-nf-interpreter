@@ -11,6 +11,7 @@
 #include <target_platform.h>
 #include <nanoPAL_BlockStorage.h>
 #include <nanoHAL_ConfigurationManager.h>
+#include <nanoCLR_Runtime.h>
 
 // global mutex protecting the internal state of the interpreter, including event flags
 //mutex_t interpreterGlobalMutex;
@@ -62,6 +63,9 @@ void nanoHAL_Initialize()
 	
 	// Initialise Network Stack
     Network_Initialize();
+
+    // Disable Heap Compaction
+    CLR_EE_DBG_SET( NoCompaction );
 }
 
 void nanoHAL_Uninitialize()
