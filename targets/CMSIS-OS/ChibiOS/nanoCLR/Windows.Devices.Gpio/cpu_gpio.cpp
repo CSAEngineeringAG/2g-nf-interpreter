@@ -180,7 +180,7 @@ bool   CPU_GPIO_Uninitialize()
 	while (pGpio->Next() != NULL)
 	{
 		UnlinkInputState(pGpio);
-		pGpio = pGpio->Next();
+		pGpio = gpioInputList.FirstNode();
 	}
 
 	return true;
@@ -258,6 +258,15 @@ bool CPU_GPIO_EnableInputPin(GPIO_PIN pinNumber, int64_t debounceTimeMillisecond
 		return false;
 
 	pState = AllocateGpioInputState(pinNumber);
+
+	switch (pinNumber) {
+	case 121:
+	case 45:
+		break;
+	default:
+		Pin_ISR = NULL;
+		break;
+	}
 
 	// Link ISR ptr supplied and not already set up
 	// CPU_GPIO_EnableInputPin could be called a 2nd time with changed parameters
