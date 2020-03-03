@@ -33,7 +33,7 @@ pipeline {
 		// Build nanoFramework
         stage('Build') {
             steps {
-				bat 'cd %WORKSPACE%\\build & cmake -S ../ -C ../jenkins-pipelines/CMake_initial_cache_cfg_M4MCU.cmake -DCMAKE_TOOLCHAIN_FILE=%WORKSPACE%\\CMake\\toolchain.arm-none-eabi.cmake -DTOOLCHAIN_PREFIX=%WORKSPACE%\\%TOOLCHAIN_PATH% -G Ninja'
+				bat 'cd %WORKSPACE%\\build & cmake -S ../ -C ../jenkins-pipelines/CMake_initial_cache_cfg_M4MCU.cmake -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_TOOLCHAIN_FILE=%WORKSPACE%\\CMake\\toolchain.arm-none-eabi.cmake -DTOOLCHAIN_PREFIX=%WORKSPACE%\\%TOOLCHAIN_PATH% -G Ninja'
 				bat 'cd %WORKSPACE%\\build & ninja'
 				bat 'cd %WORKSPACE%\\build & dir'
             }
