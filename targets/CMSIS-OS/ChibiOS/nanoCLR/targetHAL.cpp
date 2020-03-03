@@ -240,6 +240,19 @@ void nanoHAL_Uninitialize()
 
 #endif
 
+// stop CAN
+#if HAL_USE_CAN
+	#if STM32_CAN_USE_CAN1
+		canStop(&CAND1);
+	#endif
+	#if STM32_CAN_USE_CAN2
+		canStop(&CAND2);
+	#endif
+	#if STM32_CAN_USE_CAN3
+		canStop(&CAND3);
+	#endif
+#endif
+
     CPU_GPIO_Uninitialize();
 
     Events_Uninitialize();
