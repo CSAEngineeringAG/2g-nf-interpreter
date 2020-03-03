@@ -48,6 +48,7 @@ pipeline {
             echo 'Build successful! :)'
 			archiveArtifacts artifacts: 'build\\*.hex'
 			archiveArtifacts artifacts: 'build\\*.elf'
+			archiveArtifacts artifacts: 'build\\*.bin'
 			archiveArtifacts artifacts: 'buildInfo.txt'
         }
         failure {
