@@ -24,6 +24,15 @@ void ClrReboot()
     CLR_EE_DBG_SET(RebootPending);
 }
 
+
+
+struct assemblies_struct : public HAL_DblLinkedNode<assemblies_struct>
+{
+	unsigned char * Buffer;
+};
+
+static HAL_DblLinkedList<assemblies_struct>  AssembliesList;
+
 // the CLR Startup code on Windows version is different
 #ifndef WIN32
 
@@ -37,6 +46,8 @@ struct Settings
     HRESULT Initialize(CLR_SETTINGS params)
     {
         NANOCLR_HEADER();
+
+        AssembliesList.Initialize();
 
         m_clrOptions = params;
 
@@ -249,6 +260,10 @@ struct Settings
                 {
                     NANOCLR_SET_AND_LEAVE(CLR_E_OUT_OF_MEMORY);
                 }
+                assemblies_struct* ptr = (assemblies_struct*)platform_malloc(sizeof(assemblies_struct));
+                memset(ptr, 0, sizeof(assemblies_struct));
+                ptr->Buffer = assembliesBuffer;
+                AssembliesList.LinkAtBack(ptr);
 
                 // clear the buffer
                 memset(assembliesBuffer, 0, assemblySizeInByte);
@@ -273,7 +288,9 @@ struct Settings
                 if(!isXIP && assembliesBuffer != NULL)
                 {
                     // release the assembliesBuffer
-                    platform_free(assembliesBuffer);
+                	assemblies_struct* ptr = AssembliesList.ExtractLastNode();
+                    platform_free(ptr->Buffer);
+                	platform_free(ptr);
                 }
 
                 continue;
@@ -294,7 +311,9 @@ struct Settings
                 if(!isXIP && assembliesBuffer != NULL)
                 {
                     // release the assembliesBuffer which has being used and leave
-                    platform_free(assembliesBuffer);
+                	assemblies_struct* ptr = AssembliesList.ExtractLastNode();
+					platform_free(ptr->Buffer);
+					platform_free(ptr);
                 }
 
                 continue;
@@ -338,6 +357,14 @@ struct Settings
     void Cleanup()
     {
         CLR_RT_ExecutionEngine::DeleteInstance();
+
+        NANOCLR_FOREACH_NODE(assemblies_struct, ptr, AssembliesList)
+		{
+        	ptr->Unlink();
+        	platform_free(ptr->Buffer);
+        	platform_free(ptr);
+		}
+        NANOCLR_FOREACH_NODE_END();
     
         memset( &g_CLR_RT_ExecutionEngine, 0, sizeof(g_CLR_RT_ExecutionEngine));
         memset( &g_CLR_RT_WellKnownTypes, 0, sizeof(g_CLR_RT_WellKnownTypes));
