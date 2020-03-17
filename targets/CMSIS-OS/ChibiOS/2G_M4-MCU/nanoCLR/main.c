@@ -17,6 +17,7 @@
 #include <nanoHAL_v2.h>
 #include <targetPAL.h>
 #include "usbh/dev/msd.h"
+#include <hal_uart_lld.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -35,6 +36,31 @@ osThreadDef(SdCardWorkingThread, osPriorityNormal, 1024, "SDCWT");
 #if HAL_USBH_USE_MSD
 // declare USB MSD thread here 
 osThreadDef(UsbMsdWorkingThread, osPriorityNormal, 1024, "USBMSDWT"); 
+#endif
+
+#ifdef USE_M4MCU_V3
+static void config_debug_uart() {
+	rccEnableUART7(true);
+	rccResetUART7();
+	UART7->BRR = STM32_PCLK1 / 115200;
+	UART7->CR2 = 0;
+	UART7->CR3 = 0;
+	UART7->CR1 = USART_CR1_UE | USART_CR1_TE;
+}
+
+uint32_t GenericPort_Write(int comPortNum, const char* data, size_t size) {
+	(void)comPortNum;
+
+	for (size_t i = 0; i < size; i++) {
+		while(!(UART7->SR & USART_SR_TXE)) {
+			;
+		}
+
+		UART7->DR = data[i];
+	}
+
+	return size;
+}
 #endif
 
 //  Application entry point.
@@ -75,6 +101,10 @@ int main(void) {
   // init SWO as soon as possible to make it available to output ASAP
 #if (SWO_OUTPUT == TRUE)  
   SwoInit();
+#endif
+
+#ifdef USE_M4MCU_V3
+  config_debug_uart();
 #endif
 
   // The kernel is initialized but not started yet, this means that

@@ -236,6 +236,8 @@ void CLR_Debug::Emit( const char *text, int len )
     }
 }
 
+static char printfv_buffer[1024];
+
 int CLR_Debug::PrintfV( const char *format, va_list arg )
 {
     NATIVE_PROFILE_CLR_DIAGNOSTICS();
@@ -247,9 +249,10 @@ int CLR_Debug::PrintfV( const char *format, va_list arg )
     size_t iBuffer  = bufferSize;
 #else
     // this should be more than enough for the existing output needs
-    const int16_t c_BufferSize = 512;
+    const int16_t c_BufferSize = 1024;
 
-    char*  buffer = (char*)platform_malloc(c_BufferSize);
+//    char*  buffer = (char*)platform_malloc(c_BufferSize);
+    char* buffer = printfv_buffer;
 	char*  szBuffer = buffer;
     size_t iBuffer = c_BufferSize;
     int16_t bufferSize = c_BufferSize;
@@ -274,7 +277,7 @@ int CLR_Debug::PrintfV( const char *format, va_list arg )
 #if !defined(_WIN32)
     if(buffer != NULL)
     {
-        platform_free(buffer);
+//        platform_free(buffer);
     }
 #endif
 

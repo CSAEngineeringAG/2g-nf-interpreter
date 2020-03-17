@@ -1017,7 +1017,7 @@
                                      PIN_MODE_ALTERNATE(GPIOF_FMC_A4) |		\
                                      PIN_MODE_ALTERNATE(GPIOF_FMC_A5) |		\
                                      PIN_MODE_INPUT(GPIOF_PIN6) |           \
-                                     PIN_MODE_INPUT(GPIOF_TEST) |			\
+                                     PIN_MODE_ALTERNATE(GPIOF_TEST) |			\
                                      PIN_MODE_INPUT(GPIOF_PIN8) |			\
                                      PIN_MODE_INPUT(GPIOF_PIN9) |			\
                                      PIN_MODE_INPUT(GPIOF_TP23) |			\
@@ -1049,7 +1049,7 @@
                                      PIN_OSPEED_HIGH(GPIOF_FMC_A4) |		\
                                      PIN_OSPEED_HIGH(GPIOF_FMC_A5) |		\
                                      PIN_OSPEED_VERYLOW(GPIOF_PIN6) |       \
-                                     PIN_OSPEED_LOW(GPIOF_TEST) |			\
+                                     PIN_OSPEED_HIGH(GPIOF_TEST) |			\
                                      PIN_OSPEED_VERYLOW(GPIOF_PIN8) |		\
                                      PIN_OSPEED_VERYLOW(GPIOF_PIN9) |		\
                                      PIN_OSPEED_VERYLOW(GPIOF_TP23) |		\
@@ -1097,7 +1097,7 @@
                                      PIN_AFIO_AF(GPIOF_FMC_A4, 12U) |		\
                                      PIN_AFIO_AF(GPIOF_FMC_A5, 12U) |		\
                                      PIN_AFIO_AF(GPIOF_PIN6, 0U) |          \
-                                     PIN_AFIO_AF(GPIOF_TEST, 0U))
+                                     PIN_AFIO_AF(GPIOF_TEST, 8U))
 #define VAL_GPIOF_AFRH              (PIN_AFIO_AF(GPIOF_PIN8, 0U) |			\
                                      PIN_AFIO_AF(GPIOF_PIN9, 0U) |			\
                                      PIN_AFIO_AF(GPIOF_TP23, 0U) |			\
