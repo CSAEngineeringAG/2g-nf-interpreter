@@ -39,6 +39,6 @@ set(NF_NETWORKING_SNTP ON CACHE BOOL "option to use add SNTP support, requires n
 set(NF_SECURITY_MBEDTLS ON CACHE BOOL "option to use mbed TLS as the network security provider")
 set(RTOS CHIBIOS CACHE STRING "Select RTOS")
 set(SUPPORT_ANY_BASE_CONVERSION ON CACHE BOOL "option to enable support for converting strings to value on any base")
-set(SWO_OUTPUT ON CACHE BOOL "option to enable SWO Output")
+set(SWO_OUTPUT OFF CACHE BOOL "option to enable SWO Output")
 set(TARGET_SERIES STM32F4xx CACHE STRING "Series of the target MCU")
 set(NF_INTEROP_ASSEMBLIES USB.Host Oberon.NaCl System.IO.FileSystem SPOT.MFUpdate CACHE STRING "option to add nanoFramework Interop Libraries")
