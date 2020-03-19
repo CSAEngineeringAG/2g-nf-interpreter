@@ -75,6 +75,9 @@ REGION_ALIAS("BSS_RAM", ram0);
 /* RAM region to be used for the default heap.*/
 REGION_ALIAS("HEAP_RAM", ram0);
 
+/* RAM region to be used for the default heap (internal).*/
+REGION_ALIAS("HEAP_INT_RAM", ram0);
+
 /* Stacks rules inclusion.*/
 INCLUDE rules_stacks.ld
 

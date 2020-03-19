@@ -263,4 +263,13 @@ SECTIONS
         . = ALIGN(8);
         __heap_end__ = .;
     } > HEAP_RAM
+    
+    .heap_int (NOLOAD) :
+    {
+        . = ALIGN(8);
+        __heap_int_base__ = .;
+        . += __crt_heap_int_size__;
+        . = ALIGN(8);
+        __heap_int_end__ = .;
+    } > HEAP_INT_RAM
 }
