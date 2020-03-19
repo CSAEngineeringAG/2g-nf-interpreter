@@ -155,6 +155,15 @@ const BlockRegionInfo  MX29_BlockRegions[MX29__NUM_REGIONS] =
 };
 
 
+#ifdef USE_M4MCU_V3
+const DeviceBlockInfo MX29_Device_BlockInfo=
+{
+    (0),			                        // STM32 flash memory is XIP
+    MX29_BYTES_PER_SECTOR,               	// UINT32 BytesPerSector;     
+    MX29__NUM_REGIONS,                    	// UINT32 NumRegions;
+    (BlockRegionInfo*)MX29_BlockRegions,    // const BlockRegionInfo* pRegions;
+};
+#else
 const DeviceBlockInfo MX29_Device_BlockInfo=
 {
     (MediaAttribute_SupportsXIP),			// STM32 flash memory is XIP
@@ -162,6 +171,7 @@ const DeviceBlockInfo MX29_Device_BlockInfo=
     MX29__NUM_REGIONS,                    	// UINT32 NumRegions;
     (BlockRegionInfo*)MX29_BlockRegions,    // const BlockRegionInfo* pRegions;
 };
+#endif
 
 
 MEMORY_MAPPED_NOR_BLOCK_CONFIG MX29_Device_BSConfig =
