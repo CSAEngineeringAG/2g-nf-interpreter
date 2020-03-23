@@ -25,7 +25,9 @@ void* malloc(size_t size) {
 }
 
 void free (void * ptr) {
-    platform_free(ptr);
+	if (ptr != NULL) {
+		platform_free(ptr);
+	}
 }
 
 void* calloc (size_t num, size_t size) {
