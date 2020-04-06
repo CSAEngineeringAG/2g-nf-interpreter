@@ -67,8 +67,7 @@ static void SdCardDetectCallback(void *arg)
 {
     BaseBlockDevice* bbdp = (BaseBlockDevice*)arg;
 
-    if (port_is_isr_context())
-    {
+    if (port_is_isr_context()) {
     	chSysLockFromISR();
     	if(!chVTIsArmedI(&sdCardDebounceTimer))
 		{
@@ -78,9 +77,8 @@ static void SdCardDetectCallback(void *arg)
         	chVTSetI(&sdCardDebounceTimer, TIME_MS2I(SDCARD_POLLING_DELAY), SdCardInsertionMonitorCallback, arg);
 		}
     	chSysUnlockFromISR();
-	}
-    else
-	{
+
+	} else {
 		if(!chVTIsArmed(&sdCardDebounceTimer))
 		{
 

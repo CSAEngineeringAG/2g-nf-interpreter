@@ -99,12 +99,10 @@ void Events_SetBoolTimer( bool* timerCompleteFlag, uint32_t millisecondsFromNow 
     if(timerCompleteFlag != NULL)
     {
         // no need to stop the timer even if it's running because the API does it anyway
-    	if (port_is_isr_context())
-    	{
+    	if (port_is_isr_context()){
     		chVTSetI(&boolEventsTimer, TIME_MS2I(millisecondsFromNow), local_Events_SetBoolTimer_Callback, timerCompleteFlag);
 		}
-		else
-		{
+		else{
 			chVTSet(&boolEventsTimer, TIME_MS2I(millisecondsFromNow), local_Events_SetBoolTimer_Callback, timerCompleteFlag);
 		}
     }
@@ -161,6 +159,9 @@ uint32_t Events_WaitForEvents( uint32_t powerLevel, uint32_t wakeupSystemEvents,
         {
             break;
         }
+
+        // feed the watchdog...
+        Watchdog_Reset();
     }
 
     return 0;
