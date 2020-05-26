@@ -388,15 +388,19 @@ bool CLR_Messaging::ProcessPayload( WP_Message* msg )
     return true;
 }
 
+extern "C" osMutexId softRebootMutexIdGet(void);
 // wrapper function for CLR_Messaging::ProcessPayload(
 extern "C" int CLR_Messaging_ProcessPayload(WP_Message* msg)
 {
+    osMutexWait(softRebootMutexIdGet(), osWaitForever);
     if (g_CLR_DBG_Debugger == NULL)
     {
+		osMutexRelease(softRebootMutexIdGet());
         return false;
     }
     
     bool retValue = g_CLR_DBG_Debugger->m_messaging->ProcessPayload(msg);
+    osMutexRelease(softRebootMutexIdGet());
     return retValue;
 }
 

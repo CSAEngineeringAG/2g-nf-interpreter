@@ -384,7 +384,7 @@ struct Settings
 
 };
 
-
+extern "C" osMutexId softRebootMutexIdGet(void);
 static Settings s_ClrSettings;
 
 void ClrStartup(CLR_SETTINGS params)
@@ -416,6 +416,7 @@ void ClrStartup(CLR_SETTINGS params)
 
         if(SUCCEEDED(hr = s_ClrSettings.Initialize(params)))
         {
+        	osMutexRelease(softRebootMutexIdGet());
             if(SUCCEEDED(hr = s_ClrSettings.Load()))
             {
 #if !defined(BUILD_RTM)
@@ -428,6 +429,7 @@ void ClrStartup(CLR_SETTINGS params)
                 CLR_Debug::Printf( "Done.\r\n" );
 #endif
             }
+            osMutexWait(softRebootMutexIdGet(), osWaitForever);
         }
 
         // process setting of power mode, if reboot was requested along with a power mode "higher" then PowerLevel__Active
@@ -446,7 +448,9 @@ void ClrStartup(CLR_SETTINGS params)
 #if !defined(BUILD_RTM)
             if(params.EnterDebuggerLoopAfterExit)
             {
+            	osMutexRelease(softRebootMutexIdGet());
                 CLR_DBG_Debugger::Debugger_WaitForCommands();
+                osMutexWait(softRebootMutexIdGet(), osWaitForever);
             }
 #endif
         }

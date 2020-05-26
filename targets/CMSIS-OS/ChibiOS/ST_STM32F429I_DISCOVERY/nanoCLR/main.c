@@ -22,6 +22,12 @@ osThreadDef(ReceiverThread, osPriorityHigh, 2048, "ReceiverThread");
 // declare CLRStartup thread here 
 osThreadDef(CLRStartupThread, osPriorityNormal, 4096, "CLRStartupThread"); 
 
+static osMutexId softRebootMutexId = NULL;
+osMutexId softRebootMutexIdGet(void)
+{
+	return softRebootMutexId;
+}
+
 //  Application entry point.
 int main(void) {
 
@@ -86,6 +92,11 @@ int main(void) {
   chThdSleepMilliseconds(1500);
   usbStart(serusbcfg.usbp, &usbcfg);
   usbConnectBus(serusbcfg.usbp);
+
+  // create a mutex to delay communication at soft reboot
+  const osMutexDef_t softRebootMutex = {0};
+  softRebootMutexId = osMutexCreate(&softRebootMutex);
+  osMutexWait(softRebootMutexId, osWaitForever);
 
   // create the receiver thread
   osThreadCreate(osThread(ReceiverThread), NULL);
