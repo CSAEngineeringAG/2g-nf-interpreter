@@ -274,7 +274,7 @@ bool CPU_GPIO_EnableInputPin(GPIO_PIN pinNumber, CLR_UINT64 debounceTimeMillisec
 	case 45:
 		break;
 	default:
-		Pin_ISR = NULL;
+		pin_ISR = NULL;
 		break;
 	}
 
