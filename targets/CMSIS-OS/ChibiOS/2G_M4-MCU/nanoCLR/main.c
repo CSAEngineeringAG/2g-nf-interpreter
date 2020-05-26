@@ -25,6 +25,8 @@
 #include <string.h>
 
 #include <hal_stm32_rng.h>
+#include <stdarg.h>
+#include <printf.h>
 
 // need to declare the Receiver thread here
 osThreadDef(ReceiverThread, osPriorityHigh, 2048, "ReceiverThread");
@@ -62,6 +64,32 @@ uint32_t GenericPort_Write(int comPortNum, const char* data, size_t size) {
 	}
 
 	return size;
+}
+
+#ifdef SERIAL_DEBUG_OUTPUT
+void vserial_printf(const char *format, va_list arg)
+{
+	static char printfv_buffer[1024];
+	vsnprintf(printfv_buffer, 1024, format, arg);
+
+	GenericPort_Write(0, printfv_buffer, strlen(printfv_buffer));
+}
+#endif // SERIAL_DEBUG_OUTPUT
+#endif
+
+#ifdef SERIAL_DEBUG_OUTPUT
+void serial_printf(const char *format, ...)
+{
+	va_list arg;
+	va_start(arg, format);
+
+#ifdef USE_M4MCU_V3
+	vserial_printf(format, arg);
+#else
+	(void)format;
+#endif
+
+	va_end( arg );
 }
 #endif
 

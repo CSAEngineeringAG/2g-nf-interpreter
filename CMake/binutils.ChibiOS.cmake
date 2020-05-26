@@ -40,6 +40,10 @@ function(NF_SET_COMPILER_DEFINITIONS TARGET)
 	if(USE_M4MCU_V3)
 		target_compile_definitions(${TARGET} PUBLIC -DUSE_M4MCU_V3)
 	endif()
+	
+	if(SERIAL_DEBUG_OUTPUT)
+		target_compile_definitions(${TARGET} PUBLIC -DSERIAL_DEBUG_OUTPUT)
+	endif()
 
     # definition for platform 
     # (always ARM here)

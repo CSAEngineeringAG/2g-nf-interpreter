@@ -22,6 +22,13 @@
 // need to declare the Receiver thread here
 osThreadDef(ReceiverThread, osPriorityHigh, 2048, "ReceiverThread");
 
+#ifdef SERIAL_DEBUG_OUTPUT
+void serial_printf(const char *text, ...)
+{
+	(void)text; // not used in bootloader!
+}
+#endif // SERIAL_DEBUG_OUTPUT
+
 //  Application entry point.
 int main(void) {
 
