@@ -37,7 +37,8 @@ int crypto_sign_keypair(
     unsigned char extsk[64];
     int i;
 
-    randombytes(sk, 32);
+    //randombytes(sk, 32);
+    for (;;);
     crypto_hash_sha512(extsk, sk, 32);
     extsk[0] &= 248;
     extsk[31] &= 127;
