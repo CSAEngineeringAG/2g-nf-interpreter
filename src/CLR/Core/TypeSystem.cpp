@@ -3296,7 +3296,7 @@ CLR_RT_Assembly* CLR_RT_TypeSystem::FindAssembly( const char* szName, const CLR_
             {
                 return pASSM;
             }
-            // exact match must take into accoutn all numbers
+            // exact match must take into account all numbers
             else if(fExact)
             {
                 if(0 == memcmp( &pASSM->m_header->version, ver, sizeof(*ver) ))
@@ -3304,8 +3304,8 @@ CLR_RT_Assembly* CLR_RT_TypeSystem::FindAssembly( const char* szName, const CLR_
                     return pASSM;
                 }
             }
-            // if excet match is not required but still we have version we will enforce only the first two number because by convention
-            // we increse the minor numbers when native assemblies change CRC
+            // if exact match is not required but still we have version we will enforce only the first two number because by convention
+            // we increase the minor numbers when native assemblies change CRC
             else if(
                      ver->iMajorVersion == pASSM->m_header->version.iMajorVersion &&
                      ver->iMinorVersion == pASSM->m_header->version.iMinorVersion

@@ -1243,7 +1243,7 @@ HRESULT CLR_RT_Thread::ProcessException()
         //decent failure case is currently not implemented
         //a. Clearing the unwind stack and throwing a new exception is just asking for undefined behavior if this exception is caught
         //and the IP in stack frames somewhere below are in a finally due to an exception that hasn't yet ran a catch block and
-        //endfinally gets executed. Execution would continue, thinking that nothing was wrong... a guranteed way to create hard-to-find bugs.
+        //endfinally gets executed. Execution would continue, thinking that nothing was wrong... a guaranteed way to create hard-to-find bugs.
 
         //b. We could treat it as an unhandled exception, which would terminate the thread. It would be annoying, but it wouldn't lead to
         //unexpected code execution leading to potentially more exceptions.

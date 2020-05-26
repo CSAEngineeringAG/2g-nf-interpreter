@@ -42,7 +42,7 @@ void nanoHAL_Network_Initialize()
         // grab MAC address
         lwipOptions.macaddress = (uint8_t *)networkConfig.MacAddress;
 
-        // static or dinamic address
+        // static or dynamic address
         if(networkConfig.StartupAddressMode == AddressMode_Static)
         {
             // IPv4 configs
