@@ -353,6 +353,37 @@ static const USBEndpointConfig ep2config = {
   NULL
 };
 
+static int usb_active = 0;
+static int dtr_active = 1; // TODO: make init not here, but at init of SDU
+
+static void control_queue(void)
+{
+    const int anybody_wants_to_suspend = (usb_active == 0) || (dtr_active == 0);
+
+    if (anybody_wants_to_suspend)
+    {
+        sduSuspendHookI(&SDU1);
+        palSetPad(GPIOH, 11);
+    }
+    else
+    {
+        sduWakeupHookI(&SDU1);
+        palClearPad(GPIOH, 11);
+    }
+}
+
+static void check_for_dtr(USBDriver *usbp)
+{
+    chSysLockFromISR();
+    if ((usbp->setup[0] & USB_RTYPE_TYPE_MASK) == USB_RTYPE_TYPE_CLASS) {
+      if (usbp->setup[1] == CDC_SET_CONTROL_LINE_STATE) {
+        dtr_active = (usbp->setup[2] & 0x1) != 0;
+        control_queue();
+      }
+    }
+    chSysUnlockFromISR();
+}
+
 /*
  * Handles the USB driver global events.
  */
@@ -374,6 +405,8 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
 
       /* Resetting the state of the CDC subsystem.*/
       sduConfigureHookI(&SDU1);
+      usb_active = 1;
+      control_queue();
     }
     else if (usbp->state == USB_SELECTED) {
       usbDisableEndpointsI(usbp);
@@ -388,16 +421,16 @@ static void usb_event(USBDriver *usbp, usbevent_t event) {
   case USB_EVENT_SUSPEND:
     chSysLockFromISR();
 
-    /* Disconnection event on suspend.*/
-    sduSuspendHookI(&SDU1);
+    usb_active = 0;
+    control_queue();
 
     chSysUnlockFromISR();
     return;
   case USB_EVENT_WAKEUP:
     chSysLockFromISR();
 
-    /* Disconnection event on suspend.*/
-    sduWakeupHookI(&SDU1);
+    usb_active = 1;
+    control_queue();
 
     chSysUnlockFromISR();
     return;
@@ -418,6 +451,7 @@ static bool requests_hook(USBDriver *usbp) {
     usbSetupTransfer(usbp, NULL, 0, NULL);
     return true;
   }
+  check_for_dtr(usbp);
   return sduRequestsHook(usbp);
 }
 

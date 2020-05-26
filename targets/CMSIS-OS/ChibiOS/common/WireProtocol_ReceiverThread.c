@@ -39,6 +39,10 @@ void ReceiverThread(void const * argument)
       WP_Message_Process(&inboundMessage);
 
   #if (HAL_USE_SERIAL_USB == TRUE)
+      if (bqIsSuspendedX(&SDU1.ibqueue))
+      {
+        osDelay(100);
+      }
       // pass control to the OS
       osThreadYield();
     }
