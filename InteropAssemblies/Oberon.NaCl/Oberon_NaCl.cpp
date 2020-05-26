@@ -68,7 +68,7 @@ static const CLR_RT_MethodHandler method_lookup[] =
 const CLR_RT_NativeAssemblyData g_CLR_AssemblyNative_Oberon_NaCl =
 {
     "Oberon.NaCl", 
-    0x17260498,
+    0x10863C8B, //0x17260498,
     method_lookup,
     ////////////////////////////////////////////////////////////////////////////////////
     // check if the version bellow matches the one in AssemblyNativeVersion attribute //

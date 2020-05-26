@@ -30,7 +30,7 @@ static const CLR_RT_MethodHandler method_lookup[] =
 const CLR_RT_NativeAssemblyData g_CLR_AssemblyNative_USB_Host =
 {
     "USB.Host", 
-    0xA59604BC,
+    0xAA48C67A, //0xA59604BC,
     method_lookup,
     ////////////////////////////////////////////////////////////////////////////////////
     // check if the version bellow matches the one in AssemblyNativeVersion attribute //
