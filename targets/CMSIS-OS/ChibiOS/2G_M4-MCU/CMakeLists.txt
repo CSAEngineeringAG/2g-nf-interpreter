@@ -193,13 +193,6 @@ if(USE_NETWORKING_OPTION)
     endif()
 endif()
 
-# add dependencies from CHIBIOS_FILESYSTEM_COMPONENTS (this is required to make sure that ChibiOS filesystem components are unzip at the proper locations before the build starts)
-# only required if filesystem is ON
-if(USE_FILESYSTEM_OPTION)
-    add_dependencies(${NANOBOOTER_PROJECT_NAME}.elf CHIBIOS_FILESYSTEM_COMPONENTS)
-    add_dependencies(${NANOCLR_PROJECT_NAME}.elf CHIBIOS_FILESYSTEM_COMPONENTS)
-endif()
-
 # include common directories
 include_directories(
     ${CMAKE_CURRENT_BINARY_DIR}
@@ -336,7 +329,7 @@ set_property(TARGET ${NANOBOOTER_PROJECT_NAME}.elf APPEND_STRING PROPERTY LINK_F
 if(USE_M4MCU_V3)
 set_property(TARGET ${NANOCLR_PROJECT_NAME}.elf APPEND_STRING PROPERTY LINK_FLAGS ",--defsym=__main_stack_size__=0x400,--defsym=__process_stack_size__=0x800,--defsym=__crt_heap_size__=0x3C0000,--defsym=__crt_heap_int_size__=0x20000")
 else()
-set_property(TARGET ${NANOCLR_PROJECT_NAME}.elf APPEND_STRING PROPERTY LINK_FLAGS ",--defsym=__main_stack_size__=0x400,--defsym=__process_stack_size__=0x800,--defsym=__crt_heap_size__=0x200000,--defsym=__crt_heap_int_size__=0x20000")
+set_property(TARGET ${NANOCLR_PROJECT_NAME}.elf APPEND_STRING PROPERTY LINK_FLAGS ",--defsym=__main_stack_size__=0x400,--defsym=__process_stack_size__=0x800,--defsym=__crt_heap_size__=0x3C0000,--defsym=__crt_heap_int_size__=0x20000")
 endif()
 
 # generate output files
