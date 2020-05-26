@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <hal_stm32_rng.h>
 
 // need to declare the Receiver thread here
 osThreadDef(ReceiverThread, osPriorityHigh, 2048, "ReceiverThread");
@@ -69,6 +70,16 @@ osMutexId softRebootMutexIdGet(void)
 {
 	return softRebootMutexId;
 }
+
+static void seed_rand(void)
+{
+    rng_lld_init();
+    rng_lld_start();
+    uint32_t seed = rng_lld_GenerateRandomNumber();
+    rng_lld_stop();
+    srand(seed);
+}
+
 //  Application entry point.
 int main(void) {
 
@@ -135,6 +146,8 @@ int main(void) {
   //  Initializes a serial-over-USB CDC driver.
   sduObjectInit(&SDU1);
   sduStart(&SDU1, &serusbcfg);
+
+  seed_rand();
 
   // Activates the USB driver and then the USB bus pull-up on D+.
   // Note, a delay is inserted in order to not have to disconnect the cable after a reset
