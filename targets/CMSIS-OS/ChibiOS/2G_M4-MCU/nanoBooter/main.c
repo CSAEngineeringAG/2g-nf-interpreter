@@ -17,6 +17,7 @@
 #include <nanoPAL_BlockStorage.h>
 #include <LaunchCLR.h>
 #include <NanoBooterEntry.h>
+#include <hal_nf_community.h>
 
 // need to declare the Receiver thread here
 osThreadDef(ReceiverThread, osPriorityHigh, 2048, "ReceiverThread");
@@ -73,6 +74,12 @@ int main(void) {
       LaunchCLR((uint32_t)(&__netmfBlock_end__));
     }
   }
+
+#if (HAL_NF_USE_STM32_CRC == TRUE)
+	// startup crc
+	crcStart(NULL);
+#endif
+
 
   //  Initializes a serial-over-USB CDC driver.
   sduObjectInit(&SDU1);

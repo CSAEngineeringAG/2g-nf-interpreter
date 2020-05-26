@@ -18,6 +18,7 @@
 #include <targetPAL.h>
 #include "usbh/dev/msd.h"
 #include <hal_uart_lld.h>
+#include <hal_nf_community.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -125,6 +126,11 @@ int main(void) {
   // config and init external memory
   // this has to be called after osKernelInitialize, otherwise an hard fault will occur
   Target_ExternalMemoryInit();
+
+#if (HAL_NF_USE_STM32_CRC == TRUE)
+  // startup crc
+  crcStart(NULL);
+#endif
 
   //  Initializes a serial-over-USB CDC driver.
   sduObjectInit(&SDU1);
