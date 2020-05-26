@@ -20,7 +20,7 @@ set(API_Windows.Devices.SerialCommunication ON CACHE BOOL "option for Windows.De
 set(API_Windows.Devices.Spi OFF CACHE BOOL "option for Windows.Devices.Spi API")
 set(API_Windows.Networking.Sockets OFF CACHE BOOL "option for Windows.Networking.Sockets (Deprecated)")
 set(API_Windows.Storage ON CACHE BOOL "option for Windows.Storage")
-set(BUILD_VERSION 1.1.1.0 CACHE STRING "Build Version")
+set(BUILD_VERSION 1.2.0.0 CACHE STRING "Build Version")
 #set(CMAKE_BUILD_TYPE MinSizeRel CACHE STRING "Select Build Type")
 set(CHIBIOS_BOARD 2G_M4-MCU CACHE STRING "Select the target ChibiOS board")
 set(CHIBIOS_CONTRIB_REQUIRED ON CACHE BOOL "option to include ChibiOS Community contributions repository")
