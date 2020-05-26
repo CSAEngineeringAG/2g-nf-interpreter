@@ -5,7 +5,7 @@
 /  FatFs - Configuration file
 /---------------------------------------------------------------------------*/
 
-#define FFCONF_DEF 87030	/* Revision ID */
+#define FFCONF_DEF 86606	/* Revision ID */
 
 /*---------------------------------------------------------------------------/
 / Function Configurations
@@ -119,22 +119,36 @@
 
 
 #define FF_LFN_UNICODE	0
-/* This option switches character encoding on the API, 0:ANSI/OEM or 1:UTF-16,
-/  when LFN is enabled. Also behavior of string I/O functions will be affected by
-/  this option. When LFN is not enabled, this option has no effect.
-*/
+/* This option switches the character encoding on the API when LFN is enabled.
+/
+/   0: ANSI/OEM in current CP (TCHAR = char)
+/   1: Unicode in UTF-16 (TCHAR = WCHAR)
+/   2: Unicode in UTF-8 (TCHAR = char)
+/   3: Unicode in UTF-32 (TCHAR = DWORD)
+/
+/  Also behavior of string I/O functions will be affected by this option.
+/  When LFN is not enabled, this option has no effect. */
+
+
+
+#define FF_LFN_BUF		255
+#define FF_SFN_BUF		12
+/* This set of options defines size of file name members in the FILINFO structure
+/  which is used to read out directory items. These values should be suffcient for
+/  the file names to read. The maximum possible length of the read file name depends
+/  on character encoding. When LFN is not enabled, these options have no effect. */
 
 
 #define FF_STRF_ENCODE	3
-/* When FF_LFN_UNICODE = 1 with LFN enabled, string I/O functions, f_gets(),
+/* When FF_LFN_UNICODE >= 1 with LFN enabled, string I/O functions, f_gets(),
 /  f_putc(), f_puts and f_printf() convert the character encoding in it.
 /  This option selects assumption of character encoding ON THE FILE to be
 /  read/written via those functions.
 /
-/   0: ANSI/OEM
-/   1: UTF-16LE
-/   2: UTF-16BE
-/   3: UTF-8
+/   0: ANSI/OEM in current CP
+/   1: Unicode in UTF-16LE
+/   2: Unicode in UTF-16BE
+/   3: Unicode in UTF-8
 */
 
 
@@ -181,6 +195,16 @@
 /  type of optical media. When FF_MAX_SS is larger than FF_MIN_SS, FatFs is configured
 /  for variable sector size mode and disk_ioctl() function needs to implement
 /  GET_SECTOR_SIZE command. */
+
+
+#define FF_LBA64		0
+/* This option switches support for 64-bit LBA. (0:Disable or 1:Enable)
+/  To enable the 64-bit LBA, also exFAT needs to be enabled. (FF_FS_EXFAT == 1) */
+
+
+#define FF_MIN_GPT		0x100000000
+/* Minimum number of sectors to switch GPT format to create partition in f_mkfs and
+/  f_fdisk function. 0x100000000 max. This option has no effect when FF_LBA64 == 0. */
 
 
 #define FF_USE_TRIM		0
