@@ -47,7 +47,7 @@ static void SdCardInsertionMonitorCallback(void *p)
     // get current status
     currentStatus = blkIsInserted(bbdp);
 
-    if(sdCardPresent == currentStatus)
+    //if(sdCardPresent == currentStatus)
     {
         // value hasn't change for debounce interval so this is a valid change
         if(currentStatus)
