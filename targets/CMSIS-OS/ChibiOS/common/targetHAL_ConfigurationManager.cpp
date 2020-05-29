@@ -163,6 +163,10 @@ __nfweak bool ConfigurationManager_StoreConfigurationBlock(void* configurationBl
             // OK to continue
             // set storage address as the start of the flash configuration sector
             storageAddress = (ByteAddress)&__nanoConfig_start__;
+            if (__nanoConfig_start__ != 0xFFFFFFFF)
+            {
+                STM32FlashDriver_EraseBlock(NULL, storageAddress); // need to first erase block before writing new config
+            }
         }
         else
         {
