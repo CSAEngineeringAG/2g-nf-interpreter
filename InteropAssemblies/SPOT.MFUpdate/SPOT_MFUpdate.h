@@ -14,14 +14,14 @@
 #include <nanoCLR_Runtime.h>
 struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFUpdateBase
 {
-    static const int FIELD__m_provider = 65535;
-    static const int FIELD__m_updateID = 65535;
-    static const int FIELD__m_updateVersion = 65535;
-    static const int FIELD__m_updateType = 65535;
-    static const int FIELD__m_updateSubType = 65535;
-    static const int FIELD__m_updateSize = 65535;
-    static const int FIELD__m_packetSize = 65535;
-    static const int FIELD__m_updateHandle = 65535;
+    static const int FIELD__m_provider = 1;
+    static const int FIELD__m_updateID = 2;
+    static const int FIELD__m_updateVersion = 3;
+    static const int FIELD__m_updateType = 4;
+    static const int FIELD__m_updateSubType = 5;
+    static const int FIELD__m_updateSize = 6;
+    static const int FIELD__m_packetSize = 7;
+    static const int FIELD__m_updateHandle = 8;
 
 
     //--//
@@ -30,9 +30,9 @@ struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFUpdateBase
 
 struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFUpdate
 {
-    static const int FIELD__m_pktBitChk = 65535;
-    static const int FIELD__m_maxPkt = 65535;
-    static const int FIELD__m_authenticated = 65535;
+    static const int FIELD__m_pktBitChk = 9;
+    static const int FIELD__m_maxPkt = 10;
+    static const int FIELD__m_authenticated = 11;
 
 
     //--//
@@ -57,9 +57,9 @@ struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate
 
 struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFUpdatePkt
 {
-    static const int FIELD__PacketIndex = 65535;
-    static const int FIELD__ValidationData = 65535;
-    static const int FIELD__Data = 65535;
+    static const int FIELD__PacketIndex = 1;
+    static const int FIELD__ValidationData = 2;
+    static const int FIELD__Data = 3;
 
 
     //--//
@@ -68,8 +68,8 @@ struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFUpdatePkt
 
 struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFUpdateProperty
 {
-    static const int FIELD__Name = 65535;
-    static const int FIELD__Value = 65535;
+    static const int FIELD__Name = 1;
+    static const int FIELD__Value = 2;
 
 
     //--//
@@ -78,9 +78,9 @@ struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MFUpdateProperty
 
 struct Library_SPOT_MFUpdate_SPOT_MFUpdate_MissingPacketEnumerator
 {
-    static const int FIELD__m_pktBitChk = 65535;
-    static const int FIELD__m_currentIdx = 65535;
-    static const int FIELD__m_maxPkt = 65535;
+    static const int FIELD__m_pktBitChk = 1;
+    static const int FIELD__m_currentIdx = 2;
+    static const int FIELD__m_maxPkt = 3;
 
 
     //--//

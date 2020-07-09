@@ -15,16 +15,15 @@
 #include <hal.h>
 struct Library_System_IO_FileSystem_System_IO_FileStream
 {
-    static const int FIELD___nativeFileStream = 65535;
-    static const int FIELD___canRead = 65535;
-    static const int FIELD___canWrite = 65535;
-    static const int FIELD___canSeek = 65535;
-    static const int FIELD___seekLimit = 65535;
-    static const int FIELD___position = 65535;
-    static const int FIELD___disposed = 65535;
-    static const int FIELD___name = 65535;
-    static const int FIELD___path = 65535;
-
+    static const int FIELD___nativeFileStream = 1;
+    static const int FIELD___canRead = 2;
+    static const int FIELD___canWrite = 3;
+    static const int FIELD___canSeek = 4;
+    static const int FIELD___seekLimit = 5;
+    static const int FIELD___position = 6;
+    static const int FIELD___disposed = 7;
+    static const int FIELD___name = 8;
+    static const int FIELD___path = 9;
 
     //--//
 

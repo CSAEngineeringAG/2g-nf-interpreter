@@ -13,12 +13,6 @@
 static const CLR_RT_MethodHandler method_lookup[] =
 {
     NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
-    NULL,
     Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::_cctor___STATIC__VOID,
     Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Initialize___STATIC__I4__U4__U4__U4__U2__U2__I4__I4__I4__I4__STRING,
     Library_SPOT_MFUpdate_SPOT_MFUpdate_MFNativeUpdate::Authenticate___STATIC__BOOLEAN__I4__SZARRAY_U1,
@@ -34,12 +28,18 @@ static const CLR_RT_MethodHandler method_lookup[] =
     NULL,
     NULL,
     NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
 };
 
 const CLR_RT_NativeAssemblyData g_CLR_AssemblyNative_SPOT_MFUpdate =
 {
     "SPOT.MFUpdate", 
-    0xFC13EE65,
+    0x00810462,
     method_lookup,
     ////////////////////////////////////////////////////////////////////////////////////
     // check if the version bellow matches the one in AssemblyNativeVersion attribute //
