@@ -173,12 +173,24 @@ HRESULT Library_corlib_native_System_DateTime::get_UtcNow___STATIC__SystemDateTi
     NATIVE_PROFILE_CLR_CORE();
     NANOCLR_HEADER();
 
-    CLR_INT64* pRes = NewObject( stack );
+    CLR_RT_TypeDescriptor dtType;
+    CLR_INT64*            val;
 
-    // request full date&time
-    *pRes = HAL_Time_CurrentDateTime(false);
+    CLR_RT_HeapBlock& ref = stack.PushValue();
 
-    NANOCLR_NOCLEANUP_NOLABEL();
+    // initialize <DateTime> type descriptor
+    NANOCLR_CHECK_HRESULT( dtType.InitializeFromType( g_CLR_RT_WellKnownTypes.m_DateTime ) );
+
+    // create an instance of <DateTime>
+    NANOCLR_CHECK_HRESULT( g_CLR_RT_ExecutionEngine.NewObject( ref, dtType.m_handlerCls ) );
+
+    val = GetValuePtr( ref );
+    
+    // load with full date&time
+    // including UTC flag
+    *val = HAL_Time_CurrentDateTime(false);
+
+    NANOCLR_NOCLEANUP();
 }
 
 HRESULT Library_corlib_native_System_DateTime::get_Today___STATIC__SystemDateTime( CLR_RT_StackFrame& stack )
@@ -186,28 +198,27 @@ HRESULT Library_corlib_native_System_DateTime::get_Today___STATIC__SystemDateTim
     NATIVE_PROFILE_CLR_CORE();
     NANOCLR_HEADER();
 
-    CLR_INT64* pRes = NewObject( stack );
+    CLR_RT_TypeDescriptor dtType;
+    CLR_INT64*            val;
 
-    // request date part only
-    *pRes = HAL_Time_CurrentDateTime(true);
+    CLR_RT_HeapBlock& ref = stack.PushValue();
 
-    NANOCLR_NOCLEANUP_NOLABEL();
+    // initialize <DateTime> type descriptor
+    NANOCLR_CHECK_HRESULT( dtType.InitializeFromType( g_CLR_RT_WellKnownTypes.m_DateTime ) );
+
+    // create an instance of <DateTime>
+    NANOCLR_CHECK_HRESULT( g_CLR_RT_ExecutionEngine.NewObject( ref, dtType.m_handlerCls ) );
+
+    val = GetValuePtr( ref );
+
+    // load with date part only
+    // including UTC flag
+    *val = HAL_Time_CurrentDateTime(true);
+
+    NANOCLR_NOCLEANUP();
 }
 
 //--//
-
-CLR_INT64* Library_corlib_native_System_DateTime::NewObject( CLR_RT_StackFrame& stack )
-{
-    NATIVE_PROFILE_CLR_CORE();
-    CLR_RT_HeapBlock& ref = stack.PushValue();
-
-    ref.SetDataId( CLR_RT_HEAPBLOCK_RAW_ID(DATATYPE_DATETIME, 0, 1) );
-    ref.ClearData();
-
-    //return (CLR_INT64*)&ref.NumericByRef().s8;
-    // NOTE: reinterpret_cast is a test. It can be safely removed ;)
-    return reinterpret_cast<CLR_INT64*>(&ref.NumericByRef().s8);
-}
 
 CLR_INT64* Library_corlib_native_System_DateTime::GetValuePtr( CLR_RT_StackFrame& stack )
 {
