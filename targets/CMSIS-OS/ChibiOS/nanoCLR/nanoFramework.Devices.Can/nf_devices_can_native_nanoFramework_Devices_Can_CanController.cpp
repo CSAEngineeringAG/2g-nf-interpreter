@@ -40,9 +40,10 @@ static void RxMessage(CANDriver *canp, uint32_t flags)
         controllerId = 3;
     }
     #endif
-  
-    while (canReceiveTimeout(palCan->Driver, CAN_ANY_MAILBOX, &rxMsg, TIME_IMMEDIATE) == MSG_OK)
+    chSysLockFromISR();
+    while (canTryReceiveI(palCan->Driver, CAN_ANY_MAILBOX, &rxMsg) == false)
     {
+        chSysUnlockFromISR();
         // got message
 
         // store message in the CAN buffer
@@ -51,8 +52,9 @@ static void RxMessage(CANDriver *canp, uint32_t flags)
 
         // fire event for CAN message received
         PostManagedEvent( EVENT_CAN, 0, controllerId, CanEvent_MessageReceived );
+        chSysLockFromISR();
     }
-
+    chSysUnlockFromISR();
     NATIVE_INTERRUPT_END
 }
 
