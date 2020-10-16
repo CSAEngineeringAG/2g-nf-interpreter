@@ -238,6 +238,14 @@ CLR_INT64* Library_corlib_native_System_DateTime::GetValuePtr( CLR_RT_HeapBlock&
         dt = obj->DataType();
     }
 
+    // after dereferencing the object if it's pointing to another Object 
+    // need to do it again because this DateTime instance is most likely boxed
+    if(dt == DATATYPE_OBJECT)
+    {
+        obj = obj->Dereference(); if(!obj) return NULL;
+        dt = obj->DataType();
+    }
+
     if(dt == DATATYPE_DATETIME)
     {
         return (CLR_INT64*)&obj->NumericByRef().s8;
