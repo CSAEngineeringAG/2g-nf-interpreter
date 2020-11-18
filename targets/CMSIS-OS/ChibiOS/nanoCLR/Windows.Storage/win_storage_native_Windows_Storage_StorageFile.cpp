@@ -10,6 +10,7 @@
 #include "win_storage_native_target.h"
 #include <target_windows_storage_config.h>
 #include <nanoHAL_Windows_Storage.h>
+#include <corlib_native.h>
 
 #if (HAL_USBH_USE_MSD == TRUE)
 #include "usbh/dev/msd.h"
@@ -290,7 +291,7 @@ HRESULT Library_win_storage_native_Windows_Storage_StorageFile::GetFileFromPathN
 
                 // get a reference to the dateCreated managed field...
                 CLR_RT_HeapBlock& dateFieldRef = storageFile[Library_win_storage_native_Windows_Storage_StorageFile::FIELD___dateCreated];
-                CLR_INT64* pRes = (CLR_INT64*)&dateFieldRef.NumericByRef().s8;
+                CLR_INT64* pRes = Library_corlib_native_System_DateTime::GetValuePtr(dateFieldRef);
                 // ...and set it with the fileInfoTime
                 *pRes = HAL_Time_ConvertFromSystemTime( &fileInfoTime );
             }
