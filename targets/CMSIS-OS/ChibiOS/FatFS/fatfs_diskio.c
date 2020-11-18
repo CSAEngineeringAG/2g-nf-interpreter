@@ -7,11 +7,20 @@
 
 #include "hal.h"
 #include "ffconf.h"
-#include "ff.h"			  /* Obtains integer types */
-#include "diskio.h"		/* Declarations of disk functions */
+#include "ff.h"
+#include "diskio.h"
+#include "usbh/dev/msd.h"
+#include <string.h>
+#include <nanoHAL_v2.h>
 
 #if HAL_USE_MMC_SPI && HAL_USE_SDC
 #error "cannot specify both MMC_SPI and SDC drivers"
+#endif
+
+// sanity check for no FAT option selected
+// why is the FAT sources being pulled into the build?
+#if !HAL_USE_MMC_SPI && !HAL_USE_SDC & !HAL_USBH_USE_MSD
+#error "MMC_SPI, FATFSDEV_MMC or USBH_MSD driver must be specified. None was."
 #endif
 
 #if !defined(FATFS_HAL_DEVICE)
@@ -24,10 +33,13 @@
 
 #if HAL_USE_MMC_SPI
 extern MMCDriver FATFS_HAL_DEVICE;
-#elif HAL_USE_SDC
+#endif
+#if HAL_USE_SDC
 extern SDCDriver FATFS_HAL_DEVICE;
-#else
-#error "MMC_SPI or SDC driver must be specified"
+#endif
+#if HAL_USBH_USE_MSD
+DWORD scratch[FF_MAX_SS/4];
+bool in_use = false;
 #endif
 
 #if HAL_USE_RTC
@@ -39,7 +51,7 @@ extern RTCDriver RTCD1;
 
 #define MMC     0
 #define SDC     0
-
+#define MSD     1
 
 
 /*-----------------------------------------------------------------------*/
@@ -61,7 +73,7 @@ DSTATUS disk_initialize (
     if (mmcIsWriteProtected(&FATFS_HAL_DEVICE))
       stat |=  STA_PROTECT;
     return stat;
-#else
+#elif HAL_USE_SDC
   case SDC:
     stat = 0;
     /* It is initialized externally, just reads the status.*/
@@ -70,6 +82,14 @@ DSTATUS disk_initialize (
     if (sdcIsWriteProtected(&FATFS_HAL_DEVICE))
       stat |=  STA_PROTECT;
     return stat;
+#endif
+#if HAL_USBH_USE_MSD
+  case MSD:
+	stat = 0;
+	/* It is initialized externally, just reads the status.*/
+	if (blkGetDriverState(&MSBLKD[0]) != BLK_READY)
+	  stat |= STA_NOINIT;
+	return stat;
 #endif
   }
   return STA_NOINIT;
@@ -96,7 +116,7 @@ DSTATUS disk_status (
     if (mmcIsWriteProtected(&FATFS_HAL_DEVICE))
       stat |= STA_PROTECT;
     return stat;
-#else
+#elif HAL_USE_SDC
   case SDC:
     stat = 0;
     /* It is initialized externally, just reads the status.*/
@@ -104,6 +124,14 @@ DSTATUS disk_status (
       stat |= STA_NOINIT;
     if (sdcIsWriteProtected(&FATFS_HAL_DEVICE))
       stat |= STA_PROTECT;
+    return stat;
+#endif
+#if HAL_USBH_USE_MSD
+  case MSD:
+    stat = 0;
+    /* It is initialized externally, just reads the status.*/
+    if (blkGetDriverState(&MSBLKD[0]) != BLK_READY)
+      stat |= STA_NOINIT;
     return stat;
 #endif
   }
@@ -139,12 +167,10 @@ DRESULT disk_read (
       buff += MMCSD_BLOCK_SIZE;
       count--;
     }
-
     if (mmcStopSequentialRead(&FATFS_HAL_DEVICE))
         return RES_ERROR;
-    
     return RES_OK;
-#else
+#elif HAL_USE_SDC
   case SDC:
     if (blkGetDriverState(&FATFS_HAL_DEVICE) != BLK_READY)
       return RES_NOTRDY;
@@ -153,6 +179,43 @@ DRESULT disk_read (
     // invalidate cache over read buffer to ensure that content from DMA is read
     cacheBufferInvalidate(buff, MMCSD_BLOCK_SIZE*count);
     return RES_OK;
+#endif
+#if HAL_USBH_USE_MSD
+  case MSD:
+	/* It is initialized externally, just reads the status.*/
+	if (blkGetDriverState(&MSBLKD[0]) != BLK_READY)
+		return RES_NOTRDY;
+
+	if ((DWORD)buff & 3)
+	{
+		// Safety net ...
+		bool b = false;
+		chSysLock();
+		b = in_use;
+		in_use = true;
+		chSysUnlock();
+		ASSERT(b == false);
+
+		// Unaligned buffer, use scratch buffer
+		for (UINT i = 0; i < count; i++) {
+			// Read just one sector
+			if (usbhmsdLUNRead(&MSBLKD[0], sector + i, (BYTE*)scratch, 1))
+			{
+				in_use = false;
+				return RES_ERROR;
+			}
+			memcpy(&buff[i * FF_MAX_SS], scratch, FF_MAX_SS);
+		}
+
+		in_use = false;
+	}
+	else
+	{
+		// Read in one go
+		if (usbhmsdLUNRead(&MSBLKD[0], sector, buff, count))
+			return RES_ERROR;
+	}
+	return RES_OK;
 #endif
   }
   return RES_PARERR;
@@ -193,14 +256,51 @@ DRESULT disk_write (
     if (mmcStopSequentialWrite(&FATFS_HAL_DEVICE))
         return RES_ERROR;
     return RES_OK;
-#else
+#elif HAL_USE_SDC
   case SDC:
     if (blkGetDriverState(&FATFS_HAL_DEVICE) != BLK_READY)
       return RES_NOTRDY;
+
     // invalidate cache on buffer
-    cacheBufferFlush(buff, count);
+    cacheBufferFlush(buff, count * MMCSD_BLOCK_SIZE);
+
     if (sdcWrite(&FATFS_HAL_DEVICE, sector, buff, count))
       return RES_ERROR;
+
+    return RES_OK;
+#endif
+#if HAL_USBH_USE_MSD
+  case MSD:
+  // invalidate cache on buffer
+	if ((DWORD)buff & 3)
+	{
+		// Safety net ...
+		bool b = false;
+		chSysLock();
+		b = in_use;
+		in_use = true;
+		chSysUnlock();
+		ASSERT(b == false);
+
+		// Unaligned buffer, use scratch buffer
+		for (UINT i = 0; i < count; i++) {
+			memcpy(scratch, &buff[i * FF_MAX_SS], FF_MAX_SS);
+			// Write just one sector
+			if (usbhmsdLUNWrite(&MSBLKD[0], sector + i, (BYTE*)scratch, 1))
+			{
+				in_use = false;
+				return RES_ERROR;
+			}
+		}
+
+		in_use = false;
+	}
+	else
+	{
+		// Write in one go
+		if (usbhmsdLUNWrite(&MSBLKD[0], sector, buff, count))
+			return RES_ERROR;
+	}
 	return RES_OK;
 #endif
   }
@@ -240,7 +340,7 @@ DRESULT disk_ioctl (
     default:
         return RES_PARERR;
     }
-#else
+#elif HAL_USE_SDC
   case SDC:
     switch (cmd) {
     case CTRL_SYNC:
@@ -264,6 +364,29 @@ DRESULT disk_ioctl (
     default:
         return RES_PARERR;
     }
+#endif
+#if HAL_USBH_USE_MSD
+    case MSD:
+      switch (cmd) {
+      case CTRL_SYNC:
+          return RES_OK;
+      case GET_SECTOR_COUNT:
+          *((DWORD *)buff) = MSBLKD[0].info.blk_num;
+          return RES_OK;
+#if FF_MAX_SS > FF_MIN_SS
+      case GET_SECTOR_SIZE:
+          *((WORD *)buff) = MSBLKD[0].info.blk_size;
+          return RES_OK;
+#endif
+#if FF_USE_TRIM
+#error "unimplemented yet!"
+//    case CTRL_TRIM:
+//      ....
+//      return RES_OK;
+#endif
+      default:
+          return RES_PARERR;
+      }
 #endif
   }
   return RES_PARERR;

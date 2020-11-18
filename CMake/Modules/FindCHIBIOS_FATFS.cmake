@@ -41,7 +41,9 @@ endforeach()
 # fatfs_diskio is hacked because of USB Host, so we need to use the source from the appropriate location
 if(NF_FEATURE_HAS_USB_MSD)
     # get it from ChibiOS contribution
-    list(APPEND CHIBIOS_FATFS_SOURCES ${PROJECT_BINARY_DIR}/ChibiOS-Contrib_Source/os/various/fatfs_bindings/fatfs_diskio.c)
+    #list(APPEND CHIBIOS_FATFS_SOURCES ${PROJECT_BINARY_DIR}/ChibiOS-Contrib_Source/os/various/fatfs_bindings/fatfs_diskio.c)
+    # get it from the targets directory for fixing STM32F7 series Cache issues + fix unaligned USB access
+    list(APPEND CHIBIOS_FATFS_SOURCES ${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/FatFS/fatfs_diskio.c)
 else()
     # get it from the targets directory for fixing STM32F7 series Cache issues
     list(APPEND CHIBIOS_FATFS_SOURCES ${PROJECT_SOURCE_DIR}/targets/CMSIS-OS/ChibiOS/FatFS/fatfs_diskio.c)
