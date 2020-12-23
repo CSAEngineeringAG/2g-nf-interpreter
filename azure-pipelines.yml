@@ -27,11 +27,11 @@ pool:
 
 strategy:
   matrix:
-      2G_M4-MCU_v1:
-        BoardName: 2G_M4-MCU_v1
-        BuildOptions: -DUSE_M4MCU_V3=OFF
-        GccArm_Version: 8_2019-q3-update
-        NeedsDFU: false 
+      # 2G_M4-MCU_v1:
+      #   BoardName: 2G_M4-MCU_v1
+      #   BuildOptions: -DUSE_M4MCU_V3=OFF
+      #   GccArm_Version: 8_2019-q3-update
+      #   NeedsDFU: false 
 
       2G_M4-MCU_v3:
         BoardName: 2G_M4-MCU_v3
@@ -49,15 +49,16 @@ steps:
 #  - template: azure-pipelines-templates/download-install-ninja.yml
 
   - checkout: self
+    submodules: true
     displayName: Get Source Files
 
-  - checkout: targets_community
-    path : s\2g-nf-interpreter-csa\targets_community
-    displayName: Submodule targets_community
+  # - checkout: targets_community
+  #   path : s\2g-nf-interpreter-csa\targets_community
+  #   displayName: Submodule targets_community
 
-  - checkout: nF_Tools
-    path: s\2g-nf-interpreter-csa\nF_Tools
-    displayName: Submodule nF_Tools
+  # - checkout: nF_Tools
+  #   path: s\2g-nf-interpreter-csa\nF_Tools
+  #   displayName: Submodule nF_Tools
 
   - script: echo "##vso[task.prependpath]$(SOURCE_DIR)\nF_Tools\GNU_ARM_Toolchain\$(GccArm_Version)\bin
     displayName: Tweak PATH with GNU ARM Toolchain
