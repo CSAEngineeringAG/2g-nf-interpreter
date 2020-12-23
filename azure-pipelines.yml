@@ -4,22 +4,22 @@ trigger:
   paths:
     exclude: [ "doc", "*.md", ".gitignore", "README.md" ]
 
-resources:
-  repositories:
-  - repository: self # The name used to reference this repository in the checkout step
-    type: github
-    endpoint: GitHub-SC
-    name:   CSAEngineeringAG/2g-nf-interpreter-csa
+# resources:
+#   repositories:
+#   - repository: source # The name used to reference this repository in the checkout step
+#     type: github
+#     endpoint: GitHub-SC
+#     name:   CSAEngineeringAG/2g-nf-interpreter-csa
 
-  - repository: nF_Tools # The name used to reference this repository in the checkout step
-    type: github
-    endpoint: GitHub-SC
-    name:  CSAEngineeringAG/2g-nf-toolchain
+  # - repository: nF_Tools # The name used to reference this repository in the checkout step
+  #   type: github
+  #   endpoint: GitHub-SC
+  #   name:  CSAEngineeringAG/2g-nf-toolchain
 
-  - repository: targets_community # The name used to reference this repository in the checkout step
-    type: github
-    endpoint: GitHub-SC
-    name:   nanoframework/nf-Community-Targets
+  # - repository: targets_community # The name used to reference this repository in the checkout step
+  #   type: github
+  #   endpoint: GitHub-SC
+  #   name:   nanoframework/nf-Community-Targets
 
 
 pool:
@@ -50,6 +50,7 @@ steps:
 
   - checkout: self
     submodules: true
+    persistCredentials: true
     displayName: Get Source Files
 
   # - checkout: targets_community
