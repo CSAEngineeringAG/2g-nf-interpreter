@@ -21,3 +21,9 @@ __nfweak void Watchdog_Init(){}
  */ 
 __nfweak void Watchdog_Reset(){}
 
+__nfweak void Watchdog_Init_From_Managed(){}
+
+__nfweak void Watchdog_Reset_From_Managed(){}
+
+__nfweak eResetReason_t GetWatchdogResetReason(){return HARD_RESET;}
+

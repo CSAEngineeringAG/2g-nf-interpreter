@@ -14,6 +14,7 @@ InteropAssemblies/*
 !InteropAssemblies/System.IO.FileSystem
 !InteropAssemblies/USB.Host
 !InteropAssemblies/Oberon.NaCl
+!InteropAssemblies/Process.Watchdog
 !InteropAssemblies/SPOT.MFUpdate
 
 # Visual Studio Code
@@ -31,6 +32,7 @@ CMake/Modules/FindINTEROP*.cmake
 !CMake/Modules/FindINTEROP-System.IO.FileSystem.cmake
 !CMake/Modules/FindINTEROP-USB.Host.cmake
 !CMake/Modules/FindINTEROP-Oberon.NaCl.cmake
+!CMake/Modules/FindINTEROP-Process.Watchdog.cmake
 !CMake/Modules/FindINTEROP-SPOT.MFUpdate.cmake
 
 # Visual Studio
