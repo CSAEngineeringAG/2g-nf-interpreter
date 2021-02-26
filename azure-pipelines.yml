@@ -28,6 +28,8 @@ resources:
 pool:
     vmImage: 'VS2017-Win2016'
 
+name: $(Build.DefinitionName)_$(Build.SourceBranchName)
+
 strategy:
   matrix:
       2G_M4-MCU_v1:
@@ -48,8 +50,6 @@ variables:
     BUILD_DIR: $(SOURCE_DIR)\build
 
 steps:
-#  - template: azure-pipelines-templates/download-install-arm-gcc-toolchain.yml
-#  - template: azure-pipelines-templates/download-install-ninja.yml
 
   - checkout: self
     displayName: Get Source Files
@@ -67,7 +67,7 @@ steps:
 
   - script: echo "##vso[task.prependpath]$(SOURCE_DIR)\nF_Tools\Ninja
     displayName: Tweak PATH with Ninja
-
+  
   - task: PowerShell@2
     inputs:
       targetType: 'inline'
@@ -104,6 +104,6 @@ steps:
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: $(BoardName)
+      ArtifactName: $(BoardName)_$(Build.SourceBranchName)
       publishLocation: 'Container'
     displayName: Publish Artifacts
