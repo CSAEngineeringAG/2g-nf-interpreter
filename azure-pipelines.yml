@@ -1,12 +1,15 @@
 trigger:
+  tags:
+    include:
+      - '*'
   branches:
-    include: ["RemoteUpdate","master", "develop*", "release-*", "refs/tags/*" ]
-  paths:
-    exclude: [ "doc", "*.md", ".gitignore", "README.md" ]
+    exclude:
+      - '*'
+
 
 resources:
   repositories:
-  - repository: source # The name used to reference this repository in the checkout step
+  - repository: self # The name used to reference this repository in the checkout step
     type: github
     endpoint: GitHub-SC
     name:   CSAEngineeringAG/2g-nf-interpreter-csa
@@ -85,17 +88,17 @@ steps:
       workingDirectory:  '$(BUILD_DIR)'
     displayName: Build with CMake
 
-  - task: PowerShell@2
+  - task: CopyFiles@2
     inputs:
-      targetType: 'inline'
-      script: |
-        cd $(SOURCE_DIR)/build
-        Move-Item -Path .\*.hex -Destination $(Build.ArtifactStagingDirectory)
-        Move-Item -Path .\*.bin -Destination $(Build.ArtifactStagingDirectory)
-        Move-Item -Path .\*.elf -Destination $(Build.ArtifactStagingDirectory)
-        Move-Item -Path .\*.lst -Destination $(Build.ArtifactStagingDirectory)
-        Move-Item -Path .\*.map -Destination $(Build.ArtifactStagingDirectory)
-        Move-Item -Path .\*.s19 -Destination $(Build.ArtifactStagingDirectory)
+      SourceFolder: '$(SOURCE_DIR)/build'
+      Contents: |
+        *.hex
+        *.bin
+        *.elf
+        *.lst
+        *.map
+        *.s19
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
     displayName: Sort Artifacts
 
   - task: PublishBuildArtifacts@1
