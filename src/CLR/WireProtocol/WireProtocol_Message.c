@@ -18,7 +18,6 @@ static uint8_t* marker;
 static const uint64_t c_PayloadTimeout = 50000000;
 
 extern void debug_printf( const char* format, ... );
-extern uint64_t HAL_Time_SysTicksToTime_C(unsigned int sysTicks);
 
 //////////////////////////////////////////
 // helper functions
@@ -323,7 +322,7 @@ int WP_Message_Process(WP_Message* message)
                     // If the time between consecutive payload bytes exceeds the timeout threshold then assume that
                     // the rest of the payload is not coming. Reinitialize to synch on the next header. 
 
-                    if(HAL_Time_SysTicksToTime_C( curTicks - message->m_payloadTicks ) < c_PayloadTimeout)
+                    if(HAL_Time_SysTicksToTime( curTicks - message->m_payloadTicks ) < c_PayloadTimeout)
                     {
                         message->m_payloadTicks = curTicks;
 

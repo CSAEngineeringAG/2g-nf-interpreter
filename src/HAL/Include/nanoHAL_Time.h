@@ -45,8 +45,6 @@
 /// if you are to create that date. To stay safe side 1/1/1601 is taken as origin, as was done for Windows.
 
 
-uint64_t HAL_Time_SysTicksToTime(unsigned int sysTicks);
-
 /// <summary>
 /// System time and date for DateTime managed class.
 /// This value will be provided by the system tick or from an RTC if hardware support exists and if the board designer has enabled it in the configuration options.
