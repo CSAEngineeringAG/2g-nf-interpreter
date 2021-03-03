@@ -1,8 +1,7 @@
 trigger:
-  tags:
-    include:
-      - '*'
   branches:
+    include:
+      - refs/tags/*
     exclude:
       - '*'
 
