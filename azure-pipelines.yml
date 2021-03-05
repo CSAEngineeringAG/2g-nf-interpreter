@@ -31,7 +31,7 @@ resources:
 pool:
     vmImage: 'VS2017-Win2016'
 
-name: $(Build.DefinitionName)_$(Build.SourceBranchName)
+name: $(Build.DefinitionName)_$(BRANCH)
 
 strategy:
   matrix:
