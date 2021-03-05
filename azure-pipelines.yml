@@ -2,9 +2,12 @@ trigger:
   branches:
     include:
       - refs/tags/*
-    exclude:
-      - '*'
 
+variables:
+    GNU_GCC_TOOLCHAIN_PATH: $(Agent.TempDirectory)\GNU_Tools_ARM_Embedded
+    SOURCE_DIR: $(Build.SourcesDirectory)\2g-nf-interpreter-csa
+    BUILD_DIR: $(SOURCE_DIR)\build
+    BRANCH: $(Build.SourceBranchName)
 
 resources:
   repositories:
@@ -12,7 +15,7 @@ resources:
     type: github
     endpoint: GitHub-SC
     name: CSAEngineeringAG/2g-nf-interpreter-csa
-    ref: $(Build.SourceBranchName)
+    ref: $(BRANCH)
 
   - repository: nF_Tools # The name used to reference this repository in the checkout step
     type: github
@@ -44,10 +47,7 @@ strategy:
         GccArm_Version: 8_2019-q3-update
         NeedsDFU: false 
 
-variables:
-    GNU_GCC_TOOLCHAIN_PATH: $(Agent.TempDirectory)\GNU_Tools_ARM_Embedded
-    SOURCE_DIR: $(Build.SourcesDirectory)\2g-nf-interpreter-csa
-    BUILD_DIR: $(SOURCE_DIR)\build
+
 
 steps:
 
