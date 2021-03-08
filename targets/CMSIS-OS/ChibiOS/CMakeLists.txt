@@ -276,7 +276,6 @@ if(NF_FEATURE_HAS_SDCARD OR NF_FEATURE_HAS_USB_MSD)
             # Disable all other steps
             CONFIGURE_COMMAND ""
             BUILD_COMMAND ""
-            UPDATE_COMMAND ""
         )
 
     else()
