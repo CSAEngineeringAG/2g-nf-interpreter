@@ -23,4 +23,5 @@ ExternalProject_Add(
     INSTALL_COMMAND ""
     CONFIGURE_COMMAND ""
     BUILD_COMMAND ""
+    UPDATE_COMMAND ""
 )
