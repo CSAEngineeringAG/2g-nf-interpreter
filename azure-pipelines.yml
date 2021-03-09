@@ -18,7 +18,7 @@ resources:
     type: github
     endpoint: GitHub-SC
     name: CSAEngineeringAG/2g-nf-interpreter-csa
-    ref: $(BRANCH)
+    ref: $(Build.SourceBranchName)
 
   - repository: nF_Tools # The name used to reference this repository in the checkout step
     type: github
