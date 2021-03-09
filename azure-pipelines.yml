@@ -2,12 +2,15 @@ trigger:
   branches:
     include:
       - refs/tags/*
+      - develop
+      - ledcube_board_V2
 
 variables:
     GNU_GCC_TOOLCHAIN_PATH: $(Agent.TempDirectory)\GNU_Tools_ARM_Embedded
     SOURCE_DIR: $(Build.SourcesDirectory)\2g-nf-interpreter-csa
     BUILD_DIR: $(SOURCE_DIR)\build
     BRANCH: $(Build.SourceBranchName)
+    CONFIG: MinSizeRel
 
 resources:
   repositories:
@@ -84,7 +87,7 @@ steps:
 
   - task: CMake@1
     inputs:
-      cmakeArgs: '--build $(BUILD_DIR) --config MinSizeRel --target all -- -j 10'
+      cmakeArgs: '--build $(BUILD_DIR) --config $(CONFIG) --target all -- -j 10'
       workingDirectory:  '$(BUILD_DIR)'
     displayName: Build with CMake
 
@@ -104,6 +107,6 @@ steps:
   - task: PublishBuildArtifacts@1
     inputs:
       PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: $(BoardName)
+      ArtifactName: $(Build.SourceBranchName)_$(BoardName)
       publishLocation: 'Container'
     displayName: Publish Artifacts
