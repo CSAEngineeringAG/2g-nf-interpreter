@@ -26,7 +26,7 @@
       "2G_M4-MCU_v1": {
         "short": "2G_M4-MCU_v1",
         "settings": {
-          "BUILD_VERSION" : "1.2.6.0",
+          "BUILD_VERSION" : "1.2.7.0",
           "CMAKE_TOOLCHAIN_FILE" : "CMake/toolchain.arm-none-eabi.cmake",
           "TOOLCHAIN_PREFIX" : "C:/2G_Drives/nanoFramework/nf-interpreter/nF_Tools/GNU_ARM_Toolchain/8_2019-q3-update",
           "TARGET_SERIES" : "STM32F4xx",
@@ -82,7 +82,7 @@
       "2G_M4-MCU_v3": {
         "short": "2G_M4-MCU_v3",
         "settings": {
-          "BUILD_VERSION" : "1.2.6.0",
+          "BUILD_VERSION" : "1.2.7.0",
           "CMAKE_TOOLCHAIN_FILE" : "CMake/toolchain.arm-none-eabi.cmake",
           "TOOLCHAIN_PREFIX" : "C:/2G_Drives/nanoFramework/nf-interpreter/nF_Tools/GNU_ARM_Toolchain/8_2019-q3-update",
           "TARGET_SERIES" : "STM32F4xx",
