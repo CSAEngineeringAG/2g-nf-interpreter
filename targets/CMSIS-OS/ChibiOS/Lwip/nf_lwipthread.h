@@ -49,9 +49,11 @@
 
 /**
  * @brief   lwIP thread priority.
+ *
+ * (NORMALPRIO + 2 is equal to osPriorityHigh of CMSIS)
  */
 #ifndef LWIP_THREAD_PRIORITY
-#define LWIP_THREAD_PRIORITY                NORMALPRIO
+#define LWIP_THREAD_PRIORITY                (NORMALPRIO + 2)
 #endif
 
 /**
